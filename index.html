@@ -120,7 +120,7 @@ header{background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 2px 10px 
 .m{position:relative;border-radius:16px 16px 16px 4px;box-shadow:0 1px 2px #0002}.m.new{animation:pop .22s cubic-bezier(.2,.8,.2,1)}
 .m.me{border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff}
 .m.me .t,.m.me .n{color:#ffffffcc}.m.me a{color:#fff}
-.mm{cursor:pointer;font-weight:700;font-size:18px;padding:0 8px;opacity:.9}
+.mm{cursor:pointer;font-weight:700;font-size:20px;padding:6px 14px;opacity:.95}
 @keyframes pop{from{transform:scale(.92) translateY(6px);opacity:0}to{transform:none;opacity:1}}
 #send{background:linear-gradient(135deg,#14b8a6,#6366f1);transition:transform .15s}#send:active{transform:scale(.88)}
 #in{border-radius:24px;box-shadow:0 1px 3px #0001}
@@ -145,6 +145,7 @@ button:active{transform:scale(.94)}
 @keyframes slideup{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+#lv{transform:scaleX(-1)}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -177,7 +178,7 @@ const snap=(p,d)=>({id:p.split("/").pop(),exists:!!d,data:()=>d});
 function docRef(path){return{
  async get(){const{data,error}=await sb.from("docs").select("data").eq("path",path).maybeSingle();if(error)throw error;return snap(path,data&&data.data)},
  async set(d){const{error}=await sb.from("docs").upsert({path,collection:path.split("/")[0],data:d});if(error)throw error},
- async update(d){const c=await this.get();const{error}=await sb.from("docs").upsert({path,collection:path.split("/")[0],data:{...(c.data()||{}),...d}});if(error)throw error},
+ async update(d){const c=await this.get();if(!c.exists)throw new Error("Message not found");const{data,error}=await sb.from("docs").update({data:{...c.data(),...d}}).eq("path",path).select("path");if(error)throw error;if(!data||!data.length)throw new Error("Blocked by database rules")},
  async delete(){const{error}=await sb.from("docs").delete().eq("path",path);if(error)throw error},
  async acquire(o){const{error}=await sb.from("docs").insert({path,collection:path.split("/")[0],data:o||{}});return{acquired:!error}}}}
 function colRef(name,flt,lim){const q={
@@ -321,7 +322,11 @@ function markRead(arr){if(!db||document.visibilityState!=="visible")return;const
 $("msgs").onclick=e=>{const el=e.target.closest(".m");if(!el||e.target.closest("a,audio"))return;sel=el.dataset.id;$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false};
 $("s-x").onclick=()=>{$("sheet").hidden=true};
 $("s-re").onclick=()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}$("sheet").hidden=true};
-$("s-del").onclick=()=>{if(db)db.doc("messages/"+sel).update({del:true,text:"",img:"",aud:""}).catch(()=>{});else{const m=local.find(x=>String(x.ts)===sel);if(m){m.del=true;m.text="";render(local.filter(x=>x.room===room))}}$("sheet").hidden=true};
+$("s-del").onclick=async()=>{$("sheet").hidden=true;const id=sel;
+  if(db){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m){m.del=true;m.text="";m.img="";m.aud="";render(rawCur)}
+    try{await db.doc("messages/"+id).update({del:true,text:"",img:"",aud:""})}catch(e){alert("Couldn’t delete: "+((e&&e.message)||e))}}
+  else{const m=local.find(x=>String(x.ts)===id);if(m){m.del=true;m.text="";render(local.filter(x=>x.room===room))}}};
+$("msgs").addEventListener("contextmenu",e=>{const el=e.target.closest(".m");if(!el)return;e.preventDefault();sel=el.dataset.id;$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false});
 $("rx").onclick=()=>{replyTo=null;$("rbar").hidden=true};
 let lastTy=0;$("in").oninput=()=>{const n=Date.now();if(R&&room&&n-lastTy>1500){lastTy=n;R.emit("typing",{room,name:me.name}).catch(()=>{})}};
 async function postRaw(m){if(dmBlocked()){alert("You blocked this user. Unblock them to send messages.");return}if(db){try{await db.collection("messages").add(m)}catch(e){$("note").hidden=false;$("note").textContent="Couldn’t send."}}else{local.push(m);render(local.filter(x=>x.room===room))}}
