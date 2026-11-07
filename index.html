@@ -125,7 +125,8 @@ header{background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 2px 10px 
 #send{background:linear-gradient(135deg,#14b8a6,#6366f1);transition:transform .15s}#send:active{transform:scale(.88)}
 #in{border-radius:24px;box-shadow:0 1px 3px #0001}
 .m audio{max-width:220px;height:36px;display:block}
-.pw{position:relative;width:100%;max-width:320px}.pw input{width:100%;padding-right:46px}.eye{color:var(--sub);position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:20px;cursor:pointer;padding:4px;line-height:1}
+.pw{position:relative;width:100%;max-width:320px}.pw input{width:100%;padding-right:46px}#lconn{color:var(--sub);font-size:13px;margin-top:10px;text-align:center}
+.eye{color:var(--sub);position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:20px;cursor:pointer;padding:4px;line-height:1}
 
 /* smoothness */
 *{-webkit-tap-highlight-color:transparent}
@@ -181,7 +182,7 @@ button:active{transform:scale(.94)}
 <div id="sheet" hidden><button id="s-re">Reply</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
 <div id="starview" hidden><div id="svh"><button id="svx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Starred messages</b></div><div id="svlist"></div></div>
 <div id="fwpick" hidden><div id="fwb"><b>Forward to...</b><div id="fwlist"></div><button type="button" id="fwx">Cancel</button></div></div>
-<div id="login"><span id="biglogo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><h2 id="lt">Chatly</h2><form id="lf"><input id="ln" placeholder="Username" maxlength="24" required><input id="lw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password"><input id="lc" type="password" placeholder="Confirm password" autocomplete="new-password" hidden><button id="lb">Log in</button><button type="button" id="su">Create account</button></form><div id="lerr"></div></div>
+<div id="login"><span id="biglogo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><h2 id="lt">Chatly</h2><form id="lf"><input id="ln" placeholder="Username" maxlength="24" required><input id="lw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password"><input id="lc" type="password" placeholder="Confirm password" autocomplete="new-password" hidden><button id="lb">Log in</button><button type="button" id="su">Create account</button></form><div id="lerr"></div><div id="lconn">Connecting…</div></div>
 <div id="call" hidden><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><div id="cs"></div><div id="cb"><button id="acc" hidden>Accept</button><button id="end">End</button></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
 <script>
@@ -312,7 +313,7 @@ function fin(n,ph){const tok=Math.random().toString(36).slice(2)+Date.now().toSt
 async function acct(create){
   $("lerr").textContent="";const n=$("ln").value.trim().slice(0,24),p=$("lw").value,u=n.toLowerCase().replace(/[\s\/]/g,"");
   if(!u)return alert("Enter a username.");if(create&&$("lc").value!==p)return alert("Passwords don’t match.");if(p.length<6)return alert("Password must be at least 6 characters.");
-  if(!db){for(let i=0;i<20&&!db;i++)await new Promise(r=>setTimeout(r,250))}if(!db)return alert("Live sync isn’t connected, so accounts can’t be created right now. Reload the page and try again. ["+((window.__sberr&&window.__sberr.message)||"no detail")+"]");
+  if(!db){for(let i=0;i<56&&!db&&!sbGaveUp;i++)await new Promise(r=>setTimeout(r,250))}if(!db)return alert("Live sync isn’t connected, so accounts can’t be created right now. Reload the page and try again. ["+((window.__sberr&&window.__sberr.message)||"no detail")+"]");
   let s;try{s=await db.doc("users/"+u).get()}catch(e){return alert("Couldn’t reach the server: "+((e&&e.message)||e))}
   const h=await pwh(u,p);
   if(create){if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
@@ -440,15 +441,16 @@ async function bootSB(attempt){
     db=d;const v=await u.me();me={id:await u.id()||v.id||"anon",name:v.name||"Someone"};if(prof)me.name=prof.name;names[me.id]=me.name;reg();
     db.collection("users").onSnapshot(s=>{s.docs.forEach(d=>{usersCache[d.id]=d.data()});checkSess();if(!room)drawRooms();if(!$("prof").hidden)fillProfile()},()=>{});
     db.collection("rooms").onSnapshot(s=>{roomDocs=s.docs.map(x=>x.data()).filter(x=>x.id);if(!room)drawRooms()},()=>{});
-    $("note").hidden=true;if(prof)initNotify();
+    $("note").hidden=true;$("lconn").hidden=true;if(prof)initNotify();
   }catch(e){
     window.__sberr=e;
     if(attempt<3){setTimeout(()=>bootSB(attempt+1),1200*(attempt+1));return}
-    $("note").hidden=false;$("note").innerHTML="Live sync unavailable here – running as a local demo. <button type=\"button\" id=\"retrysb\" style=\"text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer\">Retry</button>";
-    const rb=document.getElementById("retrysb");if(rb)rb.onclick=()=>{$("note").hidden=true;bootSB(0)}
+    sbGaveUp=true;$("lconn").hidden=true;$("note").hidden=false;$("note").innerHTML="Live sync unavailable here – running as a local demo. <button type=\"button\" id=\"retrysb\" style=\"text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer\">Retry</button>";
+    const rb=document.getElementById("retrysb");if(rb)rb.onclick=()=>{sbGaveUp=false;$("note").hidden=true;$("lconn").hidden=false;bootSB(0)}
   }
 }
 bootSB(0);
+setTimeout(()=>{if($("lconn")&&!db&&!sbGaveUp)$("lconn").hidden=false},300);
 
 (function(){const w=document.getElementById("lw"),c=document.getElementById("lc");if(!w)return;const box=document.createElement("div");box.className="pw";w.parentNode.insertBefore(box,w);box.appendChild(w);const b=document.createElement("button");b.type="button";b.className="eye";b.setAttribute("aria-label","Show password");const E='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',X='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';b.innerHTML=E;b.onclick=()=>{const show=w.type==="password";w.type=show?"text":"password";if(c)c.type=w.type;b.innerHTML=show?X:E};box.appendChild(b)})();
 
@@ -467,6 +469,7 @@ box.addEventListener("touchstart",onStart,{passive:true});box.addEventListener("
 box.addEventListener("mousedown",onStart);box.addEventListener("mousemove",onMove);box.addEventListener("mouseup",onEnd);box.addEventListener("mouseleave",onEnd);
 })();
 
+let sbGaveUp=false;
 let notifyReady=false;
 function initNotify(){
   if(notifyReady||!("Notification" in window))return;notifyReady=true;
