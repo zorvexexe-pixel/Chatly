@@ -330,7 +330,7 @@ $("out").onclick=()=>{prof=null;try{localStorage.removeItem("chatly_user")}catch
 const uname=()=>((prof&&prof.name)||me.name||"").toLowerCase().replace(/[\s\/]/g,"");
 const allRooms=()=>[...defaults.map(n=>({id:n,name:n})),...roomDocs.filter(r=>!r.members||r.members.includes(uname()))];
 function titleOf(id){const r=allRooms().find(x=>x.id===id);if(!r)return id;if(r.dm){const o=r.members.find(x=>x!==uname());return(r.names&&r.names[o])||o}return r.name}
-function subOf(id){const r=allRooms().find(x=>x.id===id);if(r&&r.dm)return"Private chat";if(r&&r.members)return"Group: "+r.members.join(", ");return db?"Open room, anyone can join":"Offline demo mode"}
+function subOf(id){const r=allRooms().find(x=>x.id===id);if(r&&r.dm)return"Private chat";if(r&&r.members)return"Group: "+r.members.join(", ");return db?"Open room, anyone can join":("Offline: "+(window.__sberr?(window.__sberr.message||String(window.__sberr)):(sbGaveUp?"gave up":"connecting…")))}
 async function removeFromGroup(roomId,who){const r=allRooms().find(x=>x.id===roomId);if(!r||!r.members)return;const nm=r.members.filter(x=>x!==who);if(!db)return;try{await db.doc("rooms/"+roomId).update({members:nm})}catch(e){alert("Couldn’t update group: "+((e&&e.message)||e))}}
 function openGroupInfo(roomId){const r=allRooms().find(x=>x.id===roomId);if(!r||!r.members)return;
   $("svh").querySelector("b").textContent="Group members";
