@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chatly diagnostic</title>
+<style>
+body{font:15px/1.5 system-ui;padding:16px;background:#fff;color:#111}
+.row{padding:10px 0;border-bottom:1px solid #eee}
+.ok{color:#0a8a4a;font-weight:700}.bad{color:#c0392b;font-weight:700}.pend{color:#888}
+pre{white-space:pre-wrap;word-break:break-word;background:#f5f5f5;padding:8px;border-radius:8px;font-size:12px}
+h1{font-size:18px}
+</style></head><body>
+<h1>Chatly connection test</h1>
+<div class="row">1. Supabase library loaded: <span id="r1" class="pend">checking…</span></div>
+<div class="row">2. Client created: <span id="r2" class="pend">checking…</span></div>
+<div class="row">3. Database reachable: <span id="r3" class="pend">checking…</span><pre id="e3"></pre></div>
+<div class="row">4. Realtime (live updates) connects: <span id="r4" class="pend">checking…</span><pre id="e4"></pre></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+<script>
+const set=(id,ok,txt)=>{const e=document.getElementById(id);e.textContent=txt;e.className=ok===true?"ok":ok===false?"bad":"pend"};
+(async()=>{
+  if(typeof supabase==="undefined"){set("r1",false,"FAILED – library did not load (network/CDN blocked)");return}
+  set("r1",true,"OK");
+  let sb;
+  try{sb=supabase.createClient("https://qomajfduadrzxhfskvfu.supabase.co","sb_publishable_PGv884UFEJSHaYmTEpTAGA_JYjNlr2p");set("r2",true,"OK")}
+  catch(e){set("r2",false,"FAILED: "+e.message);return}
+  try{
+    const {data,error}=await sb.from("docs").select("path").limit(1);
+    if(error)throw error;
+    set("r3",true,"OK ("+data.length+" row(s) returned)");
+  }catch(e){set("r3",false,"FAILED");document.getElementById("e3").textContent=JSON.stringify(e,Object.getOwnPropertyNames(e),2)}
+  try{
+    const ok=await new Promise((res)=>{
+      const ch=sb.channel("diag-"+Date.now()).subscribe(status=>{
+        if(status==="SUBSCRIBED")res("SUBSCRIBED");
+        else if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"||status==="CLOSED")res(status);
+      });
+      setTimeout(()=>res("TIMEOUT after 8s"),8000);
+    });
+    if(ok==="SUBSCRIBED")set("r4",true,"OK");else{set("r4",false,"FAILED: "+ok)}
+  }catch(e){set("r4",false,"FAILED");document.getElementById("e4").textContent=String(e)}
+})();
+</script>
+</body></html>
