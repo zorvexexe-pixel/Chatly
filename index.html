@@ -216,7 +216,7 @@ const room={async emit(t,d){rch&&await rch.send({type:"broadcast",event:t,payloa
 return{raw:sb,db:async()=>db,user:async()=>user,room:async()=>{if(!rch){rch=sb.channel("chatly-signal",{config:{broadcast:{self:false}}});["call","typing"].forEach(t=>rch.on("broadcast",{event:t},m=>{(hs[t]||[]).forEach(f=>f({isMe:false,peer:m.payload.peer,data:m.payload.data}))}));await new Promise(r=>rch.subscribe(st=>{if(st==="SUBSCRIBED")r()}))}return room}}
 })();
 </script>
-<script>
+<script>let sbGaveUp=false,notifyReady=false;
 const $=id=>document.getElementById(id);
 let db=null,me={id:"local",name:"You"},room=null,unsub=null,names={},local=[],roomDocs=[],replyTo=null,sel=null,typingT=null,baseSub="",cur=[],fwMsg=null;
 const defaults=["General","Friends","Random"];
@@ -325,7 +325,7 @@ let signup=false;
 $("ln").addEventListener("input",function(){if(signup){const c=this.value.replace(/[^A-Za-z0-9_@-]/g,"");if(c!==this.value)this.value=c}});
 function setMode(s){signup=s;$("lc").hidden=!s;$("lc").value="";$("lb").textContent=s?"Create account":"Log in";$("su").textContent=s?"Back to log in":"Create new account";$("lt").textContent=s?"Create account":"Chatly";$("lerr").textContent=""}
 setMode(false);
-$("lf").onsubmit=e=>{e.preventDefault();acct(signup)};$("su").onclick=()=>setMode(!signup);
+$("lf").onsubmit=async e=>{e.preventDefault();const b=$("lb"),t=b.textContent;b.disabled=true;b.textContent="Please wait…";$("lerr").textContent="";try{await acct(signup)}catch(err){$("lerr").textContent="Error: "+((err&&err.message)||err)}b.disabled=false;b.textContent=signup?"Create account":"Log in"};$("su").onclick=()=>setMode(!signup);
 $("out").onclick=()=>{prof=null;try{localStorage.removeItem("chatly_user")}catch(err){}$("ln").value="";$("sub").textContent="";applyLogin()};
 const uname=()=>((prof&&prof.name)||me.name||"").toLowerCase().replace(/[\s\/]/g,"");
 const allRooms=()=>[...defaults.map(n=>({id:n,name:n})),...roomDocs.filter(r=>!r.members||r.members.includes(uname()))];
@@ -469,8 +469,6 @@ box.addEventListener("touchstart",onStart,{passive:true});box.addEventListener("
 box.addEventListener("mousedown",onStart);box.addEventListener("mousemove",onMove);box.addEventListener("mouseup",onEnd);box.addEventListener("mouseleave",onEnd);
 })();
 
-let sbGaveUp=false;
-let notifyReady=false;
 function initNotify(){
   if(notifyReady||!("Notification" in window))return;notifyReady=true;
   if(Notification.permission==="default")Notification.requestPermission().catch(()=>{});
