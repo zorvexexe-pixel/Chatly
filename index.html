@@ -109,6 +109,42 @@ header svg{width:24px;height:24px;fill:currentColor;display:block}
 #nerr,#lerr{color:#e53935;font-size:14px;max-width:320px;text-align:center}#nerr{max-width:none;text-align:left}
 .nrow{display:flex;gap:10px;justify-content:flex-end}.nrow button{border:0;border-radius:20px;padding:10px 18px;font:inherit;cursor:pointer;background:var(--line);color:var(--text)}#ng{background:var(--accent)!important;color:#fff!important}
 #cl,#su{background:none;color:var(--text);border:1px solid var(--line);border-radius:22px;padding:12px;font:inherit;cursor:pointer}
+
+/* refresh */
+:root{--accent:#00c896;--head:#0f766e}
+header{background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 2px 10px #0003;position:relative;z-index:2}
+.av{background:linear-gradient(135deg,#14b8a6,#6366f1);box-shadow:0 2px 6px #0003}
+.room{transition:background .15s}.room:active{background:var(--line)}
+#fab{background:linear-gradient(135deg,#14b8a6,#6366f1);border-radius:50%;transition:transform .15s}#fab:active{transform:scale(.9)}
+#msgs{background:var(--bg) radial-gradient(circle at 20% 10%,#14b8a61f,transparent 40%),radial-gradient(circle at 85% 85%,#6366f11f,transparent 45%)}
+.m{position:relative;border-radius:16px 16px 16px 4px;box-shadow:0 1px 2px #0002}.m.new{animation:pop .22s cubic-bezier(.2,.8,.2,1)}
+.m.me{border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff}
+.m.me .t,.m.me .n{color:#ffffffcc}.m.me a{color:#fff}
+.mm{cursor:pointer;font-weight:700;font-size:18px;padding:0 8px;opacity:.9}
+@keyframes pop{from{transform:scale(.92) translateY(6px);opacity:0}to{transform:none;opacity:1}}
+#send{background:linear-gradient(135deg,#14b8a6,#6366f1);transition:transform .15s}#send:active{transform:scale(.88)}
+#in{border-radius:24px;box-shadow:0 1px 3px #0001}
+.m audio{max-width:220px;height:36px;display:block}
+.pw{position:relative;width:100%;max-width:320px}.pw input{width:100%;padding-right:46px}.eye{color:var(--sub);position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:20px;cursor:pointer;padding:4px;line-height:1}
+
+/* smoothness */
+*{-webkit-tap-highlight-color:transparent}
+button,.room,.m,input{touch-action:manipulation}
+#msgs,#list,#prof{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#list{scroll-behavior:smooth}
+button{transition:transform .12s ease,opacity .15s ease,background-color .15s ease}
+button:active{transform:scale(.94)}
+#in,#login input{transition:box-shadow .2s ease,border-color .2s ease}
+#in:focus,#login input:focus{box-shadow:0 0 0 3px #14b8a655;border-color:#14b8a6}
+#chat{animation:slidein .24s cubic-bezier(.2,.8,.2,1)}
+#prof:not([hidden]){animation:slidein .24s cubic-bezier(.2,.8,.2,1)}
+#sheet:not([hidden]){animation:slideup .2s cubic-bezier(.2,.8,.2,1)}
+#login:not([hidden]),#call:not([hidden]){animation:fadein .25s ease}
+.room{animation:fadein .3s ease both}
+@keyframes slidein{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+@keyframes slideup{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -129,7 +165,7 @@ header svg{width:24px;height:24px;fill:currentColor;display:block}
 <div id="sheet" hidden><button id="s-re">Reply</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
 <div id="login"><span id="biglogo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><h2 id="lt">Chatly</h2><form id="lf"><input id="ln" placeholder="Username" maxlength="24" required><input id="lw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password"><input id="lc" type="password" placeholder="Confirm password" autocomplete="new-password" hidden><button id="lb">Log in</button><button type="button" id="su">Create account</button></form><div id="lerr"></div></div>
 <div id="call" hidden><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><div id="cs"></div><div id="cb"><button id="acc" hidden>Accept</button><button id="end">End</button></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
 <script>
 /* Supabase connector: gives Chatly the db/user/room APIs it expects */
 const SB=(()=>{
@@ -199,7 +235,7 @@ async function render(arr){
   if(ids.length){try{const u=await SB.user();const p=await u.profiles(ids);ids.forEach(i=>names[i]=p[i]?.name||"Someone")}catch(e){}}
   const box=$("msgs"),atEnd=box.scrollHeight-box.scrollTop-box.clientHeight<80;
   box.innerHTML=arr.map(m=>{const mine=su(m)===uname();const t=new Date(m.ts).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
-    return `<div class="m${mine?" me":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.del?'<span class="del">This message was deleted</span>':body(m)}<div class="t">${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
+    return `<div class="m${mine?" me":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.del?'<span class="del">This message was deleted</span>':body(m)}<div class="t">${mine&&!m.del?'<span class="mm">⋮</span> ':""}${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
   if(atEnd||arr.length<2)box.scrollTop=box.scrollHeight;
 }
 $("f").onsubmit=async e=>{
@@ -257,12 +293,12 @@ function fin(n,ph){const tok=Math.random().toString(36).slice(2)+Date.now().toSt
 async function acct(create){
   $("lerr").textContent="";const n=$("ln").value.trim().slice(0,24),p=$("lw").value,u=n.toLowerCase().replace(/[\s\/]/g,"");
   if(!u)return alert("Enter a username.");if(create&&$("lc").value!==p)return alert("Passwords don’t match.");if(p.length<6)return alert("Password must be at least 6 characters.");
-  if(!db){for(let i=0;i<20&&!db;i++)await new Promise(r=>setTimeout(r,250))}if(!db)return alert("Live sync isn’t connected, so accounts can’t be created right now. Reload the page and try again.");
-  let s;try{s=await db.doc("users/"+u).get()}catch(e){return alert("Couldn’t reach the server. Try again.")}
+  if(!db){for(let i=0;i<20&&!db;i++)await new Promise(r=>setTimeout(r,250))}if(!db)return alert("Live sync isn’t connected, so accounts can’t be created right now. Reload the page and try again. ["+((window.__sberr&&window.__sberr.message)||"no detail")+"]");
+  let s;try{s=await db.doc("users/"+u).get()}catch(e){return alert("Couldn’t reach the server: "+((e&&e.message)||e))}
   const h=await pwh(u,p);
   if(create){if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
     const ph="";
-    try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account.")}fin(n,ph)}
+    try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}fin(n,ph)}
   else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");fin(d.name||n,d.phone)}
 }
 let signup=false;
@@ -316,7 +352,7 @@ const dmBlocked=()=>{const o=dmOther(room);return !!o&&myBlocked().includes(o)};
 async function upUser(p){const u=uname();usersCache[u]={...(usersCache[u]||{}),...p};if(!db)return;try{await db.doc("users/"+u).update(p)}catch(e){try{await db.doc("users/"+u).set({name:me.name,...p})}catch(e2){}}}
 $("bl").onclick=async()=>{const o=dmOther(room);if(!o)return;const b=myBlocked();const nb=b.includes(o)?b.filter(x=>x!==o):[...b,o];await upUser({blocked:nb});alert(nb.includes(o)?"Blocked @"+o+". You won’t see their messages.":"Unblocked @"+o);render(rawCur)};
 function fillProfile(){const u=uname();$("st1").textContent=allRooms().length;$("st2").textContent=myBlocked().length;$("st3").textContent=Object.keys(usersCache).length;$("pfav").innerHTML=avatar(u,me.name,90);$("pfn").textContent=me.name;$("pfu").textContent="@"+u;
-  $("pfs").value=`Add me on Chatly! My username is: ${u}\nhttps://claude.ai/artifact/EfTVoeebQKB4CBgMuvWBFM`;
+  $("pfs").value=`Add me on Chatly! My username is: ${u}\nhttps://zorvexexe-pixel.github.io/Chatly/`;
   const b=myBlocked();$("pfbl").innerHTML=b.length?"<b>Blocked users</b>"+b.map(x=>`<div class="brow"><span>@${esc(x)}</span><button data-ub="${esc(x)}">Unblock</button></div>`).join(""):""}
 $("pf").onclick=()=>{$("pferr").textContent="";fillProfile();$("prof").hidden=false};
 $("pfx").onclick=()=>{$("prof").hidden=true};
@@ -358,6 +394,10 @@ drawRooms();
     if(d&&u){db=d;const v=await u.me();me={id:await u.id()||v.id||"anon",name:v.name||"Someone"};if(prof)me.name=prof.name;names[me.id]=me.name;reg();db.collection("users").onSnapshot(s=>{s.docs.forEach(d=>{usersCache[d.id]=d.data()});checkSess();if(!room)drawRooms();if(!$("prof").hidden)fillProfile()},()=>{});
       db.collection("rooms").onSnapshot(s=>{roomDocs=s.docs.map(x=>x.data()).filter(x=>x.id);if(!room)drawRooms()},()=>{});}
     else throw 0;
-  }catch(e){$("note").hidden=false;$("note").textContent="Live sync unavailable here – running as a local demo."}
+  }catch(e){window.__sberr=e;$("note").hidden=false;$("note").textContent="Live sync unavailable here – running as a local demo."}
 })();
+
+(function(){const w=document.getElementById("lw"),c=document.getElementById("lc");if(!w)return;const box=document.createElement("div");box.className="pw";w.parentNode.insertBefore(box,w);box.appendChild(w);const b=document.createElement("button");b.type="button";b.className="eye";b.setAttribute("aria-label","Show password");const E='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',X='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';b.innerHTML=E;b.onclick=()=>{const show=w.type==="password";w.type=show?"text":"password";if(c)c.type=w.type;b.innerHTML=show?X:E};box.appendChild(b)})();
+
+(function(){const R=render;let seen=new Set(),sr=null;render=async function(){const r=await R.apply(this,arguments);try{const els=document.querySelectorAll("#msgs .m");if(sr!==room){sr=room;seen=new Set();els.forEach(e=>seen.add(e.dataset.id))}else els.forEach(e=>{if(!seen.has(e.dataset.id)){seen.add(e.dataset.id);e.classList.add("new")}})}catch(e){}return r}})();
 </script></body></html>
