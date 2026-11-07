@@ -212,7 +212,7 @@ const db={doc:docRef,collection:name=>colRef(name)};
 const user={async id(){try{const u=JSON.parse(localStorage.getItem("chatly_user")||"null");if(u&&u.name)return u.name.toLowerCase().replace(/[\s\/]/g,"")}catch(e){}return guest},async me(){return{id:await this.id(),name:"Someone"}},async profiles(ids){const o={};ids.forEach(i=>o[i]={name:i});return o}};
 let rch=null;const hs={};
 const room={async emit(t,d){rch&&await rch.send({type:"broadcast",event:t,payload:{peer:peerId,data:d}})},on(t,fn){(hs[t]=hs[t]||[]).push(fn)},peers(){return[{isMe:true,peer:peerId}]}};
-return{db:async()=>db,user:async()=>user,room:async()=>{if(!rch){rch=sb.channel("chatly-signal",{config:{broadcast:{self:false}}});["call","typing"].forEach(t=>rch.on("broadcast",{event:t},m=>{(hs[t]||[]).forEach(f=>f({isMe:false,peer:m.payload.peer,data:m.payload.data}))}));await new Promise(r=>rch.subscribe(st=>{if(st==="SUBSCRIBED")r()}))}return room}}
+return{raw:sb,db:async()=>db,user:async()=>user,room:async()=>{if(!rch){rch=sb.channel("chatly-signal",{config:{broadcast:{self:false}}});["call","typing"].forEach(t=>rch.on("broadcast",{event:t},m=>{(hs[t]||[]).forEach(f=>f({isMe:false,peer:m.payload.peer,data:m.payload.data}))}));await new Promise(r=>rch.subscribe(st=>{if(st==="SUBSCRIBED")r()}))}return room}}
 })();
 </script>
 <script>
@@ -461,19 +461,14 @@ box.addEventListener("mousedown",onStart);box.addEventListener("mousemove",onMov
 
 let notifyReady=false;
 function initNotify(){
-  if(notifyReady||!db||!("Notification" in window))return;notifyReady=true;
+  if(notifyReady||!("Notification" in window))return;notifyReady=true;
   if(Notification.permission==="default")Notification.requestPermission().catch(()=>{});
-  let first=true;const seenAll=new Set();
-  db.collection("messages").onSnapshot(s=>{
-    if(first){first=false;s.docs.forEach(d=>seenAll.add(d.id));return}
-    s.docs.forEach(d=>{
-      if(seenAll.has(d.id))return;seenAll.add(d.id);
-      const m=d.data();
-      if(su(m)===uname()||m.del)return;
-      if(document.visibilityState==="visible"&&room===m.room)return;
-      notifyShow(m)
-    })
-  },()=>{})
+  SB.raw.channel("chatly-notify").on("postgres_changes",{event:"INSERT",schema:"public",table:"docs",filter:"collection=eq.messages"},p=>{
+    const m=p.new&&p.new.data;if(!m)return;
+    if(su(m)===uname()||m.del)return;
+    if(document.visibilityState==="visible"&&room===m.room)return;
+    notifyShow(m)
+  }).subscribe()
 }
 async function notifyShow(m){
   if(Notification.permission!=="granted")return;
