@@ -433,14 +433,22 @@ $("ng").onclick=async()=>{
 applyLogin();
 initCalls();
 drawRooms();
-(async()=>{
+async function bootSB(attempt){
   try{
     const [d,u]=await Promise.all([SB.db(),SB.user()]);
-    if(d&&u){db=d;const v=await u.me();me={id:await u.id()||v.id||"anon",name:v.name||"Someone"};if(prof)me.name=prof.name;names[me.id]=me.name;reg();db.collection("users").onSnapshot(s=>{s.docs.forEach(d=>{usersCache[d.id]=d.data()});checkSess();if(!room)drawRooms();if(!$("prof").hidden)fillProfile()},()=>{});
-      db.collection("rooms").onSnapshot(s=>{roomDocs=s.docs.map(x=>x.data()).filter(x=>x.id);if(!room)drawRooms()},()=>{});}
-    else throw 0;
-  }catch(e){window.__sberr=e;$("note").hidden=false;$("note").textContent="Live sync unavailable here – running as a local demo."}
-})();
+    if(!d||!u)throw new Error("Supabase did not return a client");
+    db=d;const v=await u.me();me={id:await u.id()||v.id||"anon",name:v.name||"Someone"};if(prof)me.name=prof.name;names[me.id]=me.name;reg();
+    db.collection("users").onSnapshot(s=>{s.docs.forEach(d=>{usersCache[d.id]=d.data()});checkSess();if(!room)drawRooms();if(!$("prof").hidden)fillProfile()},()=>{});
+    db.collection("rooms").onSnapshot(s=>{roomDocs=s.docs.map(x=>x.data()).filter(x=>x.id);if(!room)drawRooms()},()=>{});
+    $("note").hidden=true;if(prof)initNotify();
+  }catch(e){
+    window.__sberr=e;
+    if(attempt<3){setTimeout(()=>bootSB(attempt+1),1200*(attempt+1));return}
+    $("note").hidden=false;$("note").innerHTML="Live sync unavailable here – running as a local demo. <button type=\"button\" id=\"retrysb\" style=\"text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer\">Retry</button>";
+    const rb=document.getElementById("retrysb");if(rb)rb.onclick=()=>{$("note").hidden=true;bootSB(0)}
+  }
+}
+bootSB(0);
 
 (function(){const w=document.getElementById("lw"),c=document.getElementById("lc");if(!w)return;const box=document.createElement("div");box.className="pw";w.parentNode.insertBefore(box,w);box.appendChild(w);const b=document.createElement("button");b.type="button";b.className="eye";b.setAttribute("aria-label","Show password");const E='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',X='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';b.innerHTML=E;b.onclick=()=>{const show=w.type==="password";w.type=show?"text":"password";if(c)c.type=w.type;b.innerHTML=show?X:E};box.appendChild(b)})();
 
