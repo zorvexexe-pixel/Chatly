@@ -48,7 +48,7 @@ form{display:flex;gap:8px;padding:8px;background:var(--panel);border-top:1px sol
 .m .t svg{width:16px;height:11px;fill:none;stroke:var(--sub);stroke-width:1.8;vertical-align:middle;margin-left:3px}.m .t svg.rd{stroke:#34b7f1}
 .m audio{max-width:100%;height:36px}.m .del{font-style:italic;color:var(--sub)}
 #sheet{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--panel);border-top:1px solid var(--line);display:flex;flex-direction:column;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}#sheet[hidden]{display:none}
-#sheet button{background:none;border:0;color:var(--text);font:inherit;padding:14px;text-align:left;cursor:pointer}
+#rxrow{display:flex;justify-content:space-around;padding:4px 0 8px;border-bottom:1px solid var(--line);margin-bottom:4px}#sheet #rxrow button{font-size:28px;padding:6px 10px;border-radius:50%}#sheet #rxrow button.on{background:#14b8a633}.rch{display:inline-flex;gap:4px;margin-top:4px;flex-wrap:wrap}.rch span{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:1px 7px;font-size:13px;cursor:pointer}.rch span.on{border-color:#14b8a6;background:#14b8a622}#sheet button{background:none;border:0;color:var(--text);font:inherit;padding:14px;text-align:left;cursor:pointer}
 header svg{width:24px;height:24px;fill:currentColor;display:block}
 #logo svg{width:34px;height:34px}
 #logo{display:inline-flex;vertical-align:middle;margin-right:8px}
@@ -162,6 +162,31 @@ button:active{transform:scale(.94)}
 .fwr{display:block;width:100%;text-align:left;background:none;border:0;color:var(--text);padding:12px 4px;border-bottom:1px solid var(--line)}
 #fwx{margin-top:8px;width:100%;background:var(--box);border:1px solid var(--line);border-radius:10px;padding:10px}
 .fwdtag{font-size:11px;opacity:.6;font-style:italic;margin-bottom:2px}
+
+/* smooth + friends */
+.room{animation:none}
+#msgs{overflow-x:hidden}
+.m{will-change:auto}
+#msgs .m{touch-action:pan-y;-webkit-user-select:none;user-select:none;backface-visibility:hidden}
+.swic{position:absolute;left:-42px;top:50%;width:32px;height:32px;border-radius:50%;background:var(--panel);color:var(--sub);box-shadow:0 1px 4px #0003;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(-50%) scale(.6);pointer-events:none;transition:background-color .15s,color .15s}
+.swic.go{background:#14b8a6;color:#fff}.swic svg{width:18px;height:18px;fill:currentColor}
+#fview{position:fixed;inset:0;z-index:65;background:#0008;display:flex;flex-direction:column;justify-content:flex-end;animation:fadein .2s ease}
+#fview[hidden]{display:none}
+#fvb{background:var(--panel);width:100%;height:78vh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;animation:slideup .28s cubic-bezier(.2,.8,.2,1)}
+#fvh{display:flex;align-items:center;gap:10px;padding:12px}#fvh button{background:none;border:0;color:var(--text)}#fvh svg{width:24px;height:24px;fill:currentColor}
+#fvtabs{display:flex;border-bottom:1px solid var(--line)}
+#fvtabs button{flex:1;background:none;border:0;border-bottom:3px solid transparent;color:var(--sub);padding:12px;font:inherit}
+#fvtabs button.on{color:var(--text);border-bottom-color:#14b8a6;font-weight:600}
+#fvlist{overflow:auto;flex:1;overscroll-behavior:contain}
+.frow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.fi{flex:1;min-width:0}.fi b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fi span{font-size:13px;color:var(--sub)}
+.fb{display:flex;gap:6px;align-items:center}
+.fb button{background:var(--box);border:1px solid var(--line);color:var(--text);border-radius:14px;padding:6px 12px;font:inherit;font-size:13px}
+.fb button.pri{background:#14b8a6;color:#fff;border-color:#14b8a6}.fb .rs{font-size:12px;color:var(--sub)}
+#pfst .clk{cursor:pointer}
+#pf{position:relative}#pf.hasreq::after{content:"";position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:#ff3b30;border:2px solid #fff}
+.room .rs{margin-left:auto;font-size:12px;padding:5px 12px;border-radius:14px;border:1px solid var(--line);color:var(--sub);white-space:nowrap}
+.room .rs.add{background:#14b8a6;color:#fff;border-color:#14b8a6}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -176,11 +201,12 @@ button:active{transform:scale(.94)}
 <div id="rbar" hidden><span id="rtxt"></span><button id="rx" type="button" aria-label="Cancel reply">×</button></div>
 <form id="f"><button type="button" id="att" aria-label="Send photo"><svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5z"/></svg></button><input type="file" id="fi" accept="image/*" hidden><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
-<div id="prof" hidden><div id="pfb"><div id="pfban"></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn">⭐ Starred messages</button></div><div id="pfst"><div><b id="st1">0</b><span>Chats</span></div><div><b id="st2">0</b><span>Blocked</span></div><div><b id="st3">0</b><span>People</span></div></div><div id="pfact"><button type="button" id="pfsh">Share account</button><button type="button" id="pfcp">Copy</button></div><input id="pfs" readonly><div id="pferr"></div><div id="pfbl"></div><button type="button" id="pfout">Sign out</button></div></div>
+<div id="prof" hidden><div id="pfb"><div id="pfban"></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn">⭐ Starred messages</button></div><div id="pfst"><div><b id="st1">0</b><span>Chats</span></div><div id="stfg" class="clk"><b id="st2">0</b><span>Following</span></div><div id="stfr" class="clk"><b id="st3">0</b><span>Followers</span></div></div><div id="pfact"><button type="button" id="pfsh">Share account</button><button type="button" id="pfcp">Copy</button></div><input id="pfs" readonly><div id="pferr"></div><div id="pfbl"></div><button type="button" id="pfout">Sign out</button></div></div>
 <div id="nc" hidden><div id="ncb"><b>New chat</b><input id="nu" placeholder="Usernames, comma separated"><input id="ngn" placeholder="Group name (only for 2 or more people)"><div id="nerr"></div><div class="nrow"><button type="button" id="nx">Cancel</button><button type="button" id="ng">Start chat</button></div></div></div>
 <nav id="nav" hidden><button id="tc" class="on"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><span>Chats</span></button><button id="tp"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg><span>Profile</span></button></nav>
-<div id="sheet" hidden><button id="s-re">Reply</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
+<div id="sheet" hidden><div id="rxrow"><button type="button" data-e="👍">👍</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="😂">😂</button><button type="button" data-e="😮">😮</button><button type="button" data-e="😢">😢</button><button type="button" data-e="🙏">🙏</button></div><button id="s-re">Reply</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
 <div id="starview" hidden><div id="svh"><button id="svx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Starred messages</b></div><div id="svlist"></div></div>
+<div id="fview" hidden><div id="fvb"><div id="fvh"><button id="fvx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Friends</b></div><div id="fvtabs"><button id="fvt1" class="on">Following</button><button id="fvt2">Followers</button></div><div id="fvlist"></div></div></div>
 <div id="fwpick" hidden><div id="fwb"><b>Forward to...</b><div id="fwlist"></div><button type="button" id="fwx">Cancel</button></div></div>
 <div id="login"><span id="biglogo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><h2 id="lt">Chatly</h2><form id="lf"><input id="ln" placeholder="Username" maxlength="24" required><input id="lw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password"><input id="lc" type="password" placeholder="Confirm password" autocomplete="new-password" hidden><button id="lb">Log in</button><button type="button" id="su">Create account</button></form><div id="lerr"></div><div id="lconn">Connecting…</div></div>
 <div id="call" hidden><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><div id="cs"></div><div id="cb"><button id="acc" hidden>Accept</button><button id="end">End</button></div></div>
@@ -223,12 +249,14 @@ const defaults=["General","Friends","Random"];
 let rooms=[...defaults];
 function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
 function drawRooms(){const q=$("sq")?$("sq").value.trim().toLowerCase().replace(/^@/,""):"";if(q){$("list").innerHTML=searchHTML(q);return}$("list").innerHTML=allRooms().map(r=>{const t=titleOf(r.id);return `<div class="room" data-r="${esc(r.id)}">${avOf(r,t)}<div><b>${esc(t)}</b><span>${esc(subOf(r.id))}</span></div></div>`}).join("")}
-$("list").onclick=e=>{const r=e.target.closest(".room");if(!r)return;if(r.dataset.u){openDM(r.dataset.u);return}open(r.dataset.r)};
+$("list").onclick=e=>{const r=e.target.closest(".room");if(!r)return;if(r.dataset.u){userTap(r.dataset.u);return}open(r.dataset.r)};
 $("fab").onclick=async()=>{
   if(!db){alert("Private chats need live sync.");return}
   const raw=prompt("Username(s) to chat with, comma separated.\nOne name = private chat, several = group.");
   const us=[...new Set((raw||"").split(",").map(x=>x.toLowerCase().replace(/[\s\/]/g,"")).filter(x=>x&&x!==uname()))];
   if(!us.length)return;
+  const nf=us.filter(x=>!isFriend(x));
+  if(nf.length){if(us.length===1)userTap(us[0]);else alert("Only friends can be added to a group. Not friends yet: "+nf.map(x=>"@"+x).join(", "));return}
   const nm={[uname()]:me.name};
   for(const u of us){let s;try{s=await db.doc("users/"+u).get()}catch(e){}
     if(!s||!s.exists){alert(u+" not found. They need to sign in once first.");return}nm[u]=s.data().name||u}
@@ -250,22 +278,22 @@ function open(r){
   $("in").focus();
 }
 async function render(arr){
-  rawCur=arr;arr=arr.filter(m=>!isBlocked(m));arr.sort((a,b)=>a.ts-b.ts);markRead(arr);cur=arr;
+  rawCur=arr;if(window._sw){window._rp=1;return}arr=arr.filter(m=>!isBlocked(m));arr.sort((a,b)=>a.ts-b.ts);markRead(arr);cur=arr;
   const ids=[...new Set(arr.map(m=>m.uid))].filter(i=>i&&!names[i]);
   if(ids.length){try{const u=await SB.user();const p=await u.profiles(ids);ids.forEach(i=>names[i]=p[i]?.name||"Someone")}catch(e){}}
   const box=$("msgs"),atEnd=box.scrollHeight-box.scrollTop-box.clientHeight<80;
   box.innerHTML=arr.map(m=>{const mine=su(m)===uname();const t=new Date(m.ts).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
-    return `<div class="m${mine?" me":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.fwd&&!m.del?'<div class="fwdtag">Forwarded</div>':''}${m.del?'<span class="del">This message was deleted</span>':body(m)}<div class="t">${mine&&!m.del?'<span class="mm">⋮</span> ':""}${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
+    return `<div class="m${mine?" me":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.fwd&&!m.del?'<div class="fwdtag">Forwarded</div>':''}${m.del?'<span class="del">This message was deleted</span>':body(m)}${m.del?"":rch(m)}<div class="t">${mine&&!m.del?'<span class="mm">⋮</span> ':""}${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
   if(atEnd||arr.length<2)box.scrollTop=box.scrollHeight;
 }
 $("f").onsubmit=async e=>{
-  e.preventDefault();const text=$("in").value.trim();if(!text||!room)return;if(dmBlocked()){alert("You blocked this user. Unblock them to send messages.");return}$("in").value="";
+  e.preventDefault();const text=$("in").value.trim();if(!text||!room)return;if(dmBlocked()){alert("You blocked this user. Unblock them to send messages.");return}if(dmLocked()){lockMsg();return}$("in").value="";
   const m={room,text,uid:me.id,name:me.name,ts:Date.now()};if(replyTo){m.re=replyTo;replyTo=null;$("rbar").hidden=true}
   if(db){try{await db.collection("messages").add(m)}catch(err){$("note").hidden=false;$("note").textContent="Couldn’t send – you may need to sign in or have edit access."}}
   else{local.push(m);render(local.filter(x=>x.room===room))}
 };
 function linkify(s){return esc(s).replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`)}
-$("att").onclick=()=>{if(dmBlocked()){alert("You blocked this user.");return}$("fi").click()};
+$("att").onclick=()=>{if(dmBlocked()){alert("You blocked this user.");return}if(dmLocked()){lockMsg();return}$("fi").click()};
 $("fi").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f||!room)return;const im=new Image();im.onload=async()=>{
   const k=Math.min(1,720/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);
   let q=.7,u=c.toDataURL("image/jpeg",q);while(u.length>180000&&q>.2){q-=.15;u=c.toDataURL("image/jpeg",q)}
@@ -344,7 +372,12 @@ const body=m=>{let h="";if(m.re)h+=`<div class="q"><b>${esc(m.re.name)}</b><br>$
   return h+linkify(m.text||"")};
 const ticks=m=>{const r=(m.rb||[]).length>0;return `<svg viewBox="0 0 18 11" class="${r?"rd":""}"><path d="M1 6l3 3L11 1"/>${r?'<path d="M7 9l1 .9L15 1"/>':""}</svg>`};
 function markRead(arr){if(!db||document.visibilityState!=="visible")return;const u=uname();arr.forEach(m=>{if(su(m)!==u&&m.id&&!m.del&&!(m.rb||[]).includes(u))db.doc("messages/"+m.id).update({rb:[...(m.rb||[]),u]}).catch(()=>{})})}
-$("msgs").onclick=e=>{const el=e.target.closest(".m");if(!el||e.target.closest("a,audio"))return;sel=el.dataset.id;$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false};
+function hlRx(){const m=cur.find(x=>(x.id||String(x.ts))===sel),my=m&&m.rc&&m.rc[uname()];document.querySelectorAll("#rxrow button").forEach(b=>b.classList.toggle("on",b.dataset.e===my))}
+const rch=m=>{const r=m.rc||{},c={};Object.values(r).forEach(x=>c[x]=(c[x]||0)+1);const k=Object.keys(c);if(!k.length)return"";const my=r[uname()];return`<div class="rch">${k.map(x=>`<span data-e="${esc(x)}" class="${my===x?"on":""}">${esc(x)}${c[x]>1?" "+c[x]:""}</span>`).join("")}</div>`};
+async function react(id,e){const m=cur.find(x=>(x.id||String(x.ts))===id);if(!m||m.del)return;const u=uname(),rc={...(m.rc||{})};if(rc[u]===e)delete rc[u];else rc[u]=e;m.rc=rc;render(rawCur);
+  if(db&&m.id){try{await db.doc("messages/"+m.id).update({rc})}catch(err){alert("Couldn’t react: "+((err&&err.message)||err))}}}
+$("rxrow").onclick=e=>{const b=e.target.closest("button");if(!b)return;$("sheet").hidden=true;react(sel,b.dataset.e)};
+$("msgs").onclick=e=>{if(Date.now()-(window._swd||0)<350)return;const ch=e.target.closest(".rch span");if(ch){const mm=ch.closest(".m");if(mm)react(mm.dataset.id,ch.dataset.e);return}const el=e.target.closest(".m");if(!el||e.target.closest("a,audio"))return;sel=el.dataset.id;hlRx();$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false};
 $("s-x").onclick=()=>{$("sheet").hidden=true};
 const starKey=()=>uname()+":stars";
 function myStars(){try{return JSON.parse(localStorage.getItem(starKey())||"[]")}catch(e){return[]}}
@@ -366,10 +399,10 @@ $("s-del").onclick=async()=>{$("sheet").hidden=true;const id=sel;
   if(db){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m){m.del=true;m.text="";m.img="";m.aud="";render(rawCur)}
     try{await db.doc("messages/"+id).update({del:true,text:"",img:"",aud:""})}catch(e){alert("Couldn’t delete: "+((e&&e.message)||e))}}
   else{const m=local.find(x=>String(x.ts)===id);if(m){m.del=true;m.text="";render(local.filter(x=>x.room===room))}}};
-$("msgs").addEventListener("contextmenu",e=>{const el=e.target.closest(".m");if(!el)return;e.preventDefault();sel=el.dataset.id;$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false});
+$("msgs").addEventListener("contextmenu",e=>{const el=e.target.closest(".m");if(!el)return;e.preventDefault();sel=el.dataset.id;hlRx();$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false});
 $("rx").onclick=()=>{replyTo=null;$("rbar").hidden=true};
 let lastTy=0;$("in").oninput=()=>{const n=Date.now();if(R&&room&&n-lastTy>1500){lastTy=n;R.emit("typing",{room,name:me.name}).catch(()=>{})}};
-async function postRaw(m){if(dmBlocked()){alert("You blocked this user. Unblock them to send messages.");return}if(db){try{await db.collection("messages").add(m)}catch(e){$("note").hidden=false;$("note").textContent="Couldn’t send."}}else{local.push(m);render(local.filter(x=>x.room===room))}}
+async function postRaw(m){if(dmBlocked()){alert("You blocked this user. Unblock them to send messages.");return}if(dmLocked()){lockMsg();return}if(db){try{await db.collection("messages").add(m)}catch(e){$("note").hidden=false;$("note").textContent="Couldn’t send."}}else{local.push(m);render(local.filter(x=>x.room===room))}}
 let rec=null,chunks=[];
 $("mic").onclick=async()=>{if(rec){rec.stop();return}if(!room)return;
   try{const s=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(s,{audioBitsPerSecond:16000});chunks=[];
@@ -386,7 +419,7 @@ function avatar(u,name,sz){const p=u&&usersCache[u]&&usersCache[u].photo;const s
 function dmOther(id){const r=roomDocs.find(x=>x.id===id);return r&&r.dm?r.members.find(x=>x!==uname()):null}
 function avOf(r,t){return avatar(r.dm?r.members.find(x=>x!==uname()):null,t,44)}
 function searchHTML(q){const me_=uname();const hits=Object.keys(usersCache).filter(k=>k!==me_&&(k.includes(q)||String(usersCache[k].name||"").toLowerCase().includes(q))).slice(0,20);
-  return hits.length?hits.map(k=>`<div class="room" data-u="${esc(k)}">${avatar(k,usersCache[k].name||k,44)}<div><b>${esc(usersCache[k].name||k)}</b><span>@${esc(k)}</span></div></div>`).join(""):`<div class="empty">No user found for “${esc(q)}”</div>`}
+  return hits.length?hits.map(k=>`<div class="room" data-u="${esc(k)}">${avatar(k,usersCache[k].name||k,44)}<div><b>${esc(usersCache[k].name||k)}</b><span>@${esc(k)}</span></div><span class="rs${isFriend(k)||mySent().includes(k)?"":" add"}">${isFriend(k)?"Message":mySent().includes(k)?"Requested":pendingIn().includes(k)?"Accept":"Add"}</span></div>`).join(""):`<div class="empty">No user found for “${esc(q)}”</div>`}
 async function openDM(u){if(!db)return;const mem=[uname(),u].sort();const doc={id:"dm_"+mem.join("_"),dm:true,members:mem,names:{[uname()]:me.name,[u]:(usersCache[u]&&usersCache[u].name)||u}};
   if(!roomDocs.find(x=>x.id===doc.id)){try{await db.doc("rooms/"+doc.id).set(doc)}catch(e){}roomDocs.push(doc)}
   $("sq").value="";open(doc.id)}
@@ -395,11 +428,49 @@ const myBlocked=()=>(usersCache[uname()]&&usersCache[uname()].blocked)||[];
 const isBlocked=m=>su(m)!==uname()&&myBlocked().includes(su(m));
 const dmBlocked=()=>{const o=dmOther(room);return !!o&&myBlocked().includes(o)};
 async function upUser(p){const u=uname();usersCache[u]={...(usersCache[u]||{}),...p};if(!db)return;try{await db.doc("users/"+u).update(p)}catch(e){try{await db.doc("users/"+u).set({name:me.name,...p})}catch(e2){}}}
+function uc(x){return usersCache[x]||{}}
+function mySent(){return uc(uname()).sent||[]}
+function myFriendsL(){return uc(uname()).friends||[]}
+function myRej(){return uc(uname()).rejected||[]}
+function isFriend(x){const m=uname();return ((uc(m).sent||[]).includes(x)&&(uc(x).friends||[]).includes(m))||((uc(x).sent||[]).includes(m)&&(uc(m).friends||[]).includes(x))}
+function following(){return mySent().filter(x=>usersCache[x])}
+function followers(){const m=uname();return Object.keys(usersCache).filter(k=>k!==m&&(usersCache[k].sent||[]).includes(m))}
+function pendingIn(){return followers().filter(x=>!myFriendsL().includes(x)&&!myRej().includes(x))}
+function reqDot(){const b=$("pf");if(b)b.classList.toggle("hasreq",pendingIn().length>0)}
+const uniq=a=>[...new Set(a)];
+async function sendReq(x){await upUser({sent:uniq([...mySent(),x]),rejected:myRej().filter(y=>y!==x)})}
+async function acceptReq(x){await upUser({friends:uniq([...myFriendsL(),x]),rejected:myRej().filter(y=>y!==x)})}
+async function declineReq(x){await upUser({rejected:uniq([...myRej(),x]),friends:myFriendsL().filter(y=>y!==x)})}
+async function unfollow(x){await upUser({sent:mySent().filter(y=>y!==x),friends:myFriendsL().filter(y=>y!==x)})}
+function dmLocked(){if(!db)return false;const o=dmOther(room);return !!o&&!isFriend(o)}
+function lockMsg(){const o=dmOther(room);alert("You can message @"+o+" only after you are friends. Send a friend request and wait for them to accept.")}
+async function userTap(u){
+  if(isFriend(u)){openDM(u);return}
+  if(mySent().includes(u)){alert("Friend request already sent to @"+u+". You can message once they accept.");return}
+  if(pendingIn().includes(u)||myRej().includes(u)&&followers().includes(u)){if(confirm("@"+u+" sent you a friend request. Accept it?")){await acceptReq(u);drawRooms();openDM(u)}return}
+  if(confirm("Send a friend request to @"+u+"?\nYou can message them once they accept.")){await sendReq(u);alert("Friend request sent to @"+u+".");drawRooms()}}
+let fvTab=1;
+function fvOpen(t){fvTab=t;drawFV();$("fview").hidden=false}
+function drawFV(){
+  $("fvt1").className=fvTab===1?"on":"";$("fvt2").className=fvTab===2?"on":"";
+  $("fvt1").textContent="Following "+following().length;$("fvt2").textContent="Followers "+followers().length;
+  const l=fvTab===1?following():followers();
+  const row=x=>{const n=(usersCache[x]&&usersCache[x].name)||x,e=esc(x);let b="";
+    if(fvTab===1)b=isFriend(x)?`<button data-a="msg" data-u="${e}">Message</button><button data-a="unf" data-u="${e}">Unfollow</button>`:`<span class="rs">Requested</span><button data-a="unf" data-u="${e}">Cancel</button>`;
+    else{const fr=myFriendsL().includes(x),rj=myRej().includes(x);b=fr?`<button data-a="msg" data-u="${e}">Message</button><button data-a="rem" data-u="${e}">Remove</button>`:`<button class="pri" data-a="acc" data-u="${e}">Accept</button>`+(rj?`<span class="rs">Declined</span>`:`<button data-a="dec" data-u="${e}">Decline</button>`)}
+    return `<div class="frow">${avatar(x,n,40)}<div class="fi"><b>${esc(n)}</b><span>@${e}</span></div><div class="fb">${b}</div></div>`};
+  $("fvlist").innerHTML=l.length?l.map(row).join(""):`<div class="empty">${fvTab===1?"You haven’t sent any friend requests yet.":"No followers yet."}</div>`}
+$("stfg").onclick=()=>fvOpen(1);$("stfr").onclick=()=>fvOpen(2);$("fvx").onclick=()=>{$("fview").hidden=true};
+$("fvt1").onclick=()=>{fvTab=1;drawFV()};$("fvt2").onclick=()=>{fvTab=2;drawFV()};
+$("fvlist").onclick=async e=>{const b=e.target.closest("button");if(!b)return;const x=b.dataset.u,a=b.dataset.a;
+  if(a==="msg"){$("fview").hidden=true;$("prof").hidden=true;openDM(x);return}
+  if(a==="acc")await acceptReq(x);else if(a==="dec"||a==="rem")await declineReq(x);else if(a==="unf")await unfollow(x);
+  drawFV();fillProfile()};
 $("bl").onclick=async()=>{const o=dmOther(room);if(!o)return;const b=myBlocked();const nb=b.includes(o)?b.filter(x=>x!==o):[...b,o];await upUser({blocked:nb});alert(nb.includes(o)?"Blocked @"+o+". You won’t see their messages.":"Unblocked @"+o);render(rawCur)};
 window.openGroupInfo=openGroupInfo;
-function fillProfile(){const u=uname();$("st1").textContent=allRooms().length;$("st2").textContent=myBlocked().length;$("st3").textContent=Object.keys(usersCache).length;$("pfav").innerHTML=avatar(u,me.name,90);$("pfn").textContent=me.name;$("pfu").textContent="@"+u;
+function fillProfile(){const u=uname();$("st1").textContent=allRooms().length;$("st2").textContent=following().length;$("st3").textContent=followers().length;$("pfav").innerHTML=avatar(u,me.name,90);$("pfn").textContent=me.name;$("pfu").textContent="@"+u;
   $("pfs").value=`Add me on Chatly! My username is: ${u}\nhttps://zorvexexe-pixel.github.io/Chatly/`;
-  const b=myBlocked();$("pfbl").innerHTML=b.length?"<b>Blocked users</b>"+b.map(x=>`<div class="brow"><span>@${esc(x)}</span><button data-ub="${esc(x)}">Unblock</button></div>`).join(""):""}
+  $("pfbl").innerHTML="";reqDot()}
 $("pf").onclick=()=>{$("pferr").textContent="";fillProfile();$("prof").hidden=false};
 $("pfx").onclick=()=>{$("prof").hidden=true};
 $("pfch").onclick=()=>$("pfi").click();
@@ -439,7 +510,7 @@ async function bootSB(attempt){
     const [d,u]=await Promise.all([SB.db(),SB.user()]);
     if(!d||!u)throw new Error("Supabase did not return a client");
     db=d;const v=await u.me();me={id:await u.id()||v.id||"anon",name:v.name||"Someone"};if(prof)me.name=prof.name;names[me.id]=me.name;reg();
-    db.collection("users").onSnapshot(s=>{s.docs.forEach(d=>{usersCache[d.id]=d.data()});checkSess();if(!room)drawRooms();if(!$("prof").hidden)fillProfile()},()=>{});
+    db.collection("users").onSnapshot(s=>{s.docs.forEach(d=>{usersCache[d.id]=d.data()});checkSess();if(!room)drawRooms();if(!$("prof").hidden)fillProfile();if(!$("fview").hidden)drawFV();reqDot()},()=>{});
     db.collection("rooms").onSnapshot(s=>{roomDocs=s.docs.map(x=>x.data()).filter(x=>x.id);if(!room)drawRooms()},()=>{});
     $("note").hidden=true;$("lconn").hidden=true;if(prof)initNotify();
   }catch(e){
@@ -456,17 +527,26 @@ setTimeout(()=>{if($("lconn")&&!db&&!sbGaveUp)$("lconn").hidden=false},300);
 
 (function(){const R=render;let seen=new Set(),sr=null;render=async function(){const r=await R.apply(this,arguments);try{const els=document.querySelectorAll("#msgs .m");if(sr!==room){sr=room;seen=new Set();els.forEach(e=>seen.add(e.dataset.id))}else els.forEach(e=>{if(!seen.has(e.dataset.id)){seen.add(e.dataset.id);e.classList.add("new")}})}catch(e){}return r}})();
 
-(function(){let sx=0,sy=0,el=null,dragging=false,id=null;
-function onStart(e){const t=e.target.closest(".m");if(!t||e.target.closest("a,audio,button"))return;const p=e.touches?e.touches[0]:e;sx=p.clientX;sy=p.clientY;el=t;dragging=true;id=t.dataset.id}
-function onMove(e){if(!dragging||!el)return;const p=e.touches?e.touches[0]:e;const dx=p.clientX-sx,dy=p.clientY-sy;if(Math.abs(dy)>Math.abs(dx)+10){dragging=false;el.style.transform="";return}
-  if(dx>0&&dx<90){el.style.transform="translateX("+dx+"px)";el.style.transition="none";if(e.cancelable)e.preventDefault()}}
-function onEnd(){if(!dragging||!el)return;const dx=parseFloat((el.style.transform.match(/-?\d+\.?\d*/)||[0])[0])||0;
-  el.style.transition="transform .18s ease";el.style.transform="";
-  if(dx>56){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}}
-  dragging=false;el=null}
-const box=document.getElementById("msgs");
-box.addEventListener("touchstart",onStart,{passive:true});box.addEventListener("touchmove",onMove,{passive:false});box.addEventListener("touchend",onEnd);
-box.addEventListener("mousedown",onStart);box.addEventListener("mousemove",onMove);box.addEventListener("mouseup",onEnd);box.addEventListener("mouseleave",onEnd);
+(function(){const box=document.getElementById("msgs");let st=null,raf=0;const TH=64,MAX=96;
+const ICON='<svg viewBox="0 0 24 24"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/></svg>';
+const ease=d=>MAX*(1-Math.exp(-d/MAX));
+function doReply(id){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}}
+function apply(){raf=0;if(!st||!st.ic)return;const x=st.x;st.el.style.transform="translate3d("+x+"px,0,0)";st.ic.style.opacity=Math.min(1,x/(TH*.7));st.ic.style.transform="translateY(-50%) scale("+(.6+Math.min(.5,x/TH*.5))+")"}
+function down(e){if(e.pointerType==="mouse"&&e.button!==0)return;const t=e.target.closest(".m");if(!t||e.target.closest("a,audio,button,.rch"))return;st={el:t,id:t.dataset.id,x0:e.clientX,y0:e.clientY,x:0,lock:false,fired:false,pid:e.pointerId,ic:null}}
+function move(e){if(!st||e.pointerId!==st.pid)return;const dx=e.clientX-st.x0,dy=e.clientY-st.y0;
+  if(!st.lock){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;if(Math.abs(dy)>Math.abs(dx)||dx<0){st=null;return}
+    st.lock=true;window._sw=1;window._swd=Date.now();st.el.style.transition="none";st.el.style.willChange="transform";
+    const ic=document.createElement("div");ic.className="swic";ic.innerHTML=ICON;st.el.appendChild(ic);st.ic=ic;try{box.setPointerCapture(e.pointerId)}catch(_){}}
+  st.x=ease(Math.max(0,dx));
+  if(!st.fired&&dx>=TH){st.fired=true;st.ic.classList.add("go");if(navigator.vibrate)try{navigator.vibrate(12)}catch(_){}}
+  else if(st.fired&&dx<TH-10){st.fired=false;st.ic.classList.remove("go")}
+  if(!raf)raf=requestAnimationFrame(apply)}
+function up(){if(!st)return;const s=st;st=null;cancelAnimationFrame(raf);raf=0;if(!s.lock)return;window._swd=Date.now();
+  const el=s.el;el.style.transition="transform .3s cubic-bezier(.2,.9,.25,1)";el.style.transform="translate3d(0,0,0)";
+  if(s.ic){s.ic.style.transition="opacity .2s ease";s.ic.style.opacity=0}
+  if(s.fired)doReply(s.id);
+  setTimeout(()=>{el.style.transition="";el.style.transform="";el.style.willChange="";if(s.ic)s.ic.remove();window._sw=0;if(window._rp){window._rp=0;render(rawCur)}},320)}
+box.addEventListener("pointerdown",down);box.addEventListener("pointermove",move);box.addEventListener("pointerup",up);box.addEventListener("pointercancel",up);
 })();
 
 function initNotify(){
