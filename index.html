@@ -117,7 +117,7 @@ header{background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 2px 10px 
 .room{transition:background .15s}.room:active{background:var(--line)}
 #fab{background:linear-gradient(135deg,#14b8a6,#6366f1);border-radius:50%;transition:transform .15s}#fab:active{transform:scale(.9)}
 #msgs{background:var(--bg) radial-gradient(circle at 20% 10%,#14b8a61f,transparent 40%),radial-gradient(circle at 85% 85%,#6366f11f,transparent 45%)}
-.m{position:relative;border-radius:16px 16px 16px 4px;box-shadow:0 1px 2px #0002}.m.new{animation:pop .22s cubic-bezier(.2,.8,.2,1)}
+.m{position:relative;border-radius:16px 16px 16px 4px;box-shadow:0 1px 2px #0002;will-change:transform}.m.new{animation:pop .22s cubic-bezier(.2,.8,.2,1)}
 .m.me{border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff}
 .m.me .t,.m.me .n{color:#ffffffcc}.m.me a{color:#fff}
 .mm{cursor:pointer;font-weight:700;font-size:20px;padding:6px 14px;opacity:.95}
@@ -146,6 +146,21 @@ button:active{transform:scale(.94)}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 #lv{transform:scaleX(-1)}
+
+#pfstars{width:100%;max-width:320px;margin-top:4px}
+#pfstarsbtn{width:100%;text-align:left;background:var(--box);border:1px solid var(--line);border-radius:10px;padding:12px}
+#starview,#fwpick{position:fixed;inset:0;z-index:60;background:#0008;display:flex;align-items:flex-end}
+#starview[hidden],#fwpick[hidden]{display:none}
+#svh{display:flex;align-items:center;gap:10px;padding:12px;background:var(--panel)}
+#svh button{background:none;border:0;color:var(--text)}
+#svlist{background:var(--panel);width:100%;max-height:70vh;overflow:auto;padding:4px 0}
+.svrow{padding:12px 16px;border-bottom:1px solid var(--line)}
+.svrow b{display:block;font-size:13px;color:var(--bar)}
+.empty{padding:20px;color:var(--sub);text-align:center}
+#fwb{background:var(--panel);width:100%;border-radius:16px 16px 0 0;padding:14px;max-height:70vh;overflow:auto}
+.fwr{display:block;width:100%;text-align:left;background:none;border:0;color:var(--text);padding:12px 4px;border-bottom:1px solid var(--line)}
+#fwx{margin-top:8px;width:100%;background:var(--box);border:1px solid var(--line);border-radius:10px;padding:10px}
+.fwdtag{font-size:11px;opacity:.6;font-style:italic;margin-bottom:2px}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -153,17 +168,19 @@ button:active{transform:scale(.94)}
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 </head>
 <body><div id="app">
-<header><button id="back" hidden aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span id="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><div><span id="title">Chatly</span><small id="sub"></small></div><span style="flex:1"></span><button id="bl" aria-label="Block or unblock" hidden><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.3 3.1L7.1 18.3A8 8 0 0 1 12 4zm0 16a8 8 0 0 1-6.3-3.1L16.9 5.7A8 8 0 0 1 12 20z"/></svg></button><div id="calls" hidden><button id="ac" aria-label="Audio call"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></button><button id="vc" aria-label="Video call"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg></button></div><button id="pf" aria-label="Profile" hidden><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></button><button id="out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 4h8V2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-2H4z"/></svg></button></header>
+<header><button id="back" hidden aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span id="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><div id="titlew" style="cursor:pointer"><span id="title">Chatly</span><small id="sub"></small></div><span style="flex:1"></span><button id="bl" aria-label="Block or unblock" hidden><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.3 3.1L7.1 18.3A8 8 0 0 1 12 4zm0 16a8 8 0 0 1-6.3-3.1L16.9 5.7A8 8 0 0 1 12 20z"/></svg></button><div id="calls" hidden><button id="ac" aria-label="Audio call"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></button><button id="vc" aria-label="Video call"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg></button></div><button id="pf" aria-label="Profile" hidden><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></button><button id="out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 4h8V2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-2H4z"/></svg></button></header>
 <div id="note" hidden></div>
 <div id="sbar" hidden><input id="sq" placeholder="Search username to start a chat" autocomplete="off"></div><div id="list"></div><button id="fab" aria-label="New chat"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button>
 <div id="chat"><div id="msgs"></div>
 <div id="rbar" hidden><span id="rtxt"></span><button id="rx" type="button" aria-label="Cancel reply">×</button></div>
 <form id="f"><button type="button" id="att" aria-label="Send photo"><svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5z"/></svg></button><input type="file" id="fi" accept="image/*" hidden><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
-<div id="prof" hidden><div id="pfb"><div id="pfban"></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><div id="pfn"></div><div id="pfu"></div><div id="pfst"><div><b id="st1">0</b><span>Chats</span></div><div><b id="st2">0</b><span>Blocked</span></div><div><b id="st3">0</b><span>People</span></div></div><div id="pfact"><button type="button" id="pfsh">Share account</button><button type="button" id="pfcp">Copy</button></div><input id="pfs" readonly><div id="pferr"></div><div id="pfbl"></div><button type="button" id="pfout">Sign out</button></div></div>
+<div id="prof" hidden><div id="pfb"><div id="pfban"></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn">⭐ Starred messages</button></div><div id="pfst"><div><b id="st1">0</b><span>Chats</span></div><div><b id="st2">0</b><span>Blocked</span></div><div><b id="st3">0</b><span>People</span></div></div><div id="pfact"><button type="button" id="pfsh">Share account</button><button type="button" id="pfcp">Copy</button></div><input id="pfs" readonly><div id="pferr"></div><div id="pfbl"></div><button type="button" id="pfout">Sign out</button></div></div>
 <div id="nc" hidden><div id="ncb"><b>New chat</b><input id="nu" placeholder="Usernames, comma separated"><input id="ngn" placeholder="Group name (only for 2 or more people)"><div id="nerr"></div><div class="nrow"><button type="button" id="nx">Cancel</button><button type="button" id="ng">Start chat</button></div></div></div>
 <nav id="nav" hidden><button id="tc" class="on"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><span>Chats</span></button><button id="tp"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg><span>Profile</span></button></nav>
-<div id="sheet" hidden><button id="s-re">Reply</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
+<div id="sheet" hidden><button id="s-re">Reply</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
+<div id="starview" hidden><div id="svh"><button id="svx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Starred messages</b></div><div id="svlist"></div></div>
+<div id="fwpick" hidden><div id="fwb"><b>Forward to...</b><div id="fwlist"></div><button type="button" id="fwx">Cancel</button></div></div>
 <div id="login"><span id="biglogo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><h2 id="lt">Chatly</h2><form id="lf"><input id="ln" placeholder="Username" maxlength="24" required><input id="lw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password"><input id="lc" type="password" placeholder="Confirm password" autocomplete="new-password" hidden><button id="lb">Log in</button><button type="button" id="su">Create account</button></form><div id="lerr"></div></div>
 <div id="call" hidden><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><div id="cs"></div><div id="cb"><button id="acc" hidden>Accept</button><button id="end">End</button></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
@@ -200,7 +217,7 @@ return{db:async()=>db,user:async()=>user,room:async()=>{if(!rch){rch=sb.channel(
 </script>
 <script>
 const $=id=>document.getElementById(id);
-let db=null,me={id:"local",name:"You"},room=null,unsub=null,names={},local=[],roomDocs=[],replyTo=null,sel=null,typingT=null,baseSub="",cur=[];
+let db=null,me={id:"local",name:"You"},room=null,unsub=null,names={},local=[],roomDocs=[],replyTo=null,sel=null,typingT=null,baseSub="",cur=[],fwMsg=null;
 const defaults=["General","Friends","Random"];
 let rooms=[...defaults];
 function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
@@ -223,6 +240,7 @@ $("fab").onclick=async()=>{
 };
 $("back").onclick=()=>{if(unsub)unsub();unsub=null;room=null;$("chat").style.display="none";$("list").style.display="";$("fab").style.display="";$("back").hidden=true;$("title").textContent="Chatly";$("calls").hidden=true;$("logo").style.display="";$("out").hidden=false;$("pf").hidden=false;$("sbar").hidden=false;$("nav").hidden=false;setTab("chats");$("bl").hidden=true;drawRooms();$("sub").textContent=prof?"Signed in as "+prof.name:""};
 function open(r){
+  $("titlew").onclick=()=>{const rm=allRooms().find(x=>x.id===r);if(rm&&rm.members)openGroupInfo(r)};
   room=r;$("list").style.display="none";$("fab").style.display="none";$("chat").style.display="flex";$("back").hidden=false;
   $("title").textContent=titleOf(r);$("calls").hidden=!R;$("logo").style.display="none";$("out").hidden=true;$("pf").hidden=true;$("sbar").hidden=true;$("nav").hidden=true;$("prof").hidden=true;$("bl").hidden=!dmOther(r);baseSub=subOf(r);$("sub").textContent=baseSub;replyTo=null;$("rbar").hidden=true;
   $("msgs").innerHTML="";
@@ -236,7 +254,7 @@ async function render(arr){
   if(ids.length){try{const u=await SB.user();const p=await u.profiles(ids);ids.forEach(i=>names[i]=p[i]?.name||"Someone")}catch(e){}}
   const box=$("msgs"),atEnd=box.scrollHeight-box.scrollTop-box.clientHeight<80;
   box.innerHTML=arr.map(m=>{const mine=su(m)===uname();const t=new Date(m.ts).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
-    return `<div class="m${mine?" me":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.del?'<span class="del">This message was deleted</span>':body(m)}<div class="t">${mine&&!m.del?'<span class="mm">⋮</span> ':""}${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
+    return `<div class="m${mine?" me":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.fwd&&!m.del?'<div class="fwdtag">Forwarded</div>':''}${m.del?'<span class="del">This message was deleted</span>':body(m)}<div class="t">${mine&&!m.del?'<span class="mm">⋮</span> ':""}${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
   if(atEnd||arr.length<2)box.scrollTop=box.scrollHeight;
 }
 $("f").onsubmit=async e=>{
@@ -288,9 +306,9 @@ async function initCalls(){try{R=await SB.room()}catch(e){R=null}if(!R)return;
   })}
 let prof=null;
 try{prof=JSON.parse(localStorage.getItem("chatly_user"))}catch(e){}
-function applyLogin(){const on=!!prof;$("login").hidden=on;$("out").hidden=!on||!!room;$("pf").hidden=!on||!!room;$("nav").hidden=!on||!!room;$("sbar").hidden=!on||!!room;if(on){me.name=prof.name;names[me.id]=prof.name;if(!room)$("sub").textContent="Signed in as "+prof.name;reg()}}
+function applyLogin(){const on=!!prof;$("login").hidden=on;$("out").hidden=!on||!!room;$("pf").hidden=!on||!!room;$("nav").hidden=!on||!!room;$("sbar").hidden=!on||!!room;if(on){me.name=prof.name;names[me.id]=prof.name;if(!room)$("sub").textContent="Signed in as "+prof.name;reg();initNotify()}}
 async function pwh(u,p){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("chatly:"+u+":"+p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
-function fin(n,ph){const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);prof={name:n,phone:ph||"",sess:tok};me.id=n.toLowerCase().replace(/[\s\/]/g,"");window._sa=Date.now();try{localStorage.setItem("chatly_user",JSON.stringify(prof))}catch(e){}usersCache[uname()]={...(usersCache[uname()]||{}),session:tok};if(db)db.doc("users/"+uname()).update({session:tok}).catch(()=>{});applyLogin()}
+function fin(n,ph){const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);prof={name:n,phone:"",sess:tok};me.id=n.toLowerCase().replace(/[\s\/]/g,"");window._sa=Date.now();try{localStorage.setItem("chatly_user",JSON.stringify(prof))}catch(e){}usersCache[uname()]={...(usersCache[uname()]||{}),session:tok};if(db)db.doc("users/"+uname()).update({session:tok}).catch(()=>{});applyLogin()}
 async function acct(create){
   $("lerr").textContent="";const n=$("ln").value.trim().slice(0,24),p=$("lw").value,u=n.toLowerCase().replace(/[\s\/]/g,"");
   if(!u)return alert("Enter a username.");if(create&&$("lc").value!==p)return alert("Passwords don’t match.");if(p.length<6)return alert("Password must be at least 6 characters.");
@@ -312,6 +330,12 @@ const uname=()=>((prof&&prof.name)||me.name||"").toLowerCase().replace(/[\s\/]/g
 const allRooms=()=>[...defaults.map(n=>({id:n,name:n})),...roomDocs.filter(r=>!r.members||r.members.includes(uname()))];
 function titleOf(id){const r=allRooms().find(x=>x.id===id);if(!r)return id;if(r.dm){const o=r.members.find(x=>x!==uname());return(r.names&&r.names[o])||o}return r.name}
 function subOf(id){const r=allRooms().find(x=>x.id===id);if(r&&r.dm)return"Private chat";if(r&&r.members)return"Group: "+r.members.join(", ");return db?"Open room, anyone can join":"Offline demo mode"}
+async function removeFromGroup(roomId,who){const r=allRooms().find(x=>x.id===roomId);if(!r||!r.members)return;const nm=r.members.filter(x=>x!==who);if(!db)return;try{await db.doc("rooms/"+roomId).update({members:nm})}catch(e){alert("Couldn’t update group: "+((e&&e.message)||e))}}
+function openGroupInfo(roomId){const r=allRooms().find(x=>x.id===roomId);if(!r||!r.members)return;
+  $("svh").querySelector("b").textContent="Group members";
+  $("svlist").innerHTML=r.members.map(x=>`<div class="svrow" style="display:flex;justify-content:space-between;align-items:center"><span>@${esc(x)}</span>${x!==uname()?`<button type="button" class="rmbtn" data-rm="${esc(x)}">Remove</button>`:""}</div>`).join("");
+  $("svlist").onclick=e=>{const b=e.target.closest(".rmbtn");if(!b)return;if(confirm("Remove @"+b.dataset.rm+" from this group?")){removeFromGroup(roomId,b.dataset.rm);openGroupInfo(roomId)}};
+  $("starview").hidden=false}
 function reg(){}
 const body=m=>{let h="";if(m.re)h+=`<div class="q"><b>${esc(m.re.name)}</b><br>${esc(m.re.text)}</div>`;
   if(typeof m.img==="string"&&m.img.startsWith("data:image/"))h+=`<img src="${esc(m.img)}" alt="photo">`;
@@ -321,6 +345,21 @@ const ticks=m=>{const r=(m.rb||[]).length>0;return `<svg viewBox="0 0 18 11" cla
 function markRead(arr){if(!db||document.visibilityState!=="visible")return;const u=uname();arr.forEach(m=>{if(su(m)!==u&&m.id&&!m.del&&!(m.rb||[]).includes(u))db.doc("messages/"+m.id).update({rb:[...(m.rb||[]),u]}).catch(()=>{})})}
 $("msgs").onclick=e=>{const el=e.target.closest(".m");if(!el||e.target.closest("a,audio"))return;sel=el.dataset.id;$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false};
 $("s-x").onclick=()=>{$("sheet").hidden=true};
+const starKey=()=>uname()+":stars";
+function myStars(){try{return JSON.parse(localStorage.getItem(starKey())||"[]")}catch(e){return[]}}
+function setStars(a){try{localStorage.setItem(starKey(),JSON.stringify(a))}catch(e){}}
+$("s-star").onclick=()=>{const id=sel;const a=myStars();const i=a.indexOf(id);if(i>-1)a.splice(i,1);else a.push(id);setStars(a);$("sheet").hidden=true};
+$("pfstarsbtn").onclick=()=>{const ids=new Set(myStars());const list=rawCur.filter(m=>ids.has(m.id||String(m.ts))&&!m.del);
+  $("svlist").innerHTML=list.length?list.map(m=>`<div class="svrow"><b>${esc(m.name||"Someone")}</b><div>${esc(m.text||(m.img?"Photo":m.aud?"Voice message":""))}</div></div>`).join(""):"<p class=\"empty\">No starred messages in this chat yet.</p>";
+  $("starview").hidden=false};
+$("svx").onclick=()=>{$("starview").hidden=true};
+$("s-fw").onclick=()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);if(!m||m.del){$("sheet").hidden=true;return}
+  fwMsg=m;$("fwlist").innerHTML=allRooms().map(r=>`<button type="button" class="fwr" data-r="${esc(r.id)}">${esc(titleOf(r.id))}</button>`).join("");
+  $("fwpick").hidden=false;$("sheet").hidden=true};
+$("fwx").onclick=()=>{$("fwpick").hidden=true};
+$("fwlist").onclick=e=>{const b=e.target.closest(".fwr");if(!b||!fwMsg)return;const targetRoom=b.dataset.r;
+  postRaw({room:targetRoom,name:me.name,text:fwMsg.text||"",img:fwMsg.img||"",aud:fwMsg.aud||"",fwd:true,ts:Date.now()});
+  $("fwpick").hidden=true;alert("Forwarded.")};
 $("s-re").onclick=()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}$("sheet").hidden=true};
 $("s-del").onclick=async()=>{$("sheet").hidden=true;const id=sel;
   if(db){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m){m.del=true;m.text="";m.img="";m.aud="";render(rawCur)}
@@ -356,6 +395,7 @@ const isBlocked=m=>su(m)!==uname()&&myBlocked().includes(su(m));
 const dmBlocked=()=>{const o=dmOther(room);return !!o&&myBlocked().includes(o)};
 async function upUser(p){const u=uname();usersCache[u]={...(usersCache[u]||{}),...p};if(!db)return;try{await db.doc("users/"+u).update(p)}catch(e){try{await db.doc("users/"+u).set({name:me.name,...p})}catch(e2){}}}
 $("bl").onclick=async()=>{const o=dmOther(room);if(!o)return;const b=myBlocked();const nb=b.includes(o)?b.filter(x=>x!==o):[...b,o];await upUser({blocked:nb});alert(nb.includes(o)?"Blocked @"+o+". You won’t see their messages.":"Unblocked @"+o);render(rawCur)};
+window.openGroupInfo=openGroupInfo;
 function fillProfile(){const u=uname();$("st1").textContent=allRooms().length;$("st2").textContent=myBlocked().length;$("st3").textContent=Object.keys(usersCache).length;$("pfav").innerHTML=avatar(u,me.name,90);$("pfn").textContent=me.name;$("pfu").textContent="@"+u;
   $("pfs").value=`Add me on Chatly! My username is: ${u}\nhttps://zorvexexe-pixel.github.io/Chatly/`;
   const b=myBlocked();$("pfbl").innerHTML=b.length?"<b>Blocked users</b>"+b.map(x=>`<div class="brow"><span>@${esc(x)}</span><button data-ub="${esc(x)}">Unblock</button></div>`).join(""):""}
@@ -405,4 +445,40 @@ drawRooms();
 (function(){const w=document.getElementById("lw"),c=document.getElementById("lc");if(!w)return;const box=document.createElement("div");box.className="pw";w.parentNode.insertBefore(box,w);box.appendChild(w);const b=document.createElement("button");b.type="button";b.className="eye";b.setAttribute("aria-label","Show password");const E='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',X='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';b.innerHTML=E;b.onclick=()=>{const show=w.type==="password";w.type=show?"text":"password";if(c)c.type=w.type;b.innerHTML=show?X:E};box.appendChild(b)})();
 
 (function(){const R=render;let seen=new Set(),sr=null;render=async function(){const r=await R.apply(this,arguments);try{const els=document.querySelectorAll("#msgs .m");if(sr!==room){sr=room;seen=new Set();els.forEach(e=>seen.add(e.dataset.id))}else els.forEach(e=>{if(!seen.has(e.dataset.id)){seen.add(e.dataset.id);e.classList.add("new")}})}catch(e){}return r}})();
+
+(function(){let sx=0,sy=0,el=null,dragging=false,id=null;
+function onStart(e){const t=e.target.closest(".m");if(!t||e.target.closest("a,audio,button"))return;const p=e.touches?e.touches[0]:e;sx=p.clientX;sy=p.clientY;el=t;dragging=true;id=t.dataset.id}
+function onMove(e){if(!dragging||!el)return;const p=e.touches?e.touches[0]:e;const dx=p.clientX-sx,dy=p.clientY-sy;if(Math.abs(dy)>Math.abs(dx)+10){dragging=false;el.style.transform="";return}
+  if(dx>0&&dx<90){el.style.transform="translateX("+dx+"px)";el.style.transition="none";if(e.cancelable)e.preventDefault()}}
+function onEnd(){if(!dragging||!el)return;const dx=parseFloat((el.style.transform.match(/-?\d+\.?\d*/)||[0])[0])||0;
+  el.style.transition="transform .18s ease";el.style.transform="";
+  if(dx>56){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}}
+  dragging=false;el=null}
+const box=document.getElementById("msgs");
+box.addEventListener("touchstart",onStart,{passive:true});box.addEventListener("touchmove",onMove,{passive:false});box.addEventListener("touchend",onEnd);
+box.addEventListener("mousedown",onStart);box.addEventListener("mousemove",onMove);box.addEventListener("mouseup",onEnd);box.addEventListener("mouseleave",onEnd);
+})();
+
+let notifyReady=false;
+function initNotify(){
+  if(notifyReady||!db||!("Notification" in window))return;notifyReady=true;
+  if(Notification.permission==="default")Notification.requestPermission().catch(()=>{});
+  let first=true;const seenAll=new Set();
+  db.collection("messages").onSnapshot(s=>{
+    if(first){first=false;s.docs.forEach(d=>seenAll.add(d.id));return}
+    s.docs.forEach(d=>{
+      if(seenAll.has(d.id))return;seenAll.add(d.id);
+      const m=d.data();
+      if(su(m)===uname()||m.del)return;
+      if(document.visibilityState==="visible"&&room===m.room)return;
+      notifyShow(m)
+    })
+  },()=>{})
+}
+async function notifyShow(m){
+  if(Notification.permission!=="granted")return;
+  const title=(m.name||"Someone")+" • Chatly",body=m.fwd?"Forwarded: ":""+(m.text?m.text.slice(0,90):(m.img?"Photo":m.aud?"Voice message":"New message"));
+  try{if(navigator.serviceWorker){const reg=await navigator.serviceWorker.getRegistration();if(reg){reg.showNotification(title,{body,icon:"icon-192.png",tag:"chatly-"+m.room});return}}
+    new Notification(title,{body,icon:"icon-192.png"})}catch(e){}
+}
 </script></body></html>
