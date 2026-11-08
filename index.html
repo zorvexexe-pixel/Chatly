@@ -727,19 +727,32 @@ function up(e){if(!st)return;const s=st;st=null;clearTimeout(s.lp);cancelAnimati
 box.addEventListener("pointerdown",down);box.addEventListener("pointermove",move);box.addEventListener("pointerup",up);box.addEventListener("pointercancel",up);
 })();
 
+const VAPID_PUBLIC="BL-NbubgTAQwpY1_wIE45eKeuQPCxO9SqZWr0NA4g7PSzZNNcVAmaG6g_HV3lohS8TJHNE0bjOsKZhMnQd-01iM";
+function b64u(k){const p="=".repeat((4-k.length%4)%4),b=atob((k+p).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(b,c=>c.charCodeAt(0))}
+async function enablePush(){
+  if(!db||!prof||window._pushed===uname()||!("serviceWorker" in navigator)||!("PushManager" in window)||!("Notification" in window)||Notification.permission!=="granted"||VAPID_PUBLIC.startsWith("PASTE"))return;
+  try{const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+    if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUBLIC)});
+    const j=sub.toJSON(),id=uname()+"_"+btoa(j.endpoint).replace(/[^a-z0-9]/gi,"").slice(-24);
+    await db.doc("push/"+id).set({user:uname(),sub:j,ua:navigator.userAgent.slice(0,80),ts:Date.now()});window._pushed=uname()}catch(e){console.warn("push setup failed",e)}}
 function initNotify(){
+  enablePush();
   if(notifyReady||!("Notification" in window))return;notifyReady=true;
-  if(Notification.permission==="default")Notification.requestPermission().catch(()=>{});
+  if(Notification.permission==="default")Notification.requestPermission().then(enablePush).catch(()=>{});
+  document.addEventListener("click",()=>{if(Notification.permission==="default")Notification.requestPermission().then(enablePush).catch(()=>{})},{once:true});
   SB.raw.channel("chatly-notify").on("postgres_changes",{event:"INSERT",schema:"public",table:"docs",filter:"collection=eq.messages"},p=>{
     const m=p.new&&p.new.data;if(!m)return;
     if(su(m)===uname()||m.del)return;
+    const rd=roomDocs.find(x=>x.id===m.room);
+    if(rd&&rd.members&&!rd.members.includes(uname()))return;
+    if(!rd&&String(m.room).startsWith("dm_"))return;
     if(document.visibilityState==="visible"&&room===m.room)return;
     notifyShow(m)
   }).subscribe()
 }
 async function notifyShow(m){
   if(Notification.permission!=="granted")return;
-  const title=(m.name||"Someone")+" • Chatly",body=m.fwd?"Forwarded: ":""+(m.text?m.text.slice(0,90):(m.img?"Photo":m.aud?"Voice message":"New message"));
+  const title=(m.name||"Someone")+" • Chatly",body=(m.fwd?"Forwarded: ":"")+(m.text?m.text.slice(0,90):(m.img?"Photo":m.aud?"Voice message":m.file?"File: "+m.file.name:"New message"));
   try{if(navigator.serviceWorker){const reg=await navigator.serviceWorker.getRegistration();if(reg){reg.showNotification(title,{body,icon:"icon-192.png",tag:"chatly-"+m.room});return}}
     new Notification(title,{body,icon:"icon-192.png"})}catch(e){}
 }
