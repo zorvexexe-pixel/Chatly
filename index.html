@@ -258,6 +258,13 @@ form{gap:8px;align-items:center;padding:8px 10px calc(8px + env(safe-area-inset-
 #attw #att{width:40px;height:40px;pointer-events:none}
 #attw #fi{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:0;cursor:pointer}
 #sheet button[hidden]{display:none}
+
+/* visible errors + friend lock bar */
+#note:not([hidden]){position:fixed;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:95;background:#1f2937;color:#fff;border-radius:12px;padding:11px 14px;font-size:14px;box-shadow:0 8px 24px #0006;animation:fadein .2s ease}
+#lockbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:var(--panel);border-top:1px solid var(--line);font-size:14px;color:var(--text)}
+#lockbar[hidden]{display:none}
+#lockbar button{background:#14b8a6;color:#fff;border:0;border-radius:18px;padding:9px 16px;font:inherit;font-weight:600;white-space:nowrap}
+#lockbar button:disabled{opacity:.6}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -270,6 +277,7 @@ form{gap:8px;align-items:center;padding:8px 10px calc(8px + env(safe-area-inset-
 <div id="sbar" hidden><input id="sq" placeholder="Search username to start a chat" autocomplete="off"></div><div id="list"></div><button id="fab" aria-label="New chat"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button>
 <div id="chat"><div id="msgs"></div>
 <div id="rbar" hidden><span id="rtxt"></span><button id="rx" type="button" aria-label="Cancel reply">×</button></div>
+<div id="lockbar" hidden></div>
 <div id="tyb" hidden><span class="d"><span></span><span></span><span></span></span><i id="tyn"></i></div>
 <form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file"></span><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
@@ -514,7 +522,7 @@ function isFriend(x){const m=uname();return ((uc(m).sent||[]).includes(x)&&(uc(x
 function following(){return mySent().filter(x=>usersCache[x])}
 function followers(){const m=uname();return Object.keys(usersCache).filter(k=>k!==m&&(usersCache[k].sent||[]).includes(m))}
 function pendingIn(){return followers().filter(x=>!myFriendsL().includes(x)&&!myRej().includes(x))}
-function reqDot(){const n=pendingIn().length,b=$("pf");if(b)b.classList.toggle("hasreq",n>0);const t=$("tib");if(t){t.textContent=n>99?"99+":n;t.hidden=!n}if(window._tab==="inbox")drawRooms()}
+function reqDot(){try{refreshLock()}catch(e){}const n=pendingIn().length,b=$("pf");if(b)b.classList.toggle("hasreq",n>0);const t=$("tib");if(t){t.textContent=n>99?"99+":n;t.hidden=!n}if(window._tab==="inbox")drawRooms()}
 const uniq=a=>[...new Set(a)];
 async function sendReq(x){await upUser({sent:uniq([...mySent(),x]),rejected:myRej().filter(y=>y!==x)})}
 async function acceptReq(x){await upUser({friends:uniq([...myFriendsL(),x]),rejected:myRej().filter(y=>y!==x)})}
@@ -678,6 +686,19 @@ function inboxHTML(){const pin=pendingIn(),acc=following().filter(x=>isFriend(x)
   return h}
 async function inboxAct(a,u){if(a==="msg"){setTab("chats");openDM(u);return}if(a==="acc")await acceptReq(u);else if(a==="dec")await declineReq(u);drawRooms();reqDot()}
 $("back").addEventListener("click",()=>{if(window._tab==="inbox"){$("fab").style.display="none";$("sbar").style.display="none";drawRooms()}});
+function refreshLock(){const bar=$("lockbar");if(!bar)return;const o=room&&db?dmOther(room):null;
+  if(!o||isFriend(o)){bar.hidden=true;$("f").style.display="";return}
+  const nm=esc((usersCache[o]&&usersCache[o].name)||o);let t,b="";
+  if(mySent().includes(o))t="Friend request sent to "+nm+". You can chat once they accept.";
+  else if(followers().includes(o)&&!myFriendsL().includes(o)){t=nm+" sent you a friend request.";b='<button data-a="acc">Accept</button>'}
+  else{t="You can chat with "+nm+" after you become friends.";b='<button data-a="req">Send friend request</button>'}
+  $("f").style.display="none";bar.hidden=false;bar.innerHTML="<span>"+t+"</span>"+b}
+$("lockbar").onclick=async e=>{const b=e.target.closest("button");if(!b)return;const o=dmOther(room);if(!o)return;b.disabled=true;
+  try{if(b.dataset.a==="acc")await acceptReq(o);else await sendReq(o)}catch(err){alert("Couldn’t update: "+((err&&err.message)||err))}
+  refreshLock();drawRooms()};
+$("back").addEventListener("click",()=>setTimeout(refreshLock,0));
+(function(){const o=open;open=function(){const r=o.apply(this,arguments);try{refreshLock()}catch(e){}return r};
+  const n=$("note");let t=0;new MutationObserver(()=>{if(!n.hidden){clearTimeout(t);t=setTimeout(()=>{n.hidden=true},5000)}}).observe(n,{attributes:true,attributeFilter:["hidden"],childList:true,characterData:true,subtree:true})})();
 function setHTML(el,h){if(el._h===h)return;el._h=h;el.innerHTML=h}
 function isOnline(u){if(!isFriend(u))return false;const t=(usersCache[u]||{}).seen;return !!t&&Date.now()-t<60000}
 function presence(u){if(!isFriend(u))return"";const t=(usersCache[u]||{}).seen;if(!t)return"";if(Date.now()-t<60000)return"● online";
@@ -694,7 +715,7 @@ function refreshPresence(){if(!room)return;const o=dmOther(room);if(!o)return;co
 })();
 (function(){const R=render,D=drawRooms;let last="",raf=0,pend=null,dr=0;
   const sig=a=>room+"|"+JSON.stringify(myBlocked())+"|"+a.map(m=>(m.id||m.ts)+(m.del?"d":"")+(m.text||"")+JSON.stringify(m.rb||0)+JSON.stringify(m.rc||0)).join("§");
-  render=function(arr){pend=arr;if(window._sw){rawCur=arr;window._rp=1;return Promise.resolve()}
+  render=function(arr){pend=arr;if(window._sw&&Date.now()-(window._swd||0)<2500){rawCur=arr;window._rp=1;return Promise.resolve()}
     if(raf)return Promise.resolve();
     return new Promise(res=>{raf=requestAnimationFrame(async()=>{raf=0;const a=pend;pend=null;const k=sig(a);if(k===last){res();return}last=k;try{await R(a)}catch(e){last=""}res()})})};
   drawRooms=function(){if(dr)return;dr=requestAnimationFrame(()=>{dr=0;D()})};
