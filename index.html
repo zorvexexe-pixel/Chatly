@@ -253,6 +253,11 @@ form{gap:8px;align-items:center;padding:8px 10px calc(8px + env(safe-area-inset-
 .m video{display:block;max-width:100%;border-radius:12px;margin:2px 0}
 .bigheart{position:fixed;z-index:90;font-size:60px;pointer-events:none;transform:translate(-50%,-50%) scale(0);animation:hpop .85s cubic-bezier(.2,.8,.2,1) forwards;filter:drop-shadow(0 4px 10px #0004)}
 @keyframes hpop{0%{transform:translate(-50%,-50%) scale(0);opacity:0}25%{transform:translate(-50%,-50%) scale(1.3);opacity:1}55%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-90%) scale(1);opacity:0}}
+
+#attw{position:relative;display:grid;place-items:center;width:40px;height:40px;flex:none}
+#attw #att{width:40px;height:40px;pointer-events:none}
+#attw #fi{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:0;cursor:pointer}
+#sheet button[hidden]{display:none}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -266,12 +271,12 @@ form{gap:8px;align-items:center;padding:8px 10px calc(8px + env(safe-area-inset-
 <div id="chat"><div id="msgs"></div>
 <div id="rbar" hidden><span id="rtxt"></span><button id="rx" type="button" aria-label="Cancel reply">×</button></div>
 <div id="tyb" hidden><span class="d"><span></span><span></span><span></span></span><i id="tyn"></i></div>
-<form id="f"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" hidden><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
+<form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file"></span><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
 <div id="prof" hidden><div id="pfb"><div id="pfban"></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn">⭐ Starred messages</button></div><div id="pfst"><div><b id="st1">0</b><span>Chats</span></div><div id="stfg" class="clk"><b id="st2">0</b><span>Following</span></div><div id="stfr" class="clk"><b id="st3">0</b><span>Followers</span></div></div><div id="pfact"><button type="button" id="pfsh">Share account</button><button type="button" id="pfcp">Copy</button></div><input id="pfs" readonly><div id="pferr"></div><div id="pfbl"></div><button type="button" id="pfout">Sign out</button></div></div>
 <div id="nc" hidden><div id="ncb"><b>New chat</b><input id="nu" placeholder="Usernames, comma separated"><input id="ngn" placeholder="Group name (only for 2 or more people)"><div id="nerr"></div><div class="nrow"><button type="button" id="nx">Cancel</button><button type="button" id="ng">Start chat</button></div></div></div>
 <nav id="nav" hidden><button id="tc" class="on"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><span>Chats</span></button><button id="ti"><span class="ico"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 12h-4a3 3 0 0 1-6 0H5V5h14v10z"/></svg><b id="tib" hidden>0</b></span><span>Inbox</span></button><button id="tp"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg><span>Profile</span></button></nav>
-<div id="sheet" hidden><div id="rxrow"><button type="button" data-e="👍">👍</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="😂">😂</button><button type="button" data-e="😮">😮</button><button type="button" data-e="😢">😢</button><button type="button" data-e="🙏">🙏</button></div><button id="s-re">Reply</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
+<div id="sheet" hidden><div id="rxrow"><button type="button" data-e="👍">👍</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="😂">😂</button><button type="button" data-e="😮">😮</button><button type="button" data-e="😢">😢</button><button type="button" data-e="🙏">🙏</button></div><button id="s-re">Reply</button><button id="s-cp">Copy</button><button id="s-dl">Download</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
 <div id="starview" hidden><div id="svh"><button id="svx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Starred messages</b></div><div id="svlist"></div></div>
 <div id="fview" hidden><div id="fvb"><div id="fvh"><button id="fvx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Friends</b></div><div id="fvtabs"><button id="fvt1" class="on">Following</button><button id="fvt2">Followers</button></div><div id="fvlist"></div></div></div>
 <div id="fwpick" hidden><div id="fwb"><b>Forward to...</b><div id="fwlist"></div><button type="button" id="fwx">Cancel</button></div></div>
@@ -363,10 +368,13 @@ function linkify(s){return esc(s).replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u
 $("att").onclick=()=>{if(dmBlocked()){alert("You blocked this user.");return}if(dmLocked()){lockMsg();return}$("fi").click()};
 $("fi").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f||!room)return;if(/^image\/(jpe?g|png|webp|bmp)/.test(f.type))sendImage(f);else sendFile(f)};
 function sendImage(f){const im=new Image();im.onerror=()=>sendFile(f);im.onload=async()=>{
-  const k=Math.min(1,720/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);
-  let q=.7,u=c.toDataURL("image/jpeg",q);while(u.length>180000&&q>.2){q-=.15;u=c.toDataURL("image/jpeg",q)}
-  const m={room,text:"",img:u,uid:me.id,name:me.name,ts:Date.now()};
-  if(replyTo){m.re=replyTo;replyTo=null;$("rbar").hidden=true}
+  const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+  let q=.78,u=c.toDataURL("image/jpeg",q);while(u.length>220000&&q>.25){q-=.12;u=c.toDataURL("image/jpeg",q)}
+  const rm=room,note=$("note");let orig=null;
+  if(db&&f.size<=MAXF){try{const r=await upChunks(f,p=>{note.hidden=false;note.textContent="Sending photo "+p+"%…"});orig={id:r.id,n:r.n,name:f.name||"photo.jpg",size:f.size,type:f.type||"image/jpeg"};note.hidden=true}catch(err){note.hidden=false;note.textContent="Sent compressed, original upload failed: "+((err&&err.message)||err)}}
+  else if(db)alert("Photo is over 8 MB, so it was sent compressed.");
+  const m={room:rm,text:"",img:u,uid:me.id,name:me.name,ts:Date.now()};if(orig)m.orig=orig;
+  if(replyTo&&rm===room){m.re=replyTo;replyTo=null;$("rbar").hidden=true}
   if(db){try{await db.collection("messages").add(m)}catch(err){$("note").hidden=false;$("note").textContent="Couldn’t send the photo: "+((err&&err.message)||err)}}else{local.push(m);render(local.filter(x=>x.room===room))}
 };im.src=URL.createObjectURL(f)}
 /* ---- calls (WebRTC, signalling via room capability) ---- */
@@ -442,12 +450,12 @@ const body=m=>{let h="";if(m.re)h+=`<div class="q"><b>${esc(m.re.name)}</b><br>$
   return h+linkify(m.text||"")};
 const ticks=m=>{const r=(m.rb||[]).length>0;return `<svg viewBox="0 0 18 11" class="${r?"rd":""}"><path d="M1 6l3 3L11 1"/>${r?'<path d="M7 9l1 .9L15 1"/>':""}</svg>`};
 function markRead(arr){if(!db||document.visibilityState!=="visible")return;const u=uname();arr.forEach(m=>{if(su(m)!==u&&m.id&&!m.del&&!(m.rb||[]).includes(u))db.doc("messages/"+m.id).update({rb:[...(m.rb||[]),u]}).catch(()=>{})})}
-function hlRx(){const m=cur.find(x=>(x.id||String(x.ts))===sel),my=m&&m.rc&&m.rc[uname()];document.querySelectorAll("#rxrow button").forEach(b=>b.classList.toggle("on",b.dataset.e===my))}
+function hlRx(){const m=cur.find(x=>(x.id||String(x.ts))===sel),my=m&&m.rc&&m.rc[uname()];document.querySelectorAll("#rxrow button").forEach(b=>b.classList.toggle("on",b.dataset.e===my));$("s-cp").hidden=!(m&&!m.del&&(m.text||m.img));$("s-dl").hidden=!(m&&!m.del&&(m.img||m.file||m.aud))}
 const rch=m=>{const r=m.rc||{},c={};Object.values(r).forEach(x=>c[x]=(c[x]||0)+1);const k=Object.keys(c);if(!k.length)return"";const my=r[uname()];return`<div class="rch">${k.map(x=>`<span data-e="${esc(x)}" class="${my===x?"on":""}">${esc(x)}${c[x]>1?" "+c[x]:""}</span>`).join("")}</div>`};
 async function react(id,e){const m=cur.find(x=>(x.id||String(x.ts))===id);if(!m||m.del)return;const u=uname(),rc={...(m.rc||{})};if(rc[u]===e)delete rc[u];else rc[u]=e;m.rc=rc;render(rawCur);
   if(db&&m.id){try{await db.doc("messages/"+m.id).update({rc})}catch(err){alert("Couldn’t react: "+((err&&err.message)||err))}}}
 $("rxrow").onclick=e=>{const b=e.target.closest("button");if(!b)return;$("sheet").hidden=true;react(sel,b.dataset.e)};
-$("msgs").onclick=e=>{if(Date.now()-(window._swd||0)<350)return;const ch=e.target.closest(".rch span");if(ch){const mm=ch.closest(".m");if(mm)react(mm.dataset.id,ch.dataset.e);return}const fl=e.target.closest(".fl");if(fl){openFile(fl);return}const el=e.target.closest(".m");if(!el||e.target.closest("a,audio,video"))return;const _id=el.dataset.id,_n=Date.now();if(window._lt&&window._lt.id===_id&&_n-window._lt.t<330){window._lt=null;$("sheet").hidden=true;heart(_id,el);return}window._lt={id:_id,t:_n};sel=el.dataset.id;hlRx();$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false};
+$("msgs").onclick=e=>{if(Date.now()-(window._ptd||0)<500)return;msgTap(e.target)};
 $("s-x").onclick=()=>{$("sheet").hidden=true};
 const starKey=()=>uname()+":stars";
 function myStars(){try{return JSON.parse(localStorage.getItem(starKey())||"[]")}catch(e){return[]}}
@@ -462,14 +470,14 @@ $("s-fw").onclick=()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);if(!m||m.
   $("fwpick").hidden=false;$("sheet").hidden=true};
 $("fwx").onclick=()=>{$("fwpick").hidden=true};
 $("fwlist").onclick=e=>{const b=e.target.closest(".fwr");if(!b||!fwMsg)return;const targetRoom=b.dataset.r;
-  postRaw({room:targetRoom,name:me.name,text:fwMsg.text||"",img:fwMsg.img||"",aud:fwMsg.aud||"",file:fwMsg.file||null,fwd:true,ts:Date.now()});
+  postRaw({room:targetRoom,name:me.name,text:fwMsg.text||"",img:fwMsg.img||"",aud:fwMsg.aud||"",file:fwMsg.file||null,orig:fwMsg.orig||null,fwd:true,ts:Date.now()});
   $("fwpick").hidden=true;alert("Forwarded.")};
 $("s-re").onclick=()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":m.file?"Attachment: "+m.file.name:"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}$("sheet").hidden=true};
 $("s-del").onclick=async()=>{$("sheet").hidden=true;const id=sel;
   if(db){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m){m.del=true;m.text="";m.img="";m.aud="";render(rawCur)}
     try{await db.doc("messages/"+id).update({del:true,text:"",img:"",aud:""})}catch(e){alert("Couldn’t delete: "+((e&&e.message)||e))}}
   else{const m=local.find(x=>String(x.ts)===id);if(m){m.del=true;m.text="";render(local.filter(x=>x.room===room))}}};
-$("msgs").addEventListener("contextmenu",e=>{const el=e.target.closest(".m");if(!el)return;e.preventDefault();sel=el.dataset.id;hlRx();$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false});
+$("msgs").addEventListener("contextmenu",e=>{const el=e.target.closest(".m");if(!el)return;e.preventDefault();openMenu(el)});
 $("rx").onclick=()=>{replyTo=null;$("rbar").hidden=true};
 let lastTy=0;$("in").oninput=()=>{const n=Date.now();if(R&&room&&n-lastTy>1500){lastTy=n;R.emit("typing",{room,name:me.name}).catch(()=>{})}};
 async function postRaw(m){if(dmBlocked()){alert("You blocked this user. Unblock them to send messages.");return}if(dmLocked()){lockMsg();return}if(db){try{await db.collection("messages").add(m)}catch(e){$("note").hidden=false;$("note").textContent="Couldn’t send."}}else{local.push(m);render(local.filter(x=>x.room===room))}}
@@ -610,29 +618,53 @@ function fsz(b){return b>1048576?(b/1048576).toFixed(1)+" MB":Math.max(1,Math.ro
 function fileCard(f){const u=fcache[f.id];if(u&&/^video\//.test(f.type))return `<video controls playsinline preload="metadata" src="${u}"></video>`;
   if(u&&/^audio\//.test(f.type))return `<audio controls src="${u}"></audio>`;
   const v=/^video\//.test(f.type);return `<div class="fl" data-fid="${esc(f.id)}"><div class="fic">${v?"▶":"📄"}</div><div class="fn"><b>${esc(f.name)}</b><small>${fsz(f.size)} · tap to ${v?"play":"open"}</small></div></div>`}
+async function upChunks(f,onp){const id=Math.random().toString(36).slice(2)+Date.now().toString(36),n=Math.max(1,Math.ceil(f.size/CHK));
+  for(let i=0;i<n;i+=3){
+    await Promise.all([0,1,2].filter(k=>i+k<n).map(async k=>{const idx=i+k;
+      const b64=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(",")[1]||"");fr.onerror=()=>rej(fr.error);fr.readAsDataURL(f.slice(idx*CHK,(idx+1)*CHK))});
+      await db.doc("files/"+id+"_"+idx).set({d:b64})}));
+    if(onp)onp(Math.min(100,Math.round((i+3)/n*100)))}
+  return{id,n}}
 async function sendFile(f){
   if(!db){alert("Sending files needs a live connection.");return}
   if(f.size>MAXF){alert("File is too big. Max size is 8 MB.");return}
-  const id=Math.random().toString(36).slice(2)+Date.now().toString(36),n=Math.max(1,Math.ceil(f.size/CHK)),rm=room,note=$("note");
+  const rm=room,note=$("note");
   try{
-    for(let i=0;i<n;i+=3){
-      await Promise.all([0,1,2].filter(k=>i+k<n).map(async k=>{const idx=i+k;
-        const b64=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(",")[1]||"");fr.onerror=()=>rej(fr.error);fr.readAsDataURL(f.slice(idx*CHK,(idx+1)*CHK))});
-        await db.doc("files/"+id+"_"+idx).set({d:b64})}));
-      note.hidden=false;note.textContent="Sending "+f.name+" "+Math.min(100,Math.round((i+3)/n*100))+"%…"}
-    note.hidden=true;
-    const m={room:rm,text:"",file:{id,n,name:f.name,size:f.size,type:f.type||"application/octet-stream"},uid:me.id,name:me.name,ts:Date.now()};
+    const r=await upChunks(f,p=>{note.hidden=false;note.textContent="Sending "+f.name+" "+p+"%…"});note.hidden=true;
+    const m={room:rm,text:"",file:{id:r.id,n:r.n,name:f.name,size:f.size,type:f.type||"application/octet-stream"},uid:me.id,name:me.name,ts:Date.now()};
     if(replyTo&&rm===room){m.re=replyTo;replyTo=null;$("rbar").hidden=true}
     await db.collection("messages").add(m);
   }catch(err){note.hidden=false;note.textContent="Couldn’t send the file: "+((err&&err.message)||err)}}
+async function getFileUrl(f,onp){if(fcache[f.id])return fcache[f.id];const parts=[];
+  for(let i=0;i<f.n;i++){const d=await db.doc("files/"+f.id+"_"+i).get();if(!d.exists)throw new Error("part "+(i+1)+" is missing");const bin=atob(d.data().d),u=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u[j]=bin.charCodeAt(j);parts.push(u);if(onp)onp(Math.round((i+1)/f.n*100))}
+  return fcache[f.id]=URL.createObjectURL(new Blob(parts,{type:f.type}))}
+function saveBlob(url,name){const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove()}
 async function openFile(el){const id=el.dataset.fid,m=cur.find(x=>x.file&&x.file.id===id);if(!m||el.dataset.busy)return;const f=m.file,sm=el.querySelector("small");el.dataset.busy=1;
-  try{
-    if(!fcache[id]){const parts=[];for(let i=0;i<f.n;i++){const d=await db.doc("files/"+id+"_"+i).get();if(!d.exists)throw new Error("part "+(i+1)+" is missing");const bin=atob(d.data().d),u=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u[j]=bin.charCodeAt(j);parts.push(u);sm.textContent="Loading "+Math.round((i+1)/f.n*100)+"%…"}
-      fcache[id]=URL.createObjectURL(new Blob(parts,{type:f.type}))}
-    if(/^(video|audio)\//.test(f.type)){el.outerHTML=fileCard(f)}
-    else{const a=document.createElement("a");a.href=fcache[id];a.download=f.name;document.body.appendChild(a);a.click();a.remove();sm.textContent=fsz(f.size)+" · tap to open"}
+  try{const url=await getFileUrl(f,p=>{sm.textContent="Loading "+p+"%…"});
+    if(/^(video|audio)\//.test(f.type)){el.outerHTML=fileCard(f)}else{saveBlob(url,f.name);sm.textContent=fsz(f.size)+" · tap to open"}
   }catch(err){sm.textContent="Couldn’t load: "+((err&&err.message)||err)}
   delete el.dataset.busy}
+function toPng(b){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.width;c.height=im.height;c.getContext("2d").drawImage(im,0,0);c.toBlob(x=>x?res(x):rej(new Error("convert failed")),"image/png")};im.onerror=()=>rej(new Error("bad image"));im.src=URL.createObjectURL(b)})}
+async function copyText(t){if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(t);return}
+  const ta=document.createElement("textarea");ta.value=t;ta.style.cssText="position:fixed;opacity:0;left:-999px";document.body.appendChild(ta);ta.select();const ok=document.execCommand("copy");ta.remove();if(!ok)throw new Error("copy blocked by browser")}
+$("s-cp").onclick=async()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);$("sheet").hidden=true;if(!m||m.del)return;
+  try{if(m.text){await copyText(m.text);alert("Copied");return}
+    if(m.img){const note=$("note");const src=m.orig?await getFileUrl(m.orig,p=>{note.hidden=false;note.textContent="Loading "+p+"%…"}):m.img;const blob=await (await fetch(src)).blob();const png=blob.type==="image/png"?blob:await toPng(blob);await navigator.clipboard.write([new ClipboardItem({"image/png":png})]);alert("Image copied")}
+  }catch(err){alert("Couldn’t copy: "+((err&&err.message)||err))}};
+$("s-dl").onclick=async()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);$("sheet").hidden=true;if(!m||m.del)return;const note=$("note"),prog=p=>{note.hidden=false;note.textContent="Downloading "+p+"%…"};
+  try{
+    if(m.file){saveBlob(await getFileUrl(m.file,prog),m.file.name)}
+    else if(m.img){if(m.orig)saveBlob(await getFileUrl(m.orig,prog),m.orig.name);else saveBlob(m.img,"photo_"+m.ts+".jpg")}
+    else if(m.aud){const ext=(m.aud.match(/^data:audio\/([a-z0-9]+)/)||[])[1]||"webm";saveBlob(m.aud,"voice_"+m.ts+"."+ext)}
+    note.hidden=false;note.textContent="Saved to your downloads";clearTimeout(window._nt);window._nt=setTimeout(()=>{note.hidden=true},3000)
+  }catch(err){alert("Couldn’t download: "+((err&&err.message)||err))}};
+function openMenu(el){sel=el.dataset.id;hlRx();$("s-del").hidden=!el.classList.contains("me");$("sheet").hidden=false}
+function msgTap(t){if(Date.now()-(window._swd||0)<350)return;const ch=t.closest(".rch span");if(ch){const mm=ch.closest(".m");if(mm)react(mm.dataset.id,ch.dataset.e);return}
+  const fl=t.closest(".fl");if(fl){openFile(fl);return}
+  const el=t.closest(".m");if(!el||t.closest("a,audio,video"))return;
+  const _id=el.dataset.id,_n=Date.now();if(window._lt&&window._lt.id===_id&&_n-window._lt.t<330){window._lt=null;$("sheet").hidden=true;heart(_id,el);return}
+  window._lt={id:_id,t:_n};openMenu(el)}
+$("fi").addEventListener("click",e=>{if(dmBlocked()){e.preventDefault();alert("You blocked this user.");return}if(dmLocked()){e.preventDefault();lockMsg()}});
 function heart(id,el){const m=cur.find(x=>(x.id||String(x.ts))===id);if(!m||m.del)return;
   const r=el.getBoundingClientRect(),h=document.createElement("div");h.className="bigheart";h.textContent="❤️";h.style.left=(r.left+r.width/2)+"px";h.style.top=(r.top+r.height/2)+"px";document.body.appendChild(h);setTimeout(()=>h.remove(),850);
   if(navigator.vibrate)try{navigator.vibrate(10)}catch(_){}
@@ -676,16 +708,18 @@ const ICON='<svg viewBox="0 0 24 24"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 
 const ease=d=>MAX*(1-Math.exp(-d/MAX));
 function doReply(id){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":m.file?"Attachment: "+m.file.name:"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}}
 function apply(){raf=0;if(!st||!st.ic)return;const x=st.x;st.el.style.transform="translate3d("+x+"px,0,0)";st.ic.style.opacity=Math.min(1,x/(TH*.7));st.ic.style.transform="translateY(-50%) scale("+(.6+Math.min(.5,x/TH*.5))+")"}
-function down(e){if(e.pointerType==="mouse"&&e.button!==0)return;const t=e.target.closest(".m");if(!t||e.target.closest("a,audio,video,button,.rch"))return;st={el:t,id:t.dataset.id,x0:e.clientX,y0:e.clientY,x:0,lock:false,fired:false,pid:e.pointerId,ic:null}}
+function down(e){if(e.pointerType==="mouse"&&e.button!==0)return;const t=e.target.closest(".m");if(!t||e.target.closest("a,audio,video,button,.rch"))return;const s0={el:t,id:t.dataset.id,x0:e.clientX,y0:e.clientY,x:0,lock:false,fired:false,pid:e.pointerId,ic:null,t0:Date.now(),target:e.target,lpDone:false};st=s0;s0.lp=setTimeout(()=>{if(st===s0&&!s0.lock){s0.lpDone=true;openMenu(s0.el)}},420)}
 function move(e){if(!st||e.pointerId!==st.pid)return;const dx=e.clientX-st.x0,dy=e.clientY-st.y0;
   if(!st.lock){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;if(Math.abs(dy)>Math.abs(dx)||dx<0){st=null;return}
-    st.lock=true;window._sw=1;window._swd=Date.now();st.el.style.transition="none";st.el.style.willChange="transform";
+    clearTimeout(st.lp);st.lock=true;window._sw=1;window._swd=Date.now();st.el.style.transition="none";st.el.style.willChange="transform";
     const ic=document.createElement("div");ic.className="swic";ic.innerHTML=ICON;st.el.appendChild(ic);st.ic=ic;try{box.setPointerCapture(e.pointerId)}catch(_){}}
   st.x=ease(Math.max(0,dx));
   if(!st.fired&&dx>=TH){st.fired=true;st.ic.classList.add("go");if(navigator.vibrate)try{navigator.vibrate(12)}catch(_){}}
   else if(st.fired&&dx<TH-10){st.fired=false;st.ic.classList.remove("go")}
   if(!raf)raf=requestAnimationFrame(apply)}
-function up(){if(!st)return;const s=st;st=null;cancelAnimationFrame(raf);raf=0;if(!s.lock)return;window._swd=Date.now();
+function up(e){if(!st)return;const s=st;st=null;clearTimeout(s.lp);cancelAnimationFrame(raf);raf=0;
+  if(!s.lock){if(s.lpDone){window._ptd=Date.now();return}if(e&&e.type==="pointercancel")return;if(Date.now()-s.t0<600){window._ptd=Date.now();msgTap(s.target)}return}
+  window._swd=Date.now();
   const el=s.el;el.style.transition="transform .3s cubic-bezier(.2,.9,.25,1)";el.style.transform="translate3d(0,0,0)";
   if(s.ic){s.ic.style.transition="opacity .2s ease";s.ic.style.opacity=0}
   if(s.fired)doReply(s.id);
