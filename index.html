@@ -412,6 +412,12 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 .owr .owi{flex:1;min-width:0}.owr .owi b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.owr .owi small{color:var(--sub)}
 .owdel{flex:none;border:1px solid #e53935;background:#e5393514;color:#ff5a55;border-radius:14px;padding:6px 14px;font:inherit;font-weight:700;cursor:pointer}
 .owdel:disabled{opacity:.5}
+
+/* ===== profile avatar fix ===== */
+#pfav{display:block;width:104px;height:104px;line-height:0}
+#pfav .av{box-sizing:border-box!important;width:104px!important;height:104px!important;border:4px solid var(--bg)!important;border-radius:50%!important;box-shadow:none!important;overflow:hidden}
+#pfav div.av{display:grid!important;place-items:center;line-height:1;font-size:46px!important;font-weight:700}
+#pfav img.av{display:block!important;object-fit:cover}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
