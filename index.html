@@ -412,6 +412,7 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 .owr .owi{flex:1;min-width:0}.owr .owi b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.owr .owi small{color:var(--sub)}
 .owdel{flex:none;border:1px solid #e53935;background:#e5393514;color:#ff5a55;border-radius:14px;padding:6px 14px;font:inherit;font-weight:700;cursor:pointer}
 .owdel:disabled{opacity:.5}
+.owban{flex:none;border:1px solid #f59e0b;background:#f59e0b18;color:#d97706;border-radius:14px;padding:6px 12px;font:inherit;font-weight:700;cursor:pointer}.owunban{flex:none;border:1px solid #14b8a6;background:#14b8a61a;color:#0f9f82;border-radius:14px;padding:6px 12px;font:inherit;font-weight:700;cursor:pointer}.owstatus{display:block;font-size:11px!important;color:#e08a16!important;margin-top:3px}
 
 /* ===== profile avatar fix ===== */
 #pfav{display:block;width:104px;height:104px;line-height:0}
@@ -718,7 +719,7 @@ async function acct(create){
   if(create){if(!(await isOwner())&&(await devAll()).length>=DEV_MAX)return alert("Only "+DEV_MAX+" accounts can be created on one device. Please log in to one of your existing accounts.");if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists&&s.data()&&s.data().pw)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
     const ph="";
     try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph)}
-  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");fin(d.name||n,d.phone)}
+  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");if(isBanActive(d.ban))return alert(d.ban.permanent?"This account has been permanently suspended.":"This account is suspended until "+new Date(d.ban.until).toLocaleString()+".");fin(d.name||n,d.phone)}
 }
 let signup=false;
 $("ln").addEventListener("input",function(){if(signup){const c=this.value.replace(/[^A-Za-z0-9_@-]/g,"");if(c!==this.value)this.value=c}});
@@ -1264,21 +1265,35 @@ async function openOwner(){if(!(await isOwner()))return;$("owq").value="";$("owp
 function owDraw(){const q=$("owq").value.trim().toLowerCase().replace(/^@/,""),me=uname();
   const ks=Object.keys(usersCache).filter(k=>usersCache[k]).filter(k=>!q||k.includes(q)||String(usersCache[k].name||"").toLowerCase().includes(q)).sort();
   $("owc").textContent=ks.length+" account"+(ks.length===1?"":"s");
-  $("owl").innerHTML=ks.map(k=>{const n=usersCache[k].name||k;return '<div class="owr"><span class="owa">'+avatar(k,n,40)+'</span><div class="owi"><b>'+esc(n)+'</b><small>@'+esc(k)+(k===me?" · you":"")+'</small></div>'+(k===me?"":'<button type="button" class="owdel" data-u="'+esc(k)+'">Delete</button>')+'</div>'}).join("")||'<div class="empty">No accounts found.</div>'}
+  $("owl").innerHTML=ks.map(k=>{const n=usersCache[k].name||k,b=usersCache[k].ban,active=isBanActive(b),status=active?(b.permanent?"Permanently suspended":"Suspended until "+new Date(b.until).toLocaleString()):"";return '<div class="owr"><span class="owa">'+avatar(k,n,40)+'</span><div class="owi"><b>'+esc(n)+'</b><small>@'+esc(k)+(k===me?" · you":"")+'</small>'+(status?'<small class="owstatus">'+esc(status)+'</small>':'')+'</div>'+(k===me?"":(active?'<button type="button" class="owunban" data-action="unban" data-u="'+esc(k)+'">Unban</button>':'<button type="button" class="owban" data-action="ban" data-u="'+esc(k)+'">Suspend</button>')+'<button type="button" class="owdel" data-action="delete" data-u="'+esc(k)+'">Delete</button>')+'</div>'}).join("")||'<div class="empty">No accounts found.</div>'}
 $("owx").onclick=()=>{$("owp").hidden=true};
 $("owq").oninput=owDraw;
-$("owl").onclick=async e=>{const b=e.target.closest(".owdel");if(!b)return;const u=b.dataset.u;if(!(await isOwner()))return;
-  if(!confirm("Delete @"+u+" permanently? The account will be removed and the user will be logged out."))return;
-  b.disabled=true;b.textContent="…";
-  try{let oc=window._oc;if(!oc){oc=prompt("Owner passcode (needed to delete accounts)");if(!oc)throw new Error("cancelled");oc=oc.trim();if(await sha256(oc)!==OWNER_HASH)throw new Error("Wrong passcode");window._oc=oc}
-    const r=await SB.raw.rpc("owner_delete_user",{target:u,code:window._oc});
-    if(r.error){const m=String(r.error.message||"");if(/wrong owner code/i.test(m))window._oc="";throw new Error(/could not find the function|schema cache/i.test(m)?"Server setup missing: run the owner_delete_user SQL in Supabase first.":m)}
-    const chk=await db.doc("users/"+u).get();if(chk.exists)throw new Error("The server did not allow deleting this account (database rules).");
-    delete usersCache[u];owDraw();try{drawRooms()}catch(_){}}
-  catch(err){b.disabled=false;b.textContent="Delete";if(String(err&&err.message)!=="cancelled")alert("Couldn’t delete: "+((err&&err.message)||err))}};
+function isBanActive(b){if(!b)return false;if(b.permanent)return true;return !!b.until&&Number(b.until)>Date.now()}
+async function ownerCode(){let oc=window._oc;if(!oc){oc=prompt("Owner passcode required");if(!oc)throw new Error("cancelled");oc=oc.trim();if(await sha256(oc)!==OWNER_HASH)throw new Error("Wrong passcode");window._oc=oc}return oc}
+async function ownerBanAction(u,action){if(!(await isOwner()))return;const oc=await ownerCode();let permanent=false,until=null,reason="";
+ if(action==="ban"){
+   const choice=prompt("Suspend @"+u+" for how long?\n1 = 1 day\n2 = 7 days\n3 = 30 days\n4 = Permanent", "1");if(choice===null)throw new Error("cancelled");
+   const days={"1":1,"2":7,"3":30};if(choice==="4")permanent=true;else if(days[choice])until=Date.now()+days[choice]*86400000;else throw new Error("Choose 1, 2, 3, or 4.");
+   reason=(prompt("Reason (optional)")||"").trim().slice(0,160);
+   if(!confirm((permanent?"Permanently suspend":"Temporarily suspend")+" @"+u+"?"))return;
+ }else if(!confirm("Remove suspension from @"+u+"?"))return;
+ const r=await SB.raw.rpc("owner_set_user_ban",{target:u,code:oc,ban_on:action==="ban",permanent,until_ms:until,reason});
+ if(r.error){const m=String(r.error.message||"");if(/wrong owner code/i.test(m))window._oc="";throw new Error(/could not find the function|schema cache/i.test(m)?"Server setup missing: run the owner_set_user_ban SQL in Supabase first.":m)}
+ const x=await db.doc("users/"+u).get();if(!x.exists)throw new Error("Account could not be loaded after the update.");usersCache[u]=x.data();owDraw();
+}
+$("owl").onclick=async e=>{const b=e.target.closest("button[data-u]");if(!b)return;const u=b.dataset.u,action=b.dataset.action;if(!(await isOwner()))return;if(u===uname())return alert("You cannot suspend or delete your own owner account.");b.disabled=true;const old=b.textContent;b.textContent="…";
+ try{if(action==="ban"||action==="unban"){await ownerBanAction(u,action);return}
+  if(action==="delete"){
+   if(!confirm("Delete @"+u+" permanently? The account will be removed and the user will be logged out."))return;
+   const oc=await ownerCode(),r=await SB.raw.rpc("owner_delete_user",{target:u,code:oc});
+   if(r.error){const m=String(r.error.message||"");if(/wrong owner code/i.test(m))window._oc="";throw new Error(/could not find the function|schema cache/i.test(m)?"Server setup missing: run the owner_delete_user SQL in Supabase first.":m)}
+   const chk=await db.doc("users/"+u).get();if(chk.exists)throw new Error("The server did not allow deleting this account.");delete usersCache[u];owDraw();try{drawRooms()}catch(_){}
+  }
+ }catch(err){if(String(err&&err.message)!=="cancelled")alert("Couldn’t update account: "+((err&&err.message)||err))}finally{if(b.isConnected){b.disabled=false;b.textContent=old}}
+};
 /* a deleted account gets logged out on its own device */
 setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
-  try{const x=await db.doc("users/"+uname()).get();if(!x.exists&&prof){if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert("This account was deleted by the owner.")}}catch(e){}},30000);
+  try{const x=await db.doc("users/"+uname()).get();if(!x.exists&&prof){if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert("This account was deleted by the owner.");return}if(x.exists&&prof&&isBanActive(x.data().ban)){const b=x.data().ban;if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert(b.permanent?"This account has been permanently suspended by the owner.":"This account is suspended until "+new Date(b.until).toLocaleString()+".")}}catch(e){}},30000);
 
 /* ===== redesign: list filter chips + chat header avatar ===== */
 function chipApply(){const c=$("chips");if(!c)return;const f=window._chip,inbox=window._tab==="inbox",q=$("sq")&&$("sq").value.trim();
