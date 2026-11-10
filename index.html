@@ -581,7 +581,7 @@ async function acct(create){
   if(!db){for(let i=0;i<56&&!db&&!sbGaveUp;i++)await new Promise(r=>setTimeout(r,250))}if(!db)return alert("Live sync isn’t connected, so accounts can’t be created right now. Reload the page and try again. ["+((window.__sberr&&window.__sberr.message)||"no detail")+"]");
   let s;try{s=await db.doc("users/"+u).get()}catch(e){return alert("Couldn’t reach the server: "+((e&&e.message)||e))}
   const h=await pwh(u,p);
-  if(create){if(!(await isOwner())&&(await devAll()).length>=DEV_MAX)return alert("Only "+DEV_MAX+" accounts can be created on one device. Please log in to one of your existing accounts.");if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
+  if(create){if(!(await isOwner())&&(await devAll()).length>=DEV_MAX)return alert("Only "+DEV_MAX+" accounts can be created on one device. Please log in to one of your existing accounts.");if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists&&s.data()&&s.data().pw)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
     const ph="";
     try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph)}
   else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");fin(d.name||n,d.phone)}
@@ -665,7 +665,7 @@ $("sq").oninput=drawRooms;
 const myBlocked=()=>(usersCache[uname()]&&usersCache[uname()].blocked)||[];
 const isBlocked=m=>su(m)!==uname()&&myBlocked().includes(su(m));
 const dmBlocked=()=>{const o=dmOther(room);return !!o&&myBlocked().includes(o)};
-async function upUser(p){const u=uname();usersCache[u]={...(usersCache[u]||{}),...p};if(!db)return;try{await db.doc("users/"+u).update(p)}catch(e){try{await db.doc("users/"+u).set({name:me.name,...p})}catch(e2){}}}
+async function upUser(p){const u=uname();usersCache[u]={...(usersCache[u]||{}),...p};if(!db)return;try{await db.doc("users/"+u).update(p)}catch(e){}}
 function uc(x){return usersCache[x]||{}}
 function mySent(){return uc(uname()).sent||[]}
 function myFriendsL(){return uc(uname()).friends||[]}
