@@ -547,6 +547,15 @@ button{transition:transform .2s var(--ease),opacity .2s}
 .cfr button{flex:1;background:none;border:0;padding:15px 8px;font:inherit;font-size:16px;cursor:pointer;color:var(--text)}
 .cfr button+button{border-left:.5px solid var(--line);font-weight:700;color:#25d366}
 .cfr button.d{color:#fe2c55!important}
+
+/* Chatly notification settings */
+#nt-open{width:100%;margin:12px 0 8px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--text);display:flex;align-items:center;gap:12px;text-align:left;font:inherit;cursor:pointer}
+#nt-open .ntico{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:#25d36622;font-size:20px}
+#nt-open small{display:block;color:var(--sub);font-size:12px;margin-top:2px}#nt-open .ntarr{margin-left:auto;color:var(--sub);font-size:22px}
+#nt-page{position:fixed;inset:0;z-index:90;background:var(--panel);color:var(--text);overflow:auto;padding:env(safe-area-inset-top,0px) 16px calc(24px + env(safe-area-inset-bottom,0px));}
+#nt-page[hidden]{display:none}#nt-wrap{max-width:640px;margin:auto}#nt-head{position:sticky;top:0;z-index:2;background:var(--panel);display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}#nt-head button{border:0;background:none;color:var(--text);font-size:24px;padding:2px 8px 2px 0}#nt-head b{font-size:19px}
+.nt-card{border:1px solid var(--line);border-radius:18px;padding:14px;margin:14px 0;background:var(--bg)}.nt-card h3{margin:0 0 10px;font-size:15px}.nt-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.nt-row:first-of-type{border-top:0}.nt-row small{display:block;color:var(--sub);font-size:12px;margin-top:2px}.nt-row input[type=checkbox]{width:21px;height:21px;accent-color:var(--accent)}.nt-row select,.nt-select{max-width:48%;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px;font:inherit}.nt-actions{display:flex;gap:7px;flex-wrap:wrap}.nt-actions button,.nt-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:9px 12px;font:inherit;cursor:pointer}.nt-actions button.active,.nt-btn.primary{background:#25d36622;border-color:var(--accent)}.nt-muted{color:var(--sub);font-size:12px}.nt-log{padding:11px 0;border-top:1px solid var(--line)}.nt-log:first-child{border-top:0}.nt-log b{font-size:14px}.nt-log p{margin:3px 0;color:var(--sub);font-size:13px}.nt-log small{color:var(--sub);font-size:11px}.nt-log.unread b:after{content:' •';color:var(--accent)}#nt-search{width:100%;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px;font:inherit;margin:8px 0}
+
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -1353,4 +1362,73 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
   else if(b.id==="cs-me"){t="Delete for me?";m="The message will be removed only from your view.";o="Delete"}
   else{t="Remove banner?";m="Your profile banner will be deleted.";o="Remove"}
   if(await iosConfirm(t,m,o,d)){b._ok=true;b.click();b._ok=false}},true);
+
+
+/* ===== Notification settings + centre ===== */
+(function(){
+  const defaults={enabled:true,sounds:true,types:{messages:true,requests:true,mentions:true,reactions:true,replies:true},privacy:'Full',badge:'Number',globalMuteUntil:0,mutedChats:{},history:[]};
+  const getPrefs=()=>({...defaults,...(uc(uname()).notifyPrefs||{}),types:{...defaults.types,...((uc(uname()).notifyPrefs||{}).types||{})},mutedChats:{...(((uc(uname()).notifyPrefs||{}).mutedChats)||{})},history:Array.isArray((uc(uname()).notifyPrefs||{}).history)?(uc(uname()).notifyPrefs||{}).history:[]});
+  let prefs=getPrefs(),filter='all';
+  const save=async()=>{prefs.history=(prefs.history||[]).slice(0,100);await upUser({notifyPrefs:prefs});applyBadge()};
+  const escN=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const page=document.createElement('section');page.id='nt-page';page.hidden=true;page.innerHTML=`<div id="nt-wrap"><div id="nt-head"><button id="nt-back" aria-label="Back">‹</button><b>Notification settings</b></div><div id="nt-content"></div></div>`;document.body.appendChild(page);
+  const profileButton=document.createElement('button');profileButton.id='nt-open';profileButton.innerHTML='<span class="ntico">🔔</span><span><b>Notification settings</b><small>Alerts, sounds, privacy and notification history</small></span><span class="ntarr">›</span>';
+  const place=()=>{const v=$('pfver');if(v&&profileButton.parentNode!==v.parentNode)v.parentNode.insertBefore(profileButton,v)};
+  place();
+  function show(){prefs=getPrefs();render();page.hidden=false}
+  function hide(){page.hidden=true}
+  profileButton.onclick=show;$('nt-back').onclick=hide;
+  function toggleRow(k,title,desc){return `<div class="nt-row"><span>${title}<small>${desc}</small></span><input type="checkbox" data-pref="${k}" ${prefs[k]?'checked':''}></div>`}
+  function typeRow(k,title){return `<div class="nt-row"><span>${title}</span><input type="checkbox" data-type="${k}" ${prefs.types[k]?'checked':''}></div>`}
+  function render(){
+    const rooms=(roomDocs||[]).filter(r=>r.dm||r.members&&r.members.includes(uname()));
+    const muteUntil=prefs.globalMuteUntil||0;
+    const muteLabel=muteUntil>Date.now()?'Muted until '+new Date(muteUntil).toLocaleString():'Notifications are active';
+    const logs=(prefs.history||[]).filter(x=>(filter==='all'||(filter==='unread'&&!x.read)||(filter==='messages'&&x.type==='message')||(filter==='social'&&x.type!=='message')));
+    $('nt-content').innerHTML=`
+      <div class="nt-card"><h3>General</h3>${toggleRow('enabled','Notifications','Master switch for Chatly alerts')}${toggleRow('sounds','Sounds','Play a sound for new alerts')}<div class="nt-row"><span>Test sound<small>Preview your current alert sound</small></span><button class="nt-btn" data-act="test">▶ Test</button></div><div class="nt-row"><span>Pause all notifications<small>${escN(muteLabel)}</small></span><div class="nt-actions"><button data-mute="3600000">1h</button><button data-mute="28800000">8h</button><button data-mute="86400000">24h</button><button data-mute="0">Off</button></div></div></div>
+      <div class="nt-card"><h3>Notification types</h3>${typeRow('messages','New messages')}${typeRow('requests','Friend requests')}${typeRow('mentions','Mentions')}${typeRow('reactions','Reactions')}${typeRow('replies','Replies')}</div>
+      <div class="nt-card"><h3>Message privacy</h3><div class="nt-row"><span>Preview style<small>Choose what appears in notification previews</small></span><select data-select="privacy"><option ${prefs.privacy==='Full'?'selected':''}>Full</option><option ${prefs.privacy==='Private'?'selected':''}>Private</option><option ${prefs.privacy==='Hide All'?'selected':''}>Hide All</option></select></div><p class="nt-muted">Full shows the message. Private hides message text. Hide All uses a generic alert.</p></div>
+      <div class="nt-card"><h3>Per-chat mute</h3><div class="nt-row"><span>Choose a chat<small>Mute a specific conversation for a set time</small></span><select id="nt-room" class="nt-select"><option value="">Select chat</option>${rooms.map(r=>{const id=r.id,other=r.dm?r.members.find(x=>x!==uname()):id;return `<option value="${escN(id)}">${escN(r.dm?'@'+other:(r.name||id))}</option>`}).join('')}</select></div><div class="nt-actions"><button data-roommute="3600000">1h</button><button data-roommute="28800000">8h</button><button data-roommute="86400000">24h</button><button data-roommute="0">Unmute</button></div><div id="nt-roomstatus" class="nt-muted"></div></div>
+      <div class="nt-card"><h3>App badge</h3><div class="nt-row"><span>Badge style<small>Where supported by your installed browser</small></span><select data-select="badge"><option ${prefs.badge==='Number'?'selected':''}>Number</option><option ${prefs.badge==='Red Dot'?'selected':''}>Red Dot</option><option ${prefs.badge==='Off'?'selected':''}>Off</option></select></div></div>
+      <div class="nt-card"><h3>Notification Centre</h3><input id="nt-search" placeholder="Search notifications…"><div class="nt-actions"><button data-filter="all" class="${filter==='all'?'active':''}">All</button><button data-filter="unread" class="${filter==='unread'?'active':''}">Unread</button><button data-filter="messages" class="${filter==='messages'?'active':''}">Messages</button><button data-filter="social" class="${filter==='social'?'active':''}">Social</button></div><div id="nt-logs">${logs.length?logs.map(x=>`<div class="nt-log ${x.read?'':'unread'}"><b>${escN(x.title)}</b><p>${escN(x.body)}</p><small>${new Date(x.ts).toLocaleString()}</small></div>`).join(''):'<p class="nt-muted">No notifications yet.</p>'}</div><div class="nt-actions"><button data-act="read">Mark all read</button><button data-act="clear">Clear history</button></div></div>`;
+    const q=$('nt-search');q.oninput=()=>{const v=q.value.toLowerCase();$('nt-logs').querySelectorAll('.nt-log').forEach(el=>el.hidden=!el.textContent.toLowerCase().includes(v))};
+    const sel=$('nt-room');if(sel){const v=sel.value,st=$('nt-roomstatus');sel.onchange=()=>{const until=prefs.mutedChats[sel.value]||0;st.textContent=until>Date.now()?'Muted until '+new Date(until).toLocaleString():'Not muted'}}
+  }
+  function sound(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(740,c.currentTime);o.frequency.exponentialRampToValueAtTime(520,c.currentTime+.13);g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(.12,c.currentTime+.015);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.24);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.25);o.onended=()=>c.close()}catch(e){}}
+  function applyBadge(){const unread=(prefs.history||[]).filter(x=>!x.read).length;try{if(prefs.badge==='Off'||!unread){navigator.clearAppBadge&&navigator.clearAppBadge()}else if(prefs.badge==='Number'){navigator.setAppBadge&&navigator.setAppBadge(unread)}else{navigator.setAppBadge&&navigator.setAppBadge(1)}}catch(e){}}
+  function muted(roomId){return (prefs.globalMuteUntil>Date.now())||(prefs.mutedChats[roomId]||0)>Date.now()}
+  function record(type,title,body,roomId){const item={id:Date.now()+'_'+Math.random().toString(36).slice(2,7),type,title,body,room:roomId,ts:Date.now(),read:false};prefs.history=[item,...(prefs.history||[])].slice(0,100);save();return item}
+  const oldNotify=window.notifyShow;
+  window.notifyShow=async function(m){
+    prefs=getPrefs();if(!prefs.enabled||muted(m.room)||Notification.permission!=='granted')return;
+    const text=String(m.text||''),mention=new RegExp('@'+uname()+'\\b','i').test(text),reply=!!(m.replyTo||m.reply||m.quote),type=mention?'mentions':reply?'replies':'messages';
+    if(!prefs.types[type])return;
+    const full=(m.name||'Someone')+' • Chatly';let body='New message';
+    if(prefs.privacy==='Full')body=m.fwd?'Forwarded: '+(text.slice(0,90)):text.slice(0,90)||(m.img?'Photo':m.aud?'Voice message':m.file?'File: '+m.file.name:'New message');
+    else if(prefs.privacy==='Private')body='You have a new message';
+    const title=prefs.privacy==='Hide All'?'Chatly':full;if(prefs.privacy==='Hide All')body='You have a new notification';
+    record('message',title,body,m.room);if(prefs.sounds)sound();
+    try{const opts={body,icon:'icon-192.png',tag:'chatly-'+m.room};if(navigator.serviceWorker){const reg=await navigator.serviceWorker.getRegistration();if(reg){await reg.showNotification(title,opts);return}}new Notification(title,opts)}catch(e){}
+  };
+  page.addEventListener('change',async e=>{const t=e.target;if(t.dataset.pref){prefs[t.dataset.pref]=t.checked;await save();render()}if(t.dataset.type){prefs.types[t.dataset.type]=t.checked;await save()}if(t.dataset.select){prefs[t.dataset.select]=t.value;await save();applyBadge()}});
+  page.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.mute!==undefined){prefs.globalMuteUntil=b.dataset.mute==='0'?0:Date.now()+Number(b.dataset.mute);await save();render()}
+    if(b.dataset.roommute!==undefined){const id=$('nt-room').value;if(!id){$('nt-roomstatus').textContent='Select a chat first.';return}prefs.mutedChats[id]=b.dataset.roommute==='0'?0:Date.now()+Number(b.dataset.roommute);await save();$('nt-roomstatus').textContent=b.dataset.roommute==='0'?'Chat unmuted.':'Chat muted.'}
+    if(b.dataset.filter){filter=b.dataset.filter;render()}
+    if(b.dataset.act==='test')sound();
+    if(b.dataset.act==='read'){prefs.history=(prefs.history||[]).map(x=>({...x,read:true}));await save();render()}
+    if(b.dataset.act==='clear'){prefs.history=[];await save();render()}
+  });
+  // Friend request alerts are detected when the user cache gains a new incoming request.
+  let knownRequests=new Set(),requestPrimed=false;
+  const scanRequests=()=>{if(!me)return;const current=new Set(pendingIn());if(!requestPrimed){knownRequests=current;requestPrimed=true;return}for(const u of current){if(!knownRequests.has(u)){prefs=getPrefs();if(prefs.enabled&&prefs.types.requests&&!muted('inbox')){const name=(usersCache[u]&&usersCache[u].name)||u;record('request','New friend request','@'+u+' sent you a friend request','inbox');if(prefs.sounds)sound();if('Notification'in window&&Notification.permission==='granted'&&document.visibilityState!=='visible'){const title=prefs.privacy==='Hide All'?'Chatly':'Friend request';const body=prefs.privacy==='Full'?name+' sent you a friend request':'You have a new notification';try{new Notification(title,{body,icon:'icon-192.png'})}catch(e){}}}}}knownRequests=current};
+  window.notifySocial=async function(kind,m){prefs=getPrefs();if(!prefs.enabled||!prefs.types[kind]||muted(m.room))return;const title=prefs.privacy==='Hide All'?'Chatly':kind==='reactions'?'New reaction':'New notification';const body=prefs.privacy==='Full'?(kind==='reactions'?'Someone reacted to your message':'You have a new notification'):'You have a new notification';record(kind,title,body,m.room);if(prefs.sounds)sound();if('Notification'in window&&Notification.permission==='granted'&&document.visibilityState!=='visible'){try{new Notification(title,{body,icon:'icon-192.png'})}catch(e){}}};
+  let socialSubscribed=false;const oldInitNotify=window.initNotify;window.initNotify=function(){if(oldInitNotify)oldInitNotify();if(socialSubscribed||!window.SB||!SB.raw)return;socialSubscribed=true;try{SB.raw.channel('chatly-social-notify').on('postgres_changes',{event:'UPDATE',schema:'public',table:'docs',filter:'collection=eq.messages'},p=>{const n=p.new&&p.new.data,o=p.old&&p.old.data;if(!n||!o||!n.room||su(n)===uname()||!n.rc)return;const before=JSON.stringify(o.rc||{}),after=JSON.stringify(n.rc||{});if(before!==after){const rd=roomDocs.find(x=>x.id===n.room);if(rd&&rd.members&&!rd.members.includes(uname()))return;window.notifySocial('reactions',n)}}).subscribe()}catch(e){socialSubscribed=false}};
+  const oldReqDot=window.reqDot;window.reqDot=function(){if(oldReqDot)oldReqDot();try{scanRequests()}catch(e){}};
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')applyBadge()});
+  window.addEventListener('storage',()=>{prefs=getPrefs();applyBadge()});
+  setTimeout(()=>{prefs=getPrefs();applyBadge();place()},0);
+})();
+
 </script></body></html>
