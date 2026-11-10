@@ -418,6 +418,31 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 #pfav .av{box-sizing:border-box!important;width:104px!important;height:104px!important;border:4px solid var(--bg)!important;border-radius:50%!important;box-shadow:none!important;overflow:hidden}
 #pfav div.av{display:grid!important;place-items:center;line-height:1;font-size:46px!important;font-weight:700}
 #pfav img.av{display:block!important;object-fit:cover}
+
+/* Chatly Plus: message search, pinned message and compact action sheet */
+#chatSearchBtn{font-size:25px!important;font-weight:600!important;width:38px!important}
+#pinbar{display:flex;align-items:center;gap:10px;padding:9px 13px;background:var(--panel,#f4f7f6);border-bottom:1px solid var(--line,#ddd);cursor:pointer;min-height:52px}
+#pinbar[hidden]{display:none}
+#pinbar>span{font-size:18px}
+#pinbar>div{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
+#pinbar small{font-size:10px;opacity:.65;text-transform:uppercase;letter-spacing:.06em}
+#pintext{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+#unpin{border:0;background:transparent;font-size:22px;padding:4px 9px;opacity:.65}
+#chatSearch{position:fixed;inset:0;z-index:80;background:var(--bg,#fff);display:flex;flex-direction:column}
+#chatSearch[hidden]{display:none}
+#csHead{display:flex;align-items:center;gap:10px;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid var(--line,#ddd)}
+#csHead input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;padding:9px}
+#csHead button{border:0;background:transparent;font-size:24px;padding:4px 8px}
+#csCount{font-size:12px;opacity:.65;white-space:nowrap}
+#csResults{overflow:auto;padding:8px 12px}
+.cs-hit{padding:12px;border-bottom:1px solid var(--line,#eee);border-radius:10px;cursor:pointer}
+.cs-hit b{display:block;font-size:13px;margin-bottom:4px}
+.cs-hit p{margin:0;font-size:14px;overflow-wrap:anywhere}
+.cs-hit mark{background:#ffe58a;color:#222;border-radius:3px}
+.cs-empty{padding:28px 12px;text-align:center;opacity:.6;font-size:14px}
+.m.edited .t:after{content:" · edited";opacity:.65;font-size:10px}
+.m.search-focus{outline:2px solid var(--accent,#25d366);outline-offset:2px}
+#s-edit,#s-pin{border:0;background:transparent;width:100%;text-align:left;padding:12px 16px;font:inherit}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -425,10 +450,10 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 </head>
 <body><div id="app">
-<header><button id="back" hidden aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span id="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><div id="titlew" style="cursor:pointer"><span id="title">Chatly</span><small id="sub"></small></div><span style="flex:1"></span><button id="bl" aria-label="Block or unblock" hidden><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.3 3.1L7.1 18.3A8 8 0 0 1 12 4zm0 16a8 8 0 0 1-6.3-3.1L16.9 5.7A8 8 0 0 1 12 20z"/></svg></button><div id="calls" hidden><button id="ac" aria-label="Audio call"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></button><button id="vc" aria-label="Video call"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg></button></div><button id="pf" aria-label="Profile" hidden><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></button><button id="out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 4h8V2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-2H4z"/></svg></button></header>
+<header><button id="back" hidden aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span id="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><div id="titlew" style="cursor:pointer"><span id="title">Chatly</span><small id="sub"></small></div><span style="flex:1"></span><button id="chatSearchBtn" type="button" aria-label="Search messages" title="Search messages" hidden>⌕</button><button id="bl" aria-label="Block or unblock" hidden><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.3 3.1L7.1 18.3A8 8 0 0 1 12 4zm0 16a8 8 0 0 1-6.3-3.1L16.9 5.7A8 8 0 0 1 12 20z"/></svg></button><div id="calls" hidden><button id="ac" aria-label="Audio call"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></button><button id="vc" aria-label="Video call"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg></button></div><button id="pf" aria-label="Profile" hidden><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></button><button id="out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 4h8V2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-2H4z"/></svg></button></header>
 <div id="note" hidden></div>
 <div id="sbar" hidden><input id="sq" placeholder="Search username to start a chat" autocomplete="off"></div><div id="list"></div><button id="fab" aria-label="New chat"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button>
-<div id="chat"><div id="msgs"></div>
+<div id="chat"><div id="pinbar" hidden><span>📌</span><div><small>Pinned message</small><b id="pintext"></b></div><button id="unpin" type="button" aria-label="Unpin message">×</button></div><div id="msgs"></div>
 <div id="rbar" hidden><span id="rtxt"></span><button id="rx" type="button" aria-label="Cancel reply">×</button></div>
 <div id="lockbar" hidden></div>
 <div id="tyb" hidden><span class="d"><span></span><span></span><span></span></span><i id="tyn"></i></div>
@@ -442,8 +467,8 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 <div id="nc" hidden><div id="ncb"><b>New chat</b><input id="nu" placeholder="Usernames, comma separated"><input id="ngn" placeholder="Group name (only for 2 or more people)"><div id="nerr"></div><div class="nrow"><button type="button" id="nx">Cancel</button><button type="button" id="ng">Start chat</button></div></div></div>
 <nav id="nav" hidden><button id="tc" class="on"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><span>Chats</span></button><button id="ti"><span class="ico"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 12h-4a3 3 0 0 1-6 0H5V5h14v10z"/></svg><b id="tib" hidden>0</b></span><span>Inbox</span></button><button id="tp"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg><span>Profile</span></button></nav>
 <div id="csheet" hidden><div id="csh"></div><button type="button" id="cs-me">Delete for me</button><button type="button" id="cs-x">Cancel</button></div>
-<div id="sheet" hidden><div id="rxrow"><button type="button" data-e="👍">👍</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="😂">😂</button><button type="button" data-e="😮">😮</button><button type="button" data-e="😢">😢</button><button type="button" data-e="🙏">🙏</button></div><button id="s-re">Reply</button><button id="s-cp">Copy</button><button id="s-dl">Download</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
-<div id="starview" hidden><div id="svh"><button id="svx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Starred messages</b></div><div id="svlist"></div></div>
+<div id="sheet" hidden><div id="rxrow"><button type="button" data-e="👍">👍</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="😂">😂</button><button type="button" data-e="😮">😮</button><button type="button" data-e="😢">😢</button><button type="button" data-e="🙏">🙏</button></div><button id="s-re">Reply</button><button id="s-cp">Copy</button><button id="s-dl">Download</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-edit" hidden>Edit message</button><button id="s-pin">Pin in this chat</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
+<div id="chatSearch" hidden><div id="csHead"><button id="csClose" type="button" aria-label="Close search">←</button><input id="csQuery" type="search" placeholder="Search in this chat"><span id="csCount"></span></div><div id="csResults"></div></div>\n<div id="starview" hidden><div id="svh"><button id="svx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Starred messages</b></div><div id="svlist"></div></div>
 <div id="fview" hidden><div id="fvb"><div id="fvh"><button id="fvx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Friends</b></div><div id="fvtabs"><button id="fvt1" class="on">Following</button><button id="fvt2">Followers</button></div><div id="fvlist"></div></div></div>
 <div id="fwpick" hidden><div id="fwb"><b>Forward to...</b><div id="fwlist"></div><button type="button" id="fwx">Cancel</button></div></div>
 <div id="login"><span id="biglogo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><h2 id="lt">Chatly</h2><form id="lf"><input id="ln" placeholder="Username" maxlength="24" required><input id="lw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password"><input id="lc" type="password" placeholder="Confirm password" autocomplete="new-password" hidden><button id="lb">Log in</button><button type="button" id="su">Create account</button></form><div id="lerr"></div><div id="lconn">Connecting…</div></div>
@@ -505,10 +530,10 @@ $("fab").onclick=async()=>{
   if(!roomDocs.find(x=>x.id===doc.id))roomDocs.push(doc);
   open(doc.id);
 };
-$("back").onclick=()=>{if(unsub)unsub();unsub=null;room=null;$("chat").style.display="none";$("list").style.display="";$("fab").style.display="";$("back").hidden=true;$("title").textContent="Chatly";$("calls").hidden=true;$("logo").style.display="";$("out").hidden=false;$("pf").hidden=false;$("sbar").hidden=false;$("nav").hidden=false;setTab("chats");$("bl").hidden=true;drawRooms();$("sub").textContent=prof?"Signed in as "+prof.name:""};
+$("back").onclick=()=>{if(unsub)unsub();unsub=null;room=null;$("chatSearchBtn").hidden=true;$("chatSearch").hidden=true;$("chat").style.display="none";$("list").style.display="";$("fab").style.display="";$("back").hidden=true;$("title").textContent="Chatly";$("calls").hidden=true;$("logo").style.display="";$("out").hidden=false;$("pf").hidden=false;$("sbar").hidden=false;$("nav").hidden=false;setTab("chats");$("bl").hidden=true;drawRooms();$("sub").textContent=prof?"Signed in as "+prof.name:""};
 function open(r){
   $("titlew").onclick=()=>{const rm=allRooms().find(x=>x.id===r);if(rm&&rm.members)openGroupInfo(r)};
-  room=r;$("list").style.display="none";$("fab").style.display="none";$("chat").style.display="flex";$("back").hidden=false;
+  room=r;$("in").value=localStorage.getItem("chatly_draft_"+r)||"";$("chatSearchBtn").hidden=false;$("pinbar").hidden=true;$("list").style.display="none";$("fab").style.display="none";$("chat").style.display="flex";$("back").hidden=false;
   $("title").textContent=titleOf(r);$("calls").hidden=!R;$("logo").style.display="none";$("out").hidden=true;$("pf").hidden=true;$("sbar").hidden=true;$("nav").hidden=true;$("prof").hidden=true;$("bl").hidden=!dmOther(r);baseSub=subOf(r);$("sub").textContent=baseSub;replyTo=null;$("rbar").hidden=true;
   $("msgs").innerHTML="";
   if(db){unsub=db.collection("messages").where("room","==",r).limit(300).onSnapshot(s=>render(s.docs.map(d=>({...d.data(),id:d.id}))),()=>{})}
@@ -1151,4 +1176,186 @@ $("owl").onclick=async e=>{const b=e.target.closest(".owdel");if(!b)return;const
 /* a deleted account gets logged out on its own device */
 setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
   try{const x=await db.doc("users/"+uname()).get();if(!x.exists&&prof){if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert("This account was deleted by the owner.")}}catch(e){}},30000);
-</script></body></html>
+</script>
+<style>
+/* Chatly smooth interaction + compact sound control */
+:root{scroll-behavior:smooth}
+#msgs{scroll-behavior:smooth;scroll-padding-bottom:18px}
+.room,.m,#send,#fab,.vp{ -webkit-tap-highlight-color:transparent }
+.room{transition:background .18s ease,transform .18s ease}
+.room:active{transform:scale(.985)}
+.m{animation:chatBubbleIn .2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes chatBubbleIn{from{opacity:0;transform:translateY(7px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+#msgs::-webkit-scrollbar,#list::-webkit-scrollbar{width:4px}
+#msgs::-webkit-scrollbar-thumb,#list::-webkit-scrollbar-thumb{background:#89949b55;border-radius:8px}
+#soundToggle{position:fixed;right:14px;top:calc(72px + env(safe-area-inset-top,0px));z-index:30;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:22px;padding:8px 11px;display:flex;align-items:center;gap:6px;font:600 12px system-ui;box-shadow:0 3px 12px #0002}
+#soundToggle[hidden]{display:none}
+#soundToggle .sdot{width:7px;height:7px;border-radius:50%;background:#22c55e}
+#soundToggle.off .sdot{background:#94a3b8}
+@media(prefers-reduced-motion:reduce){.m{animation:none}}
+</style>
+<button id="soundToggle" type="button" aria-label="Toggle sound effects"><i class="sdot"></i><span>Sounds on</span></button>
+<script>
+/* Local UI sounds: generated with Web Audio; no external audio files required. */
+(()=>{
+ let enabled=localStorage.getItem("chatly_sounds")!=="off",ctx=null,lastIncoming="";
+ const toggle=document.getElementById("soundToggle");
+ const sync=()=>{toggle.classList.toggle("off",!enabled);toggle.querySelector("span").textContent=enabled?"Sounds on":"Sounds off"};
+ function tone(freq,duration,volume=.035,delay=0,type="sine"){
+   if(!enabled)return;
+   try{
+     const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+     ctx=ctx||new AC();if(ctx.state==="suspended")ctx.resume();
+     const o=ctx.createOscillator(),g=ctx.createGain(),now=ctx.currentTime+delay;
+     o.type=type;o.frequency.setValueAtTime(freq,now);
+     g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(volume,now+.012);
+     g.gain.exponentialRampToValueAtTime(.0001,now+duration);
+     o.connect(g);g.connect(ctx.destination);o.start(now);o.stop(now+duration+.02);
+   }catch(e){}
+ }
+ const sounds={
+   tap:()=>tone(520,.045,.012),
+   send:()=>{tone(620,.07,.025);tone(880,.09,.018,.055)},
+   receive:()=>{tone(740,.10,.025);tone(980,.13,.018,.09)},
+   open:()=>tone(460,.065,.014)
+ };
+ toggle.addEventListener("click",()=>{enabled=!enabled;localStorage.setItem("chatly_sounds",enabled?"on":"off");sync();if(enabled)sounds.tap()});
+ sync();
+ // Soft click feedback for navigation/actions, excluding typing and repeated taps.
+ document.addEventListener("click",e=>{
+   if(!enabled||e.target.closest("#soundToggle"))return;
+   const b=e.target.closest("button,.room,.frow,.inrow");
+   if(b&&!b.disabled)sounds.tap();
+ },true);
+ // Play a gentle sent tone only when a message is successfully submitted.
+ const form=document.getElementById("f");
+ form.addEventListener("submit",()=>{if(document.getElementById("in").value.trim())sounds.send()});
+ // Watch the message list for messages from other people.
+ const msgs=document.getElementById("msgs");
+ let first=true;
+ new MutationObserver(()=>{
+   const all=[...msgs.querySelectorAll(".m")];
+   if(first){first=false;all.forEach(x=>{if(!x.classList.contains("me"))lastIncoming=x.dataset.id||lastIncoming});return}
+   const newest=all[all.length-1];
+   if(newest&&!newest.classList.contains("me")){
+     const id=newest.dataset.id||"";
+     if(id&&id!==lastIncoming){lastIncoming=id;sounds.receive()}
+   }else if(newest&&newest.classList.contains("me"))lastIncoming=newest.dataset.id||lastIncoming;
+ }).observe(msgs,{childList:true});
+ // Keep the conversation pinned smoothly when already near the bottom.
+ const oldScroll=document.getElementById("msgs");
+ oldScroll.addEventListener("load",e=>{if(e.target.tagName==="IMG")oldScroll.scrollTo({top:oldScroll.scrollHeight,behavior:"smooth"})},true);
+})();
+</script>
+
+<style>
+/* Chatly signature login refresh */
+#login{
+  isolation:isolate;overflow:auto;justify-content:center;gap:13px;
+  padding:clamp(22px,6vh,54px) 22px calc(24px + env(safe-area-inset-bottom,0px));
+  background:
+    radial-gradient(ellipse at 12% 12%,#25d36635 0,transparent 34%),
+    radial-gradient(ellipse at 92% 82%,#7c4dff26 0,transparent 36%),
+    linear-gradient(145deg,#071c25 0%,#102d35 48%,#111827 100%);
+  color:#f5fbfc;
+}
+#login::before,#login::after{content:"";position:absolute;z-index:-1;border:1px solid #ffffff16;border-radius:50%;pointer-events:none}
+#login::before{width:310px;height:310px;top:-145px;right:-110px;box-shadow:0 0 0 28px #ffffff06,0 0 0 58px #ffffff04}
+#login::after{width:220px;height:220px;bottom:-120px;left:-95px;box-shadow:0 0 0 24px #ffffff06,0 0 0 50px #ffffff04}
+#biglogo{display:grid;place-items:center;width:100px;height:100px;border-radius:32px;
+  background:linear-gradient(145deg,#25d366,#0f9f82);box-shadow:0 16px 45px #25d36645, inset 0 1px 0 #ffffff75;
+  transform:rotate(-5deg);margin-bottom:3px}
+#biglogo svg{width:62px;height:62px;filter:drop-shadow(0 3px 5px #075b4433);transform:rotate(5deg)}
+#login h2{font-size:34px;letter-spacing:-1.2px;font-weight:800;margin:3px 0 16px;text-align:center}
+#login h2::after{content:"A better way to stay connected.";display:block;font-size:13px;letter-spacing:.15px;font-weight:400;color:#b6cbd0;margin-top:6px}
+#lf{width:100%;max-width:390px;padding:24px 20px 18px;background:#ffffff12;border:1px solid #ffffff22;border-radius:26px;
+  box-shadow:0 22px 65px #0005;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);gap:12px}
+#lf input{width:100%;min-height:52px;border:1px solid #ffffff20;background:#071c257a;color:#f5fbfc;border-radius:15px;padding:14px 16px;font-size:15px}
+#lf input::placeholder{color:#a9bdc2}
+#lf input:focus{border-color:#25d366;box-shadow:0 0 0 3px #25d36625}
+#lb{min-height:52px;border-radius:15px;background:linear-gradient(110deg,#25d366,#0eaa8b);font-size:15px;box-shadow:0 8px 22px #25d36630;margin-top:4px}
+#lb:disabled{opacity:.65}
+#su{min-height:48px;border:1px solid #ffffff26;border-radius:15px;text-align:center!important;padding:11px!important;color:#e6f2f4!important;font-weight:600}
+#lerr{width:100%;max-width:390px;min-height:0;padding:0 8px;color:#ffb4b4}
+#lconn{font-size:11px;color:#9db5bb;letter-spacing:.2px;margin-top:1px}
+@media(max-height:650px){#login{gap:8px;padding-top:16px}#biglogo{width:72px;height:72px;border-radius:24px}#biglogo svg{width:48px;height:48px}#login h2{font-size:28px;margin-bottom:8px}#lf{padding:16px;gap:9px}#lf input{min-height:46px}#lb{min-height:46px}}
+@media(prefers-reduced-motion:no-preference){#biglogo{animation:chatlyFloat 5s ease-in-out infinite}#lf{animation:chatlyCardIn .55s cubic-bezier(.2,.8,.2,1) both}}
+@keyframes chatlyFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-6px) rotate(-2deg)}}
+@keyframes chatlyCardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+</body></html>
+
+
+<script>
+/* Chatly Plus features: local drafts, in-chat search, edit and pin */
+(()=>{
+ const $p=id=>document.getElementById(id);
+ const draftKey=()=> "chatly_draft_"+(typeof room!=="undefined"&&room?room:"");
+ const pinKey=()=> "chatly_pin_"+(typeof room!=="undefined"&&room?room:"");
+ const safeText=m=>m?(m.text||(m.img?"Photo":m.aud?"Voice message":m.file?"Attachment: "+(m.file.name||"file"):"Media")):"";
+ const current=()=>typeof cur!=="undefined"?cur:[];
+ function escHtml(s){const d=document.createElement("div");d.textContent=String(s??"");return d.innerHTML}
+ function updatePin(){
+   const id=localStorage.getItem(pinKey()),m=current().find(x=>(x.id||String(x.ts))===id);
+   $p("pinbar").hidden=!m;
+   if(m)$p("pintext").textContent=safeText(m).slice(0,110);
+ }
+ const pinObs=new MutationObserver(updatePin);
+ pinObs.observe($p("msgs"),{childList:true,subtree:true});
+ $p("chatSearchBtn").addEventListener("click",()=>{
+   $p("chatSearch").hidden=false;$p("csQuery").value="";$p("csResults").innerHTML='<div class="cs-empty">Search messages in this conversation</div>';$p("csCount").textContent="";$p("csQuery").focus();
+ });
+ $p("csClose").addEventListener("click",()=>$p("chatSearch").hidden=true);
+ $p("csQuery").addEventListener("input",()=>{
+   const q=$p("csQuery").value.trim().toLowerCase(),hits=current().filter(m=>!m.del&&safeText(m).toLowerCase().includes(q));
+   if(!q){$p("csResults").innerHTML='<div class="cs-empty">Type to search messages</div>';$p("csCount").textContent="";return}
+   $p("csCount").textContent=hits.length+" found";
+   if(!hits.length){$p("csResults").innerHTML='<div class="cs-empty">No matching messages</div>';return}
+   $p("csResults").innerHTML=hits.slice(0,100).map(m=>{
+     const t=safeText(m),at=t.toLowerCase().indexOf(q),before=escHtml(t.slice(0,at)),match=escHtml(t.slice(at,at+q.length)),after=escHtml(t.slice(at+q.length));
+     return `<div class="cs-hit" data-mid="${escHtml(m.id||String(m.ts))}"><b>${escHtml(m.name||"Message")} · ${new Date(m.ts).toLocaleString()}</b><p>${before}<mark>${match}</mark>${after}</p></div>`;
+   }).join("");
+ });
+ $p("csResults").addEventListener("click",e=>{
+   const hit=e.target.closest(".cs-hit");if(!hit)return;
+   $p("chatSearch").hidden=true;
+   const el=[...$p("msgs").querySelectorAll(".m")].find(x=>x.dataset.id===hit.dataset.mid);
+   if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("search-focus");setTimeout(()=>el.classList.remove("search-focus"),1800)}
+ });
+ $p("unpin").addEventListener("click",e=>{e.stopPropagation();localStorage.removeItem(pinKey());updatePin()});
+ $p("pinbar").addEventListener("click",()=>{
+   const id=localStorage.getItem(pinKey()),el=[...$p("msgs").querySelectorAll(".m")].find(x=>x.dataset.id===id);
+   if(el)el.scrollIntoView({behavior:"smooth",block:"center"});
+ });
+ $p("s-pin").addEventListener("click",()=>{
+   const m=current().find(x=>(x.id||String(x.ts))===sel);$p("sheet").hidden=true;
+   if(!m)return;localStorage.setItem(pinKey(),m.id||String(m.ts));updatePin();
+ });
+ $p("s-edit").addEventListener("click",async()=>{
+   const m=current().find(x=>(x.id||String(x.ts))===sel);$p("sheet").hidden=true;
+   if(!m||m.del||!m.text||((m.uid||"")!==((typeof me!=="undefined"&&me.id)||"")))return;
+   const next=prompt("Edit your message:",m.text);if(next===null)return;
+   const value=next.trim();if(!value){alert("Message cannot be empty.");return}
+   try{
+     if(typeof db!=="undefined"&&db&&m.id)await db.doc("messages/"+m.id).update({text:value,edited:true});
+     else{m.text=value;m.edited=true;if(typeof render==="function")render(current())}
+   }catch(err){alert("Could not edit this message: "+(err.message||err))}
+ });
+ // Drafts are saved per conversation on this device and restored when the chat opens.
+ $p("in").addEventListener("input",()=>{
+   if(typeof room!=="undefined"&&room){try{const v=$p("in").value;if(v)localStorage.setItem(draftKey(),v);else localStorage.removeItem(draftKey())}catch(e){}}
+ });
+ $p("f").addEventListener("submit",()=>{try{localStorage.removeItem(draftKey())}catch(e){}});
+ // Show edit only for the current user's plain-text message.
+ const oldOpenMenu=window.openMenu;
+ if(typeof oldOpenMenu==="function"){
+   window.openMenu=function(el){
+     oldOpenMenu(el);
+     const m=current().find(x=>(x.id||String(x.ts))===el.dataset.id);
+     $p("s-edit").hidden=!(m&&!m.del&&!!m.text&&((m.uid||"")===((typeof me!=="undefined"&&me.id)||"")));
+     $p("s-pin").hidden=!m||!!m.del;
+   };
+ }
+})();
+</script>
