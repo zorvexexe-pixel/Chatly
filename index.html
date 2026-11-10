@@ -450,7 +450,7 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 </head>
 <body><div id="app">
-<header><button id="back" hidden aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span id="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><div id="titlew" style="cursor:pointer"><span id="title">Chatly</span><small id="sub"></small></div><span style="flex:1"></span><button id="chatSearchBtn" type="button" aria-label="Search messages" title="Search messages" hidden>⌕</button><button id="bl" aria-label="Block or unblock" hidden><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.3 3.1L7.1 18.3A8 8 0 0 1 12 4zm0 16a8 8 0 0 1-6.3-3.1L16.9 5.7A8 8 0 0 1 12 20z"/></svg></button><div id="calls" hidden><button id="ac" aria-label="Audio call"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></button><button id="vc" aria-label="Video call"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg></button></div><button id="pf" aria-label="Profile" hidden><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></button><button id="out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 4h8V2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-2H4z"/></svg></button></header>
+<header><button id="back" hidden aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span id="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><div id="titlew" style="cursor:pointer"><span id="title">Chatly</span><small id="sub"></small></div><span style="flex:1"></span><button id="chatSearchBtn" type="button" aria-label="Search messages" title="Search messages" hidden>⌕</button><button id="chatStyleBtn" type="button" aria-label="Chat appearance" title="Chat appearance" hidden>✦</button><button id="bl" aria-label="Block or unblock" hidden><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.3 3.1L7.1 18.3A8 8 0 0 1 12 4zm0 16a8 8 0 0 1-6.3-3.1L16.9 5.7A8 8 0 0 1 12 20z"/></svg></button><div id="calls" hidden><button id="ac" aria-label="Audio call"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></button><button id="vc" aria-label="Video call"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg></button></div><button id="pf" aria-label="Profile" hidden><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></button><button id="out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 4h8V2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-2H4z"/></svg></button></header>
 <div id="note" hidden></div>
 <div id="sbar" hidden><input id="sq" placeholder="Search username to start a chat" autocomplete="off"></div><div id="list"></div><button id="fab" aria-label="New chat"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button>
 <div id="chat"><div id="pinbar" hidden><span>📌</span><div><small>Pinned message</small><b id="pintext"></b></div><button id="unpin" type="button" aria-label="Unpin message">×</button></div><div id="msgs"></div>
@@ -459,7 +459,7 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 <div id="tyb" hidden><span class="d"><span></span><span></span><span></span></span><i id="tyn"></i></div>
 <form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file"></span><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
-<div id="prof" hidden><div id="pfb"><div id="pfban"><div id="pfbimg"></div></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><input type="file" id="pbi" accept="image/*" hidden><button type="button" id="pfedit"><svg viewBox="0 0 24 24" class=""><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit profile</span></button><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn"><svg viewBox="0 0 24 24" class="st"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>Starred messages</span><svg viewBox="0 0 24 24" class="chv"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button></div><section id="pflinks"><h3>My links</h3><div id="pflinklist"></div><button id="pfLinkEdit" type="button">＋ Manage profile links</button></section><div id="pfst"><div class="sc c1"><svg viewBox="0 0 24 24" class=""><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><i class="sv"><b id="st1">0</b><span>Chats</span></i></div><div id="stfg" class="sc c2 clk"><svg viewBox="0 0 24 24" class=""><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><i class="sv"><b id="st2">0</b><span>Following</span></i></div><div id="stfr" class="sc c3 clk"><svg viewBox="0 0 24 24" class=""><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><i class="sv"><b id="st3">0</b><span>Followers</span></i></div></div><div id="pfact"><button type="button" id="pfsh"><svg viewBox="0 0 24 24" class=""><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span>Share account</span></button><button type="button" id="pfcp"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy link</span></button></div><div id="pflink"><span class="lic"><svg viewBox="0 0 24 24" class=""><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span><input id="pfs" readonly><button type="button" id="pfcp2" aria-label="Copy"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button></div><div id="pferr"></div><div id="pfnc"><span class="lic sh"><svg viewBox="0 0 24 24" class=""><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span><div class="nt"><b>Notifications</b><div id="pfntm"></div></div><button type="button" id="pfnt">Enable</button></div><div id="pfver">App version 2026-11-10 · d</div><div id="pfbl"></div><button type="button" id="pfout"><svg viewBox="0 0 24 24" class=""><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg><span>Sign out</span></button></div></div>
+<div id="prof" hidden><button id="soundToggle" type="button" aria-label="Toggle sound effects"><i class="sdot"></i><span>Sounds on</span></button><div id="pfb"><div id="pfban"><div id="pfbimg"></div></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><input type="file" id="pbi" accept="image/*" hidden><button type="button" id="pfedit"><svg viewBox="0 0 24 24" class=""><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit profile</span></button><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn"><svg viewBox="0 0 24 24" class="st"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>Starred messages</span><svg viewBox="0 0 24 24" class="chv"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button></div><section id="pflinks"><h3>My links</h3><div id="pflinklist"></div><button id="pfLinkEdit" type="button">＋ Manage profile links</button></section><div id="pfst"><div class="sc c1"><svg viewBox="0 0 24 24" class=""><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><i class="sv"><b id="st1">0</b><span>Chats</span></i></div><div id="stfg" class="sc c2 clk"><svg viewBox="0 0 24 24" class=""><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><i class="sv"><b id="st2">0</b><span>Following</span></i></div><div id="stfr" class="sc c3 clk"><svg viewBox="0 0 24 24" class=""><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><i class="sv"><b id="st3">0</b><span>Followers</span></i></div></div><div id="pfact"><button type="button" id="pfsh"><svg viewBox="0 0 24 24" class=""><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span>Share account</span></button><button type="button" id="pfcp"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy link</span></button></div><div id="pflink"><span class="lic"><svg viewBox="0 0 24 24" class=""><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span><input id="pfs" readonly><button type="button" id="pfcp2" aria-label="Copy"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button></div><div id="pferr"></div><div id="pfnc"><span class="lic sh"><svg viewBox="0 0 24 24" class=""><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span><div class="nt"><b>Notifications</b><div id="pfntm"></div></div><button type="button" id="pfnt">Enable</button></div><div id="pfver">App version 2026-11-10 · d</div><div id="pfbl"></div><button type="button" id="pfout"><svg viewBox="0 0 24 24" class=""><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg><span>Sign out</span></button></div></div>
 <div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><button type="button" id="ep-x">Done</button></div>
 <div id="crp" hidden><div id="crph"><button type="button" id="crpx">Cancel</button><span>Crop banner</span><button type="button" id="crpa">Apply</button></div><div id="crps"><canvas id="crpc"></canvas></div><div id="crpz"><span>Zoom</span><input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom"></div></div>
 <div id="npop" hidden><div id="npb"><div class="npi"><svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg></div><b>Turn on notifications</b><p>Get an alert for every new message, even when Chatly is closed.</p><button type="button" id="npy">Allow notifications</button><button type="button" id="npn">Not now</button></div></div>
@@ -530,10 +530,10 @@ $("fab").onclick=async()=>{
   if(!roomDocs.find(x=>x.id===doc.id))roomDocs.push(doc);
   open(doc.id);
 };
-$("back").onclick=()=>{if(unsub)unsub();unsub=null;room=null;$("chatSearchBtn").hidden=true;$("chatSearch").hidden=true;$("chat").style.display="none";$("list").style.display="";$("fab").style.display="";$("back").hidden=true;$("title").textContent="Chatly";$("calls").hidden=true;$("logo").style.display="";$("out").hidden=false;$("pf").hidden=false;$("sbar").hidden=false;$("nav").hidden=false;setTab("chats");$("bl").hidden=true;drawRooms();$("sub").textContent=prof?"Signed in as "+prof.name:""};
+$("back").onclick=()=>{if(unsub)unsub();unsub=null;room=null;$("chatSearchBtn").hidden=true;$("chatStyleBtn").hidden=true;$("chatStylePanel").hidden=true;$("chatSearch").hidden=true;$("chat").style.display="none";$("list").style.display="";$("fab").style.display="";$("back").hidden=true;$("title").textContent="Chatly";$("calls").hidden=true;$("logo").style.display="";$("out").hidden=false;$("pf").hidden=false;$("sbar").hidden=false;$("nav").hidden=false;setTab("chats");$("bl").hidden=true;drawRooms();$("sub").textContent=prof?"Signed in as "+prof.name:""};
 function open(r){
   $("titlew").onclick=()=>{const rm=allRooms().find(x=>x.id===r);if(rm&&rm.members)openGroupInfo(r)};
-  room=r;$("in").value=localStorage.getItem("chatly_draft_"+r)||"";$("chatSearchBtn").hidden=false;$("pinbar").hidden=true;$("list").style.display="none";$("fab").style.display="none";$("chat").style.display="flex";$("back").hidden=false;
+  room=r;$("in").value=localStorage.getItem("chatly_draft_"+r)||"";$("chatSearchBtn").hidden=false;$("chatStyleBtn").hidden=false;$("pinbar").hidden=true;$("list").style.display="none";$("fab").style.display="none";$("chat").style.display="flex";$("back").hidden=false;
   $("title").textContent=titleOf(r);$("calls").hidden=!R;$("logo").style.display="none";$("out").hidden=true;$("pf").hidden=true;$("sbar").hidden=true;$("nav").hidden=true;$("prof").hidden=true;$("bl").hidden=!dmOther(r);baseSub=subOf(r);$("sub").textContent=baseSub;replyTo=null;$("rbar").hidden=true;
   $("msgs").innerHTML="";
   if(db){unsub=db.collection("messages").where("room","==",r).limit(300).onSnapshot(s=>render(s.docs.map(d=>({...d.data(),id:d.id}))),()=>{})}
@@ -1196,13 +1196,13 @@ setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
 @keyframes chatBubbleIn{from{opacity:0;transform:translateY(7px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 #msgs::-webkit-scrollbar,#list::-webkit-scrollbar{width:4px}
 #msgs::-webkit-scrollbar-thumb,#list::-webkit-scrollbar-thumb{background:#89949b55;border-radius:8px}
-#soundToggle{position:fixed;right:14px;top:calc(14px + env(safe-area-inset-top,0px));z-index:90;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:22px;padding:8px 11px;display:flex;align-items:center;gap:6px;font:600 12px system-ui;box-shadow:0 3px 12px #0002}
+#soundToggle{position:relative;z-index:1;margin:14px 16px 4px;align-self:flex-start;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:8px;font:600 13px system-ui;box-shadow:0 2px 8px #0001}
 #soundToggle[hidden]{display:none}
 #soundToggle .sdot{width:7px;height:7px;border-radius:50%;background:#22c55e}
 #soundToggle.off .sdot{background:#94a3b8}
 @media(prefers-reduced-motion:reduce){.m{animation:none}}
 </style>
-<button id="soundToggle" type="button" aria-label="Toggle sound effects"><i class="sdot"></i><span>Sounds on</span></button>
+
 <script>
 /* Chatly sound engine: unlocks audio on the first real user gesture (required by mobile browsers). */
 (()=>{
@@ -1471,6 +1471,130 @@ setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
      err.textContent="";
    }catch(e){err.textContent="Couldn’t save links: "+(e.message||e)}
  };
+})();
+</script>
+
+
+<div id="chatStylePanel" hidden>
+ <div id="cspCard">
+  <div class="cspHead"><div><b>Chat appearance</b><small>Make this conversation yours</small></div><button id="cspClose" type="button" aria-label="Close">×</button></div>
+  <section class="cspSection"><div class="cspLabel">Bubble styles <small>14 styles</small></div><div id="bubbleChoices"></div></section>
+  <section class="cspSection"><div class="cspLabel">Chat wallpaper</div><div class="wallActions"><label for="wallFile" class="wallPick">＋ Choose from gallery</label><button id="wallReset" type="button">Remove wallpaper</button><input id="wallFile" type="file" accept="image/*" hidden></div><small class="cspHint">Your photo is resized and saved on this device for this chat.</small></section>
+ </div>
+</div>
+
+
+<style>
+#chatStyleBtn{font-size:21px!important;width:34px}
+#chatStylePanel{position:fixed;inset:0;z-index:145;background:#0009;display:flex;align-items:flex-end;justify-content:center}
+#chatStylePanel[hidden]{display:none}
+#cspCard{width:100%;max-width:640px;max-height:86%;overflow:auto;background:var(--panel);color:var(--text);border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px}
+.cspHead{display:flex;align-items:center;justify-content:space-between}
+.cspHead b{font-size:18px;display:block}.cspHead small,.cspHint{font-size:12px;color:var(--sub)}
+.cspHead button{border:0;background:none;color:var(--text);font-size:27px;padding:2px 8px}
+.cspSection{display:flex;flex-direction:column;gap:11px}
+.cspLabel{font-size:14px;font-weight:750;display:flex;justify-content:space-between}
+.cspLabel small{font-weight:500;color:var(--sub)}
+#bubbleChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.bubbleChoice{min-width:0;border:1px solid var(--line);border-radius:14px;padding:8px 6px;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;gap:7px;font:inherit;font-size:11px}
+.bubbleChoice[aria-pressed="true"]{border:2px solid var(--accent);padding:7px 5px}
+.bubbleSample{width:100%;height:38px;border-radius:13px 13px 13px 4px;display:grid;place-items:center;font-size:10px;font-weight:700;overflow:hidden}
+.wallActions{display:flex;gap:8px;flex-wrap:wrap}
+.wallPick,#wallReset{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--bg);color:var(--text);font:600 13px system-ui}
+#msgs[data-bubble="classic"] .m{background:var(--theirs);color:var(--text)}
+#msgs[data-bubble="classic"] .m.me{background:var(--mine)}
+#msgs[data-bubble="neon"] .m{background:#152238;color:#eaf7ff;border:1px solid #40d9ff;box-shadow:0 0 12px #20cfff44}
+#msgs[data-bubble="neon"] .m.me{background:#182b46;border-color:#ff4fbd;box-shadow:0 0 13px #ff4fbd55}
+#msgs[data-bubble="glass"] .m{background:#ffffffc9;color:#17212b;backdrop-filter:blur(12px);border:1px solid #ffffffaa}
+#msgs[data-bubble="glass"] .m.me{background:#d5fff0d9;color:#102b25}
+#msgs[data-bubble="lavender"] .m{background:#eee7ff;color:#38265e}
+#msgs[data-bubble="lavender"] .m.me{background:#d9c7ff;color:#2e174f}
+#msgs[data-bubble="ocean"] .m{background:#d9f1ff;color:#123b56}
+#msgs[data-bubble="ocean"] .m.me{background:#b9e4f8;color:#083a59}
+#msgs[data-bubble="sunset"] .m{background:linear-gradient(135deg,#ffe0c2,#ffc3d7);color:#5b2437}
+#msgs[data-bubble="sunset"] .m.me{background:linear-gradient(135deg,#ffb78c,#ff8fb5);color:#542034}
+#msgs[data-bubble="mint"] .m{background:#d9f8e9;color:#174c39}
+#msgs[data-bubble="mint"] .m.me{background:#a9efd0;color:#10412f}
+#msgs[data-bubble="candy"] .m{background:#ffe2f1;color:#70264e;border:1px solid #ffb6db}
+#msgs[data-bubble="candy"] .m.me{background:#f7c6ff;color:#57245e}
+#msgs[data-bubble="cyber"] .m{background:#25213d;color:#f7eaff;border:1px solid #a77bff;border-radius:5px 17px 5px 17px}
+#msgs[data-bubble="cyber"] .m.me{background:#382452;color:#fff;border-color:#ff6fcf}
+#msgs[data-bubble="minimal"] .m{background:#fff;color:#222;border:1px solid #ddd;box-shadow:none;border-radius:8px}
+#msgs[data-bubble="minimal"] .m.me{background:#f1f1f1;color:#222}
+#msgs[data-bubble="outline"] .m{background:transparent;color:var(--text);border:1.5px solid #8b98a5;box-shadow:none}
+#msgs[data-bubble="outline"] .m.me{background:transparent;border-color:var(--accent)}
+#msgs[data-bubble="midnight"] .m{background:#20243b;color:#e8eaff;border:1px solid #454d77}
+#msgs[data-bubble="midnight"] .m.me{background:#343052;color:#fff;border-color:#8d7bff}
+#msgs[data-bubble="rose"] .m{background:#ffe4e8;color:#632c39}
+#msgs[data-bubble="rose"] .m.me{background:#ffcbd6;color:#5d2032}
+#msgs[data-bubble="halloween"] .m{background-color:#21162d;color:#fff0d6;border:1px solid #ff8b35;background-image:radial-gradient(circle at 90% 12%,#ff8b3540 0 2px,transparent 3px),repeating-radial-gradient(circle at 100% 0%,transparent 0 11px,#a77aff35 12px 13px,transparent 14px 21px);box-shadow:0 0 10px #ff8b3522}
+#msgs[data-bubble="halloween"] .m.me{background-color:#3a1e35;color:#fff0d6;border-color:#ffad55;background-image:radial-gradient(circle at 8% 85%,#ff8b3540 0 2px,transparent 3px),repeating-radial-gradient(circle at 0% 100%,transparent 0 11px,#ff9c5638 12px 13px,transparent 14px 21px)}
+#msgs[data-bubble="halloween"] .m::after{content:"🕸️";position:absolute;right:7px;top:-10px;font-size:13px;opacity:.85;pointer-events:none}
+#msgs[data-bubble="halloween"] .m.me::after{content:"🕷️";left:7px;right:auto}
+#msgs[data-bubble="halloween"] .m .n{color:#ffb66e}
+#msgs[data-bubble="halloween"] .m .t{color:#e9c9a8}
+@media(prefers-reduced-motion:no-preference){.bubbleChoice:active{transform:scale(.97)}}
+</style>
+
+
+<script>
+/* Per-chat bubble themes and personal photo wallpaper */
+(()=>{
+ const $=id=>document.getElementById(id),box=$("msgs"),panel=$("chatStylePanel");
+ if(!box||!panel)return;
+ const themes=[
+  ["classic","Classic","#d9fdd3","#fff"],["neon","Neon","#182b46","#152238"],
+  ["glass","Glass","#d5fff0d9","#ffffffc9"],["lavender","Lavender","#d9c7ff","#eee7ff"],
+  ["ocean","Ocean","#b9e4f8","#d9f1ff"],["sunset","Sunset","#ff8fb5","#ffe0c2"],
+  ["mint","Mint","#a9efd0","#d9f8e9"],["candy","Candy","#f7c6ff","#ffe2f1"],
+  ["cyber","Cyber","#382452","#25213d"],["minimal","Minimal","#f1f1f1","#fff"],
+  ["outline","Outline","transparent","transparent"],["midnight","Midnight","#343052","#20243b"],
+  ["rose","Rose","#ffcbd6","#ffe4e8"],["halloween","🕷️ Spider Halloween","#3a1e35","#21162d"]
+ ];
+ const key=()=> "chatly_appearance_"+(typeof room!=="undefined"&&room?room:"");
+ const read=()=>{try{return JSON.parse(localStorage.getItem(key())||"{}")}catch(e){return {}}};
+ function apply(){
+  if(!room)return;const v=read();box.dataset.bubble=themes.some(t=>t[0]===v.bubble)?v.bubble:"classic";
+  box.style.backgroundImage=v.wallpaper?`linear-gradient(#10182035,#10182035),url("${v.wallpaper}")`:"";
+  box.style.backgroundSize=v.wallpaper?"cover":"";box.style.backgroundPosition=v.wallpaper?"center":"";
+  box.style.backgroundRepeat="no-repeat";
+ }
+ function drawChoices(){
+  const active=read().bubble||"classic";
+  $("bubbleChoices").innerHTML=themes.map(t=>`<button type="button" class="bubbleChoice" data-theme="${t[0]}" aria-pressed="${active===t[0]}"><span class="bubbleSample" style="background:${t[3]};color:${t[0]==="neon"||t[0]==="cyber"||t[0]==="midnight"||t[0]==="halloween"?"#fff":"#263238"};border:1px solid ${t[0]==="outline"?"#8b98a5":"transparent"}">${t[0]==="halloween"?"🕸️ 🕷️":t[0]==="neon"?"✦ CHAT":t[0]==="glass"?"GLASS":"Chatly"}</span><span>${t[1]}</span></button>`).join("");
+ }
+ $("chatStyleBtn").addEventListener("click",()=>{drawChoices();panel.hidden=false});
+ $("cspClose").addEventListener("click",()=>panel.hidden=true);
+ panel.addEventListener("click",e=>{if(e.target===panel)panel.hidden=true});
+ $("bubbleChoices").addEventListener("click",e=>{
+  const b=e.target.closest("[data-theme]");if(!b||!room)return;
+  const v=read();v.bubble=b.dataset.theme;localStorage.setItem(key(),JSON.stringify(v));apply();drawChoices();
+ });
+ $("wallFile").addEventListener("change",e=>{
+  const f=e.target.files&&e.target.files[0];e.target.value="";if(!f||!room)return;
+  if(!f.type.startsWith("image/")){alert("Please choose an image.");return}
+  const im=new Image(),url=URL.createObjectURL(f);
+  im.onload=()=>{
+   const max=1500,scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");
+   c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);
+   c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+   let data=c.toDataURL("image/jpeg",.76);
+   try{const v=read();v.wallpaper=data;localStorage.setItem(key(),JSON.stringify(v));apply();panel.hidden=true}
+   catch(err){alert("This photo is too large to save in browser storage. Try a smaller image.");}
+   URL.revokeObjectURL(url);
+  };
+  im.onerror=()=>{URL.revokeObjectURL(url);alert("Could not open that image.")};im.src=url;
+ });
+ $("wallReset").addEventListener("click",()=>{const v=read();delete v.wallpaper;localStorage.setItem(key(),JSON.stringify(v));apply()});
+ const oldOpen=window.open;
+ // Chat's existing open() is a lexical function; wrap it by observing room changes via header open action.
+ const originalTitle=$("title");
+ const observer=new MutationObserver(()=>{if(typeof room!=="undefined"&&room)apply()});
+ observer.observe(originalTitle,{childList:true,characterData:true,subtree:true});
+ const back=$("back");back.addEventListener("click",()=>{panel.hidden=true},{capture:true});
+ window.addEventListener("storage",e=>{if(e.key===key())apply()});
+ // Restore style on first load if chat was already active.
+ apply();
 })();
 </script>
 
