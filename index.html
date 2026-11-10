@@ -1477,8 +1477,8 @@ setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
 
 <div id="chatStylePanel" hidden>
  <div id="cspCard">
-  <div class="cspHead"><div><b>Chat appearance</b><small>Make this conversation yours</small></div><button id="cspClose" type="button" aria-label="Close">×</button></div>
-  <section class="cspSection"><div class="cspLabel">Bubble styles <small>14 styles</small></div><div id="bubbleChoices"></div></section>
+  <div class="cspHead"><div><b>Chat appearance</b><small>30 polished styles · each chat can have its own look</small></div><button id="cspClose" type="button" aria-label="Close">×</button></div>
+  <section class="cspSection"><div class="cspLabel">Bubble styles <small>30 styles · tap to preview</small></div><div id="bubbleChoices"></div></section>
   <section class="cspSection"><div class="cspLabel">Chat wallpaper</div><div class="wallActions"><label for="wallFile" class="wallPick">＋ Choose from gallery</label><button id="wallReset" type="button">Remove wallpaper</button><input id="wallFile" type="file" accept="image/*" hidden></div><small class="cspHint">Your photo is resized and saved on this device for this chat.</small></section>
  </div>
 </div>
@@ -1495,10 +1495,14 @@ setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
 .cspSection{display:flex;flex-direction:column;gap:11px}
 .cspLabel{font-size:14px;font-weight:750;display:flex;justify-content:space-between}
 .cspLabel small{font-weight:500;color:var(--sub)}
-#bubbleChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.bubbleChoice{min-width:0;border:1px solid var(--line);border-radius:14px;padding:8px 6px;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;gap:7px;font:inherit;font-size:11px}
-.bubbleChoice[aria-pressed="true"]{border:2px solid var(--accent);padding:7px 5px}
-.bubbleSample{width:100%;height:38px;border-radius:13px 13px 13px 4px;display:grid;place-items:center;font-size:10px;font-weight:700;overflow:hidden}
+#bubbleChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.bubbleChoice{min-width:0;min-height:78px;border:1px solid var(--line);border-radius:16px;padding:10px;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:8px;font:inherit;font-size:12px;text-align:left;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.bubbleChoice[aria-pressed="true"]{border:2px solid var(--accent);padding:9px;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
+.bubblePreview{height:37px;display:flex;flex-direction:column;justify-content:center;gap:4px;overflow:hidden}
+.bubbleSample{display:block;width:68%;height:14px;border-radius:8px 8px 8px 3px;font-size:0;overflow:hidden}
+.bubbleSample.mine{align-self:flex-end;border-radius:8px 8px 3px 8px;width:58%}
+.bubbleChoice>span:last-child{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(min-width:520px){#bubbleChoices{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .wallActions{display:flex;gap:8px;flex-wrap:wrap}
 .wallPick,#wallReset{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--bg);color:var(--text);font:600 13px system-ui}
 #msgs[data-bubble="classic"] .m{background:var(--theirs);color:var(--text)}
@@ -1533,6 +1537,40 @@ setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
 #msgs[data-bubble="halloween"] .m.me::after{content:"🕷️";left:7px;right:auto}
 #msgs[data-bubble="halloween"] .m .n{color:#ffb66e}
 #msgs[data-bubble="halloween"] .m .t{color:#e9c9a8}
+
+#msgs[data-bubble="aurora"] .m{background:linear-gradient(135deg,#164e63,#256078);color:#e6fbff;border:1px solid #5eead4}
+#msgs[data-bubble="aurora"] .m.me{background:linear-gradient(135deg,#075985,#0f766e);color:#f0fdfa;border-color:#67e8f9}
+#msgs[data-bubble="graphite"] .m{background:linear-gradient(145deg,#343a40,#252a30);color:#f1f5f9;border:1px solid #59636d}
+#msgs[data-bubble="graphite"] .m.me{background:linear-gradient(145deg,#49545e,#303943);color:#fff;border-color:#8795a3}
+#msgs[data-bubble="bubblegum"] .m{background:linear-gradient(135deg,#ffd6e7,#ffb7d5);color:#6d2949;border:1px solid #ff9fc8}
+#msgs[data-bubble="bubblegum"] .m.me{background:linear-gradient(135deg,#ffc2dd,#f7a8d0);color:#64213f}
+#msgs[data-bubble="forest"] .m{background:linear-gradient(135deg,#205b45,#174735);color:#e5fff1;border:1px solid #5aa783}
+#msgs[data-bubble="forest"] .m.me{background:linear-gradient(135deg,#287653,#1c6047);color:#f0fff6;border-color:#8bd5ad}
+#msgs[data-bubble="sakura"] .m{background:#fff0f5;color:#78384e;border:1px solid #f6b7cc}
+#msgs[data-bubble="sakura"] .m.me{background:linear-gradient(135deg,#ffd7e5,#f6b7cc);color:#6d2942}
+#msgs[data-bubble="royal"] .m{background:linear-gradient(135deg,#2d2056,#49317d);color:#f3eaff;border:1px solid #9b83d5}
+#msgs[data-bubble="royal"] .m.me{background:linear-gradient(135deg,#5a3d91,#704cac);color:#fff;border-color:#c4a7ff}
+#msgs[data-bubble="lemon"] .m{background:#fff7bd;color:#594b12;border:1px solid #ead75a}
+#msgs[data-bubble="lemon"] .m.me{background:#f4e77b;color:#51440c}
+#msgs[data-bubble="ice"] .m{background:linear-gradient(135deg,#e2f8ff,#c7f0fa);color:#17445a;border:1px solid #9bddeb}
+#msgs[data-bubble="ice"] .m.me{background:linear-gradient(135deg,#b8eff8,#a9e7f5);color:#103c50}
+#msgs[data-bubble="ember"] .m{background:linear-gradient(135deg,#54251f,#713322);color:#fff0e8;border:1px solid #d76b43}
+#msgs[data-bubble="ember"] .m.me{background:linear-gradient(135deg,#a63d24,#87351f);color:#fff8f2;border-color:#ff9a66}
+#msgs[data-bubble="pixel"] .m{background-color:#15251d;color:#c9ffd6;border:2px solid #4f9d69;border-radius:3px;box-shadow:3px 3px 0 #0a160f}
+#msgs[data-bubble="pixel"] .m.me{background-color:#263b2c;color:#e0ffe7;border-color:#83d99a;border-radius:3px}
+#msgs[data-bubble="paper"] .m{background:#fffaf0;color:#4d4030;border:1px solid #e4d7bd;box-shadow:0 2px 5px #55452a18}
+#msgs[data-bubble="paper"] .m.me{background:#f5edda;color:#493b2c;border-color:#d8c6a5}
+#msgs[data-bubble="hologram"] .m{background:linear-gradient(120deg,#16283e,#244b65);color:#e3faff;border:1px solid #63d9e8;box-shadow:inset 0 0 16px #42d7f022}
+#msgs[data-bubble="hologram"] .m.me{background:linear-gradient(120deg,#26365c,#305d78);color:#fff;border-color:#b58cff;box-shadow:inset 0 0 16px #b58cff22}
+#msgs[data-bubble="galaxy"] .m{background:radial-gradient(circle at 80% 10%,#694b91,#211b42 72%);color:#f5eaff;border:1px solid #9574c7}
+#msgs[data-bubble="galaxy"] .m.me{background:radial-gradient(circle at 10% 90%,#764c9d,#352653 72%);color:#fff;border-color:#c4a2ef}
+#msgs[data-bubble="cloud"] .m{background:linear-gradient(145deg,#fff,#e5edf7);color:#34445a;border:1px solid #d2deec;box-shadow:0 3px 10px #53657a12}
+#msgs[data-bubble="cloud"] .m.me{background:linear-gradient(145deg,#edf5ff,#dce9f8);color:#293d57;border-color:#c2d5ec}
+#msgs[data-bubble="coffee"] .m{background:linear-gradient(135deg,#49362d,#654b3c);color:#fff2e6;border:1px solid #a98267}
+#msgs[data-bubble="coffee"] .m.me{background:linear-gradient(135deg,#8a6048,#74503d);color:#fff8f0;border-color:#c49a7b}
+#msgs[data-bubble="terminal"] .m{background:#071f17;color:#9bffb4;border:1px solid #28784a;border-radius:5px;font-family:ui-monospace,monospace}
+#msgs[data-bubble="terminal"] .m.me{background:#123c2b;color:#c5ffd2;border-color:#5bd985}
+
 @media(prefers-reduced-motion:no-preference){.bubbleChoice:active{transform:scale(.97)}}
 </style>
 
@@ -1549,7 +1587,15 @@ setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
   ["mint","Mint","#a9efd0","#d9f8e9"],["candy","Candy","#f7c6ff","#ffe2f1"],
   ["cyber","Cyber","#382452","#25213d"],["minimal","Minimal","#f1f1f1","#fff"],
   ["outline","Outline","transparent","transparent"],["midnight","Midnight","#343052","#20243b"],
-  ["rose","Rose","#ffcbd6","#ffe4e8"],["halloween","🕷️ Spider Halloween","#3a1e35","#21162d"]
+  ["rose","Rose","#ffcbd6","#ffe4e8"],["halloween","🕷️ Spider Halloween","#3a1e35","#21162d"],
+  ["aurora","Aurora","#164e63","#102d46"],["graphite","Graphite","#343a40","#20252b"],
+  ["bubblegum","Bubblegum","#ffb7d5","#ffd6e7"],["forest","Forest","#205b45","#153c31"],
+  ["sakura","Sakura","#f6b7cc","#fff0f5"],["royal","Royal","#49317d","#2d2056"],
+  ["lemon","Lemon Pop","#f4e77b","#fff7bd"],["ice","Ice Blue","#a9e7f5","#e2f8ff"],
+  ["ember","Ember","#a63d24","#54251f"],["pixel","Pixel","#263b2c","#15251d"],
+  ["paper","Paper","#f5edda","#fffaf0"],["hologram","Hologram","#244b65","#16283e"],
+  ["galaxy","Galaxy","#49306e","#211b42"],["cloud","Cloud","#e5edf7","#f8fbff"],
+  ["coffee","Coffee","#8a6048","#49362d"],["terminal","Terminal","#123c2b","#071f17"]
  ];
  const key=()=> "chatly_appearance_"+(typeof room!=="undefined"&&room?room:"");
  const read=()=>{try{return JSON.parse(localStorage.getItem(key())||"{}")}catch(e){return {}}};
@@ -1561,7 +1607,7 @@ setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
  }
  function drawChoices(){
   const active=read().bubble||"classic";
-  $("bubbleChoices").innerHTML=themes.map(t=>`<button type="button" class="bubbleChoice" data-theme="${t[0]}" aria-pressed="${active===t[0]}"><span class="bubbleSample" style="background:${t[3]};color:${t[0]==="neon"||t[0]==="cyber"||t[0]==="midnight"||t[0]==="halloween"?"#fff":"#263238"};border:1px solid ${t[0]==="outline"?"#8b98a5":"transparent"}">${t[0]==="halloween"?"🕸️ 🕷️":t[0]==="neon"?"✦ CHAT":t[0]==="glass"?"GLASS":"Chatly"}</span><span>${t[1]}</span></button>`).join("");
+  $("bubbleChoices").innerHTML=themes.map(t=>{const dark=["neon","cyber","midnight","halloween","aurora","graphite","forest","royal","ember","pixel","hologram","galaxy","coffee","terminal"].includes(t[0]);return `<button type="button" class="bubbleChoice" data-theme="${t[0]}" aria-pressed="${active===t[0]}"><span class="bubblePreview"><i class="bubbleSample" style="background:${t[3]};border:1px solid ${t[0]==="outline"?"#8b98a5":"transparent"}"></i><i class="bubbleSample mine" style="background:${t[2]};border:1px solid ${t[0]==="outline"?"var(--accent)":"transparent"}"></i></span><span>${t[1]}</span></button>`}).join("");
  }
  $("chatStyleBtn").addEventListener("click",()=>{drawChoices();panel.hidden=false});
  $("cspClose").addEventListener("click",()=>panel.hidden=true);
