@@ -1121,7 +1121,7 @@ async function isOwner(){try{return localStorage.getItem("chatly_owner")===await
   lg.addEventListener("click",()=>{clearTimeout(t);t=setTimeout(()=>{n=0},2500);if(++n<7)return;n=0;
     (async()=>{if(await isOwner()){if(confirm("Owner mode is ON. Turn it off?")){try{localStorage.removeItem("chatly_owner")}catch(e){}alert("Owner mode off")}return}
       const x=prompt("Owner passcode");if(!x)return;
-      if(await sha256(x.trim())===OWNER_HASH){try{localStorage.setItem("chatly_owner",await sha256(OWNER_HASH+"|ok"))}catch(e){}alert("Owner mode ON. You can create unlimited accounts on this device.")}else alert("Wrong passcode")})()})})();
+      if(await sha256(x.trim())===OWNER_HASH){window._oc=x.trim();try{localStorage.setItem("chatly_owner",await sha256(OWNER_HASH+"|ok"))}catch(e){}alert("Owner mode ON. You can create unlimited accounts on this device.")}else alert("Wrong passcode")})()})})();
 
 /* ===== owner tools: delete any account (owner mode only) ===== */
 function ownerUI(){isOwner().then(on=>{let b=$("ownbtn");if(!b){const pb=$("pfb");if(!pb)return;b=document.createElement("button");b.type="button";b.id="ownbtn";b.textContent="Owner tools · manage accounts";b.onclick=openOwner;pb.appendChild(b)}b.hidden=!on}).catch(()=>{})}
@@ -1136,12 +1136,12 @@ $("owq").oninput=owDraw;
 $("owl").onclick=async e=>{const b=e.target.closest(".owdel");if(!b)return;const u=b.dataset.u;if(!(await isOwner()))return;
   if(!confirm("Delete @"+u+" permanently? The account will be removed and the user will be logged out."))return;
   b.disabled=true;b.textContent="…";
-  try{await db.doc("users/"+u).delete();
-    try{await db.doc("claims/"+u).delete()}catch(_){}
-    try{await SB.raw.from("docs").delete().eq("collection","push").eq("data->>user",u)}catch(_){}
+  try{let oc=window._oc;if(!oc){oc=prompt("Owner passcode (needed to delete accounts)");if(!oc)throw new Error("cancelled");oc=oc.trim();if(await sha256(oc)!==OWNER_HASH)throw new Error("Wrong passcode");window._oc=oc}
+    const r=await SB.raw.rpc("owner_delete_user",{target:u,code:window._oc});
+    if(r.error){const m=String(r.error.message||"");if(/wrong owner code/i.test(m))window._oc="";throw new Error(/could not find the function|schema cache/i.test(m)?"Server setup missing: run the owner_delete_user SQL in Supabase first.":m)}
     const chk=await db.doc("users/"+u).get();if(chk.exists)throw new Error("The server did not allow deleting this account (database rules).");
     delete usersCache[u];owDraw();try{drawRooms()}catch(_){}}
-  catch(err){b.disabled=false;b.textContent="Delete";alert("Couldn’t delete: "+((err&&err.message)||err))}};
+  catch(err){b.disabled=false;b.textContent="Delete";if(String(err&&err.message)!=="cancelled")alert("Couldn’t delete: "+((err&&err.message)||err))}};
 /* a deleted account gets logged out on its own device */
 setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
   try{const x=await db.doc("users/"+uname()).get();if(!x.exists&&prof){if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert("This account was deleted by the owner.")}}catch(e){}},30000);
