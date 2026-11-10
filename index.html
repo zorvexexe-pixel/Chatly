@@ -519,6 +519,33 @@ button{transition:transform .2s var(--ease),opacity .2s}
 #su{color:#cfe3ee!important;border-color:#ffffff2a!important;border-radius:16px!important}
 #login #lerr{color:#ff7b7b}#login #lconn{color:#8fa6b3}
 @media (prefers-reduced-motion:reduce){#login,#login *,#login::before,#login::after{animation:none!important}}
+
+/* ===== TikTok-style bubbles + chat wallpaper ===== */
+#msgs{background-color:var(--wpc,var(--panel))!important;background-image:var(--wpi,none)!important;background-size:var(--wps,cover)!important;background-position:center!important}
+.m{max-width:75%;padding:9px 14px 7px!important;border-radius:20px!important;box-shadow:none!important;background:color-mix(in srgb,var(--text) 10%,var(--panel))!important}
+.m.me{background:linear-gradient(135deg,#fe2c55,#ff5c7c)!important;color:#fff!important;border-radius:20px!important}
+.m .t{font-size:10.5px;opacity:.75}
+.m.me .vp{background:#fff!important}.m.me .vp svg{fill:#fe2c55}
+#mic,#send{background:linear-gradient(135deg,#fe2c55,#ff5c7c)!important;box-shadow:0 4px 12px #fe2c5555!important}
+#esheet{max-height:86vh;overflow:auto}
+#wplist{display:flex;flex-wrap:wrap;gap:10px;padding:6px 8px 12px}
+#wplist button,#wplist label{width:54px;height:54px;border-radius:15px;border:2px solid var(--line);padding:0;cursor:pointer;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;background-size:cover;background-position:center;overflow:hidden}
+#wplist .on{border-color:#25d366;box-shadow:0 0 0 2px #25d36655}
+#wplist label input{display:none}#wplist .pl{background:var(--bg);color:var(--sub);font-size:22px}
+
+/* ===== confirm warning dialog ===== */
+#cfm{position:fixed;inset:0;z-index:120;background:#0007;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadein .15s ease}
+#cfm[hidden]{display:none}
+#cfb{width:min(300px,100%);background:var(--glass2);-webkit-backdrop-filter:saturate(180%) blur(28px);backdrop-filter:saturate(180%) blur(28px);color:var(--text);border-radius:20px;overflow:hidden;text-align:center;box-shadow:0 20px 50px #0006;animation:cfpop .28s cubic-bezier(.32,.72,0,1)}
+@keyframes cfpop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+#cfb .cfi{width:52px;height:52px;margin:20px auto 0;border-radius:50%;display:grid;place-items:center;font-size:26px;background:#ff9f0a22}
+#cfb .cfi.d{background:#fe2c5522}
+#cft{display:block;padding:12px 18px 4px;font-size:18px;font-weight:700}
+#cfp{margin:0;padding:0 20px 18px;font-size:14px;color:var(--sub)}
+.cfr{display:flex;border-top:.5px solid var(--line)}
+.cfr button{flex:1;background:none;border:0;padding:15px 8px;font:inherit;font-size:16px;cursor:pointer;color:var(--text)}
+.cfr button+button{border-left:.5px solid var(--line);font-weight:700;color:#25d366}
+.cfr button.d{color:#fe2c55!important}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -536,7 +563,7 @@ button{transition:transform .2s var(--ease),opacity .2s}
 <form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file"></span><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
 <div id="prof" hidden><div id="pfb"><div id="pfban"><div id="pfbimg"></div></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><input type="file" id="pbi" accept="image/*" hidden><button type="button" id="pfedit"><svg viewBox="0 0 24 24" class=""><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit profile</span></button><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn"><svg viewBox="0 0 24 24" class="st"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>Starred messages</span><svg viewBox="0 0 24 24" class="chv"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button></div><div id="pfst"><div class="sc c1"><svg viewBox="0 0 24 24" class=""><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><i class="sv"><b id="st1">0</b><span>Chats</span></i></div><div id="stfg" class="sc c2 clk"><svg viewBox="0 0 24 24" class=""><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><i class="sv"><b id="st2">0</b><span>Following</span></i></div><div id="stfr" class="sc c3 clk"><svg viewBox="0 0 24 24" class=""><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><i class="sv"><b id="st3">0</b><span>Followers</span></i></div></div><div id="pfact"><button type="button" id="pfsh"><svg viewBox="0 0 24 24" class=""><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span>Share account</span></button><button type="button" id="pfcp"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy link</span></button></div><div id="pflink"><span class="lic"><svg viewBox="0 0 24 24" class=""><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span><input id="pfs" readonly><button type="button" id="pfcp2" aria-label="Copy"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button></div><div id="pferr"></div><div id="pfnc"><span class="lic sh"><svg viewBox="0 0 24 24" class=""><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span><div class="nt"><b>Notifications</b><div id="pfntm"></div></div><button type="button" id="pfnt">Enable</button></div><div id="pfver">App version 2026-11-10 · d</div><div id="pfbl"></div><button type="button" id="pfout"><svg viewBox="0 0 24 24" class=""><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg><span>Sign out</span></button></div></div>
-<div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><button type="button" id="ep-x">Done</button></div>
+<div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><div class="eh">Chat wallpaper</div><div id="wplist"></div><button type="button" id="ep-x">Done</button></div>
 <div id="crp" hidden><div id="crph"><button type="button" id="crpx">Cancel</button><span>Crop banner</span><button type="button" id="crpa">Apply</button></div><div id="crps"><canvas id="crpc"></canvas></div><div id="crpz"><span>Zoom</span><input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom"></div></div>
 <div id="npop" hidden><div id="npb"><div class="npi"><svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg></div><b>Turn on notifications</b><p>Get an alert for every new message, even when Chatly is closed.</p><button type="button" id="npy">Allow notifications</button><button type="button" id="npn">Not now</button></div></div>
 <div id="owp" hidden><div id="owh"><button type="button" id="owx" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span>Owner tools</span></div><input id="owq" placeholder="Search accounts" autocomplete="off"><div id="owc"></div><div id="owl"></div></div>
@@ -1272,4 +1299,43 @@ function chipApply(){const c=$("chips");if(!c)return;const f=window._chip,inbox=
   if(h&&l)l.addEventListener("scroll",()=>h.classList.toggle("cl",l.scrollTop>24),{passive:true});
   const hap=()=>{try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}};
   document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("#nav button,#send,#mic,#fab"))hap()},true)})();
+
+/* ===== chat wallpaper (stored on this device) ===== */
+var WPS=[{id:"",n:"Default",i:""},
+ {id:"neon",n:"Neon",i:"linear-gradient(160deg,#fe2c55 0%,#3a0b4d 55%,#0aa9b1 130%)"},
+ {id:"night",n:"Night",i:"linear-gradient(160deg,#0f0c29,#302b63,#24243e)"},
+ {id:"ocean",n:"Ocean",i:"linear-gradient(160deg,#2193b0,#6dd5ed)"},
+ {id:"forest",n:"Forest",i:"linear-gradient(160deg,#134e5e,#71b280)"},
+ {id:"sunset",n:"Sunset",i:"linear-gradient(160deg,#ff9a9e,#fad0c4 60%,#fbc2eb)"},
+ {id:"dots",n:"Dots",c:"#10262b",i:"radial-gradient(#ffffff1c 1.6px,transparent 1.7px)",s:"22px 22px"}];
+function wpGet(){try{return localStorage.getItem("chatly_wp")||""}catch(e){return""}}
+function wpApply(){const r=document.documentElement.style,v=wpGet();let i="",c="",sz="cover";
+  if(v.startsWith("data:"))i='url("'+v+'")';else{const p=WPS.find(x=>x.id===v);if(p){i=p.i;c=p.c||"";sz=p.s||"cover"}}
+  i?r.setProperty("--wpi",i):r.removeProperty("--wpi");c?r.setProperty("--wpc",c):r.removeProperty("--wpc");r.setProperty("--wps",sz)}
+function wpDraw(){const box=$("wplist");if(!box)return;const v=wpGet();
+  box.innerHTML=WPS.map(p=>'<button type="button" data-w="'+p.id+'" class="'+(v===p.id?"on":"")+'" style="'+(p.i?"background:"+(p.c?p.c+",":"")+p.i+(p.s?";background-size:"+p.s:""):"background:var(--bg);color:var(--sub)")+'">'+(p.i?"":"Off")+'</button>').join("")
+   +'<label class="pl'+(v.startsWith("data:")?" on":"")+'">+<input type="file" accept="image/*" id="wpf"></label>';
+  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{try{localStorage.setItem("chatly_wp",b.dataset.w)}catch(e){}wpApply();wpDraw()});
+  $("wpf").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const im=new Image(),u=URL.createObjectURL(f);
+    im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
+      try{localStorage.setItem("chatly_wp",c.toDataURL("image/jpeg",.72))}catch(err){alert("Photo is too big to save as wallpaper");return}wpApply();wpDraw()};
+    im.onerror=()=>URL.revokeObjectURL(u);im.src=u}}
+wpApply();wpDraw();
+
+/* ===== warning before sign out / block / delete ===== */
+function iosConfirm(title,msg,ok,danger){return new Promise(res=>{
+  let m=$("cfm");if(!m){m=document.createElement("div");m.id="cfm";m.hidden=true;
+    m.innerHTML='<div id="cfb"><div class="cfi" id="cfi">!</div><b id="cft"></b><p id="cfp"></p><div class="cfr"><button type="button" id="cfn">Cancel</button><button type="button" id="cfy">OK</button></div></div>';document.body.appendChild(m)}
+  $("cft").textContent=title;$("cfp").textContent=msg;$("cfy").textContent=ok||"OK";$("cfy").className=danger?"d":"";$("cfi").className="cfi"+(danger?" d":"");$("cfi").textContent=danger?"🗑":"⚠️";
+  m.hidden=false;const done=v=>{m.hidden=true;m.onclick=null;$("cfn").onclick=null;$("cfy").onclick=null;res(v)};
+  $("cfn").onclick=()=>done(false);$("cfy").onclick=()=>done(true);m.onclick=e=>{if(e.target===m)done(false)}})}
+document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("#pfout,#bl,#s-del,#cs-me,#ep-rmb");if(!b||b._ok)return;
+  e.stopImmediatePropagation();e.preventDefault();let t,m,o,d=1;
+  if(b.id==="pfout"){t="Sign out?";m="You’ll need your username and password to log in again.";o="Sign out"}
+  else if(b.id==="bl"){const u=dmOther(room),bk=u&&myBlocked().includes(u);t=bk?"Unblock @"+u+"?":"Block @"+u+"?";m=bk?"You’ll see their messages again.":"You won’t see their messages anymore.";o=bk?"Unblock":"Block";d=!bk}
+  else if(b.id==="s-del"){t="Delete for everyone?";m="This message will be removed for everyone in the chat. This can’t be undone.";o="Delete"}
+  else if(b.id==="cs-me"){t="Delete for me?";m="The message will be removed only from your view.";o="Delete"}
+  else{t="Remove banner?";m="Your profile banner will be deleted.";o="Remove"}
+  if(await iosConfirm(t,m,o,d)){b._ok=true;b.click();b._ok=false}},true);
 </script></body></html>
