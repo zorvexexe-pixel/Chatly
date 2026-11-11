@@ -729,6 +729,41 @@ button{transition:transform .2s var(--ease),opacity .2s}
 #lkpad button:active{background:#ffffff40}
 #lkpad button.nb{background:transparent}
 #lockov .lkl{margin-top:22px;background:none;border:0;color:#9fb3c8;font:inherit;cursor:pointer;padding:8px}
+/* ===== v3: icons instead of emoji, chat lock, pin/star, suspended screen ===== */
+.xic{display:flex;align-items:center;gap:14px}
+.xic svg{width:22px;height:22px;fill:currentColor;flex:none}
+.xic em{font-style:normal}
+#csheet button.csi{display:flex;align-items:center;gap:14px}
+#csheet button.csi svg{width:22px;height:22px;fill:currentColor;flex:none}
+.rbd{display:inline-flex;align-items:center;gap:5px;margin-left:8px;vertical-align:middle}
+.rbd svg{width:14px;height:14px;fill:var(--sub)}
+.rbd svg.sts{fill:#f5b301}
+.lki{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:#14b8a626;margin-bottom:6px}
+.lki svg{width:42px;height:42px;fill:#14b8a6}
+#lkpad button svg{width:28px;height:28px;fill:#fff}
+.pl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-bottom:2px}
+#susp{position:fixed;inset:0;z-index:100000;overflow:auto;background:radial-gradient(120% 80% at 50% 0%,#3b0d14 0%,#12080d 55%,#070b12 100%);color:#fff;display:flex;align-items:center;justify-content:center;padding:max(28px,env(safe-area-inset-top)) 20px max(28px,env(safe-area-inset-bottom))}
+#susp[hidden]{display:none}
+.spc{width:100%;max-width:440px;text-align:center;margin:auto}
+.spi{width:112px;height:112px;margin:0 auto 24px;border-radius:50%;display:grid;place-items:center;background:#ef44441f;box-shadow:0 0 0 10px #ef44440f,0 0 60px #ef444455}
+.spi svg{width:58px;height:58px;fill:#ff6b6b}
+#sp-t{font-size:30px;line-height:1.15;font-weight:800;margin:0 0 12px;color:#fff}
+#sp-user{display:inline-block;padding:5px 14px;border-radius:20px;background:#ffffff14;font-weight:600;margin-bottom:16px}
+#sp-user:empty{display:none}
+#sp-d{font-size:16px;line-height:1.55;color:#d4c4c8;margin:0 auto 24px;max-width:380px}
+.spcd{display:flex;gap:10px;justify-content:center;margin:0 0 22px}
+.spcd[hidden]{display:none}
+.spcd div{flex:1;max-width:92px;background:#ffffff10;border:1px solid #ffffff1f;border-radius:16px;padding:12px 0}
+.spcd b{display:block;font-size:28px;font-variant-numeric:tabular-nums}
+.spcd small{color:#b9a9ae;font-size:12px}
+.spg{background:#ffffff0d;border:1px solid #ffffff1f;border-radius:20px;padding:4px 18px;margin-bottom:22px;text-align:left}
+.spr{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid #ffffff14}
+.spr:first-child{border-top:0}
+.spr[hidden]{display:none}
+.spr span{color:#b9a9ae;font-size:14px;flex:none}
+.spr b{font-size:15px;text-align:right}
+#sp-ok{width:100%;padding:16px;border:0;border-radius:16px;font:inherit;font-size:17px;font-weight:700;color:#fff;background:linear-gradient(135deg,#14b8a6,#6366f1);cursor:pointer}
+.spn{margin-top:16px;font-size:13px;color:#a79a9f}
 </style>
 
 </head>
@@ -756,7 +791,7 @@ button{transition:transform .2s var(--ease),opacity .2s}
   <div class="ts-preview"><span class="ts-dot"></span><span><b>Chatly preview</b><small>Your selected accent appears across buttons and highlights.</small></span><button type="button">Preview</button></div>
   <button type="button" id="ts-reset">Reset theme</button>
 </div>
-<div class="eh">Links (TikTok, Instagram, website…)</div><div id="lklist"></div><div id="lkadd"><input id="lkin" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Paste your link here" maxlength="300"><button type="button" id="lkbtn">Add</button></div><div id="lkerr"></div><div class="eh">Privacy &amp; security</div><button type="button" class="tg" id="ep-hs"><span>Hide last seen &amp; online<small>Others won’t see when you were last active</small></span><i class="sw"></i></button><button type="button" class="tg" id="ep-rr"><span>Read receipts<small>Off = no blue ticks sent or shown</small></span><i class="sw"></i></button><button type="button" id="ep-lock">App lock</button><button type="button" id="ep-x">Done</button></div>
+<div class="eh">Links (TikTok, Instagram, website…)</div><div id="lklist"></div><div id="lkadd"><input id="lkin" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Paste your link here" maxlength="300"><button type="button" id="lkbtn">Add</button></div><div id="lkerr"></div><div class="eh">Privacy &amp; security</div><button type="button" class="tg" id="ep-hs"><span>Hide last seen &amp; online<small>Others won’t see when you were last active</small></span><i class="sw"></i></button><button type="button" class="tg" id="ep-rr"><span>Read receipts<small>Off = no blue ticks sent or shown</small></span><i class="sw"></i></button><button type="button" id="ep-lock">Chat lock PIN</button><button type="button" id="ep-x">Done</button></div>
 <div id="crp" hidden><div id="crph"><button type="button" id="crpx">Cancel</button><span>Crop banner</span><button type="button" id="crpa">Apply</button></div><div id="crps"><canvas id="crpc"></canvas></div><div id="crpz"><span>Zoom</span><input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom"></div></div>
 <div id="npop" hidden><div id="npb"><div class="npi"><svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg></div><b>Turn on notifications</b><p>Get an alert for every new message, even when Chatly is closed.</p><button type="button" id="npy">Allow notifications</button><button type="button" id="npn">Not now</button></div></div>
 <div id="owp" hidden><div id="owh"><button type="button" id="owx" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span>Owner tools</span></div><input id="owq" placeholder="Search accounts" autocomplete="off"><div id="owc"></div><div id="owl"></div></div>
@@ -911,7 +946,7 @@ async function acct(create){
   if(create){if(!(await isOwner())&&(await devAll()).length>=DEV_MAX)return alert("Only "+DEV_MAX+" accounts can be created on one device. Please log in to one of your existing accounts.");if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists&&s.data()&&s.data().pw)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
     const ph="";
     try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph)}
-  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");if(isBanActive(d.ban))return alert(d.ban.permanent?"This account has been permanently suspended.":"This account is suspended until "+new Date(d.ban.until).toLocaleString()+".");fin(d.name||n,d.phone)}
+  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");if(isBanActive(d.ban)){if(window.showSuspended){showSuspended(d.name||n,d.ban);return}return alert(d.ban.permanent?"This account has been permanently suspended.":"This account is suspended until "+new Date(d.ban.until).toLocaleString()+".")}fin(d.name||n,d.phone)}
 }
 let signup=false;
 $("ln").addEventListener("input",function(){if(signup){const c=this.value.replace(/[^A-Za-z0-9_@-]/g,"");if(c!==this.value)this.value=c}});
@@ -1490,15 +1525,15 @@ $("owl").onclick=async e=>{const b=e.target.closest("button[data-u]");if(!b)retu
 };
 /* a deleted account gets logged out on its own device */
 setInterval(async()=>{if(!db||!prof||Date.now()-(window._sa||0)<10000)return;
-  try{const x=await db.doc("users/"+uname()).get();if(!x.exists&&prof){if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert("This account was deleted by the owner.");return}if(x.exists&&prof&&isBanActive(x.data().ban)){const b=x.data().ban;if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert(b.permanent?"This account has been permanently suspended by the owner.":"This account is suspended until "+new Date(b.until).toLocaleString()+".")}}catch(e){}},30000);
+  try{const x=await db.doc("users/"+uname()).get();if(!x.exists&&prof){if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();alert("This account was deleted by the owner.");return}if(x.exists&&prof&&isBanActive(x.data().ban)){const b=x.data().ban;if(room)$("back").click();$("prof").hidden=true;prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}$("lw").value="";setMode(false);applyLogin();(window.showSuspended?showSuspended(x.data().name||"",b):alert(b.permanent?"This account has been permanently suspended by the owner.":"This account is suspended until "+new Date(b.until).toLocaleString()+"."))}}catch(e){}},30000);
 
 /* ===== redesign: list filter chips + chat header avatar ===== */
 function chipApply(){const c=$("chips");if(!c)return;const f=window._chip,inbox=window._tab==="inbox",q=$("sq")&&$("sq").value.trim();
   c.style.display=(inbox||q)?"none":"";if(!f||inbox||q)return;
-  document.querySelectorAll("#list .room[data-r]").forEach(el=>{const r=allRooms().find(x=>x.id===el.dataset.r);el.style.display=r&&(f==="dm"?r.dm:!r.dm)?"":"none"})}
+  document.querySelectorAll("#list .room[data-r]").forEach(el=>{const r=allRooms().find(x=>x.id===el.dataset.r);el.style.display=r&&(f==="dm"?r.dm:f==="star"?!!(window.isStarC&&isStarC(r.id)):f==="lock"?!!(window.isLocked&&isLocked(r.id)):!r.dm)?"":"none"})}
 (function(){const DR=drawRooms;drawRooms=function(){DR.apply(this,arguments);try{chipApply()}catch(e){}}})();
 (function(){const sb=$("sbar");if(sb){const c=document.createElement("div");c.id="chips";window._chip="";
-  c.innerHTML='<button type="button" class="on" data-c="">All</button><button type="button" data-c="dm">Private</button><button type="button" data-c="grp">Groups</button>';sb.appendChild(c);
+  c.innerHTML='<button type="button" class="on" data-c="">All</button><button type="button" data-c="dm">Private</button><button type="button" data-c="grp">Groups</button><button type="button" data-c="star">Starred</button><button type="button" data-c="lock">Locked</button>';sb.appendChild(c);
   c.onclick=e=>{const b=e.target.closest("button");if(!b)return;window._chip=b.dataset.c;c.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));drawRooms()}}
   const h=document.querySelector("header"),tw=$("titlew");
   if(h&&tw){const a=document.createElement("span");a.id="hav";h.insertBefore(a,tw);
@@ -1674,9 +1709,12 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
 
 <div id="xsheet" hidden><div id="xsb">
  <div id="xv-menu"><div class="xh">Chat tools</div>
-  <button type="button" class="xi" data-x="poll"><span>📊 Create poll</span></button>
-  <button type="button" class="xi" data-x="sched"><span>⏰ Schedule message</span></button>
-  <button type="button" class="xi" data-x="dis"><span>⏳ Disappearing messages</span><small id="xdisv">Off</small></button>
+  <button type="button" class="xi" data-x="poll"><span class="xic"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg><em>Create poll</em></span></button>
+  <button type="button" class="xi" data-x="sched"><span class="xic"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><em>Schedule message</em></span></button>
+  <button type="button" class="xi" data-x="dis"><span class="xic"><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61 1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42A8.962 8.962 0 0 0 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg><em>Disappearing messages</em></span><small id="xdisv">Off</small></button>
+  <button type="button" class="xi" data-x="pin"><span class="xic"><svg viewBox="0 0 24 24"><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg><em id="xpt">Pin chat</em></span></button>
+  <button type="button" class="xi" data-x="star"><span class="xic"><svg viewBox="0 0 24 24"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><em id="xst2">Star chat</em></span></button>
+  <button type="button" class="xi" data-x="lock"><span class="xic"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg><em id="xlt">Lock chat</em></span></button>
  </div>
  <div id="xv-poll" hidden><div class="xh">Create poll</div>
   <input id="xpq" placeholder="Ask a question" maxlength="120">
@@ -1692,23 +1730,52 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
   <div id="xslist"></div></div>
  <div id="xv-dis" hidden><div class="xh">Disappearing messages</div>
   <div class="xs">New messages in this chat will disappear after the time you choose. Everyone in the chat is notified.</div><div id="xdlist"></div></div>
- <div id="xv-lock" hidden><div class="xh">App lock</div>
-  <button type="button" class="xi" id="xl-chg"><span>Change PIN</span></button>
-  <div class="xs" style="margin-top:10px">Lock after leaving the app for</div>
-  <select id="xl-time"><option value="0">Immediately</option><option value="60">1 minute</option><option value="300">5 minutes</option><option value="1800">30 minutes</option></select>
-  <button type="button" class="xb gr" id="xl-off" style="color:#ef4444">Turn off app lock</button></div>
+ <div id="xv-lock" hidden><div class="xh">Chat lock PIN</div>
+  <div class="xs">This PIN opens every chat you lock. Locked chats hide their preview in the chat list and ask for the PIN each time you open them.</div>
+  <button type="button" class="xi" id="xl-chg"><span class="xic"><em>Change PIN</em></span></button>
+  <button type="button" class="xb gr" id="xl-off" style="color:#ef4444">Remove PIN and unlock all chats</button></div>
  <button type="button" class="xb gr" id="xclose">Close</button>
 </div></div>
-<div id="lockov" hidden><div class="lki">🔒</div><h2 id="lkh">Enter PIN</h2><div id="lkdots"><i></i><i></i><i></i><i></i></div><div id="lkmsg"></div>
- <div id="lkpad"><button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="nb" disabled></button><button data-k="0">0</button><button data-k="x" aria-label="Delete">⌫</button></div>
- <button type="button" class="lkl" id="lkforgot">Forgot PIN? Log out</button><button type="button" class="lkl" id="lkcancel" hidden>Cancel</button></div>
+<div id="lockov" hidden><div class="lki"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg></div><h2 id="lkh">Enter PIN</h2><div id="lkdots"><i></i><i></i><i></i><i></i></div><div id="lkmsg"></div>
+ <div id="lkpad"><button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="nb" disabled></button><button data-k="0">0</button><button data-k="x" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"/></svg></button></div>
+ <button type="button" class="lkl" id="lkforgot">Forgot PIN? Log out and reset</button><button type="button" class="lkl" id="lkcancel" hidden>Cancel</button></div>
+<div id="susp" hidden><div class="spc">
+ <div class="spi"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.902 7.902 0 0 1 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.902 7.902 0 0 1 20 12c0 4.42-3.58 8-8 8z"/></svg></div>
+ <h1 id="sp-t">Account suspended</h1><div id="sp-user"></div>
+ <p id="sp-d"></p>
+ <div class="spcd" id="sp-cd"><div><b id="sp-d1">0</b><small>Days</small></div><div><b id="sp-h1">0</b><small>Hours</small></div><div><b id="sp-m1">0</b><small>Minutes</small></div><div><b id="sp-s1">0</b><small>Seconds</small></div></div>
+ <div class="spg"><div class="spr"><span>Status</span><b id="sp-st"></b></div><div class="spr"><span id="sp-ul">Ends on</span><b id="sp-until"></b></div><div class="spr" id="sp-rr" hidden><span>Reason</span><b id="sp-rs"></b></div></div>
+ <button type="button" id="sp-ok">Back to login</button>
+ <div class="spn">If you think this is a mistake, contact the owner of Chatly.</div>
+</div></div>
 <div id="xtoast" hidden></div>
-
 <script>
-/* ===== Chatly v2 features ===== */
+/* ===== Chatly v3 features ===== */
 (function(){
 var $$=function(i){return document.getElementById(i)};
 function toast(t){var b=$$("xtoast");b.textContent=t;b.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){b.hidden=true},3200)}
+var SV={pin:'<svg viewBox="0 0 24 24"><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg>',
+ star:'<svg viewBox="0 0 24 24" class="sts"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',
+ lock:'<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg>'};
+
+/* ---------- suspended screen ---------- */
+function fmtLong(t){try{return new Date(t).toLocaleString([],{weekday:"long",day:"numeric",month:"long",year:"numeric",hour:"numeric",minute:"2-digit"})}catch(e){return String(t)}}
+window.showSuspended=function(name,ban){ban=ban||{};var perm=!!ban.permanent,until=Number(ban.until)||0,o=$$("susp");
+  clearInterval(window.showSuspended._t);
+  $$("sp-user").textContent=name?"@"+String(name).toLowerCase().replace(/[\s\/]/g,""):"";
+  $$("sp-t").textContent=perm?"Account permanently suspended":"Account suspended";
+  $$("sp-d").textContent=perm?"This account was permanently banned by the owner for breaking Chatly’s rules. You can no longer log in or send messages with it.":"This account was temporarily suspended by the owner. You can’t log in or send messages until the suspension ends. It will be lifted automatically.";
+  $$("sp-st").textContent=perm?"Permanently suspended":"Temporarily suspended";
+  $$("sp-ul").textContent=perm?"Duration":"Ends on";
+  $$("sp-until").textContent=perm?"Permanent":fmtLong(until);
+  var rs=ban.reason?String(ban.reason).slice(0,200):"";$$("sp-rr").hidden=!rs;$$("sp-rs").textContent=rs;
+  $$("sp-cd").hidden=perm;$$("sp-ok").textContent="Back to login";
+  function paint(){var left=until-Date.now();
+    if(left<=0){clearInterval(window.showSuspended._t);$$("sp-t").textContent="Suspension ended";$$("sp-d").textContent="Your suspension is over. You can log in to your account again.";$$("sp-st").textContent="Ended";$$("sp-cd").hidden=true;$$("sp-ok").textContent="Log in";return}
+    var s=Math.floor(left/1000);$$("sp-d1").textContent=Math.floor(s/86400);$$("sp-h1").textContent=Math.floor(s%86400/3600);$$("sp-m1").textContent=Math.floor(s%3600/60);$$("sp-s1").textContent=s%60}
+  o.hidden=false;try{$$("lerr").textContent=""}catch(e){}
+  if(!perm){paint();window.showSuspended._t=setInterval(paint,1000)}};
+$$("sp-ok").onclick=function(){clearInterval(window.showSuspended._t);$$("susp").hidden=true;try{$$("lerr").textContent=""}catch(e){}};
 
 /* ---------- profile links ---------- */
 var LK_MAX=5;
@@ -1767,7 +1834,7 @@ window.seenPing=function(){if(!uc(uname()).hideSeen)upUser({seen:Date.now()})};
 function syncPriv(){var me_=uc(uname());
   $$("ep-hs").classList.toggle("on",!!me_.hideSeen);
   $$("ep-rr").classList.toggle("on",!me_.noRead);
-  var L=lkGet();$$("ep-lock").textContent=L?"App lock: On · change or turn off":"App lock: Off · set a PIN"}
+  $$("ep-lock").textContent=lkGet()?"Chat lock PIN: set · change or remove":"Chat lock PIN: not set · create"}
 $$("ep-hs").onclick=async function(){var on=!uc(uname()).hideSeen;await upUser(on?{hideSeen:true,seen:0}:{hideSeen:false,seen:Date.now()});syncPriv();toast(on?"Last seen & online hidden":"Last seen & online visible")};
 $$("ep-rr").onclick=async function(){var off=!uc(uname()).noRead;await upUser({noRead:off});syncPriv();try{window._rl&&window._rl();render(rawCur)}catch(e){}toast(off?"Read receipts off":"Read receipts on")};
 $$("pfedit").addEventListener("click",function(){setTimeout(function(){$$("lkerr").textContent="";try{drawLinks();syncPriv()}catch(e){}},0)});
@@ -1777,21 +1844,25 @@ var VIEWS=["menu","poll","sched","dis","lock"];
 function xview(v){VIEWS.forEach(function(k){$$("xv-"+k).hidden=k!==v});$$("xclose").textContent=v==="menu"?"Close":"Back"}
 function xopen(v){$$("xsheet").hidden=false;xview(v||"menu")}
 function xshut(){$$("xsheet").hidden=true}
-$$("xtb").onclick=function(){if(!room)return;$$("xdisv").textContent=disLabel(disGet(room));xopen("menu")};
+function xmenuRefresh(){$$("xdisv").textContent=disLabel(disGet(room));$$("xpt").textContent=isPinned(room)?"Unpin chat":"Pin chat";$$("xst2").textContent=isStarC(room)?"Unstar chat":"Star chat";$$("xlt").textContent=isLocked(room)?"Unlock chat":"Lock chat"}
+$$("xtb").onclick=function(){if(!room)return;xmenuRefresh();xopen("menu")};
 $$("xclose").onclick=function(){var inMenu=!$$("xv-menu").hidden;var fromLock=!$$("xv-lock").hidden;if(inMenu||fromLock)xshut();else xview("menu")};
 $$("xsheet").addEventListener("click",function(e){if(e.target===$$("xsheet"))xshut()});
 $$("xv-menu").onclick=function(e){var b=e.target.closest("[data-x]");if(!b)return;var k=b.dataset.x;
   if(k==="poll"){$$("xpq").value="";document.querySelectorAll(".xpo").forEach(function(i){i.value=""});xview("poll")}
   else if(k==="sched"){$$("xsto").textContent="To: "+($$("title").textContent||"this chat");var d=new Date(Date.now()+3600e3);d.setMinutes(0,0,0);$$("xsd").value=localISO(d);$$("xsd").min=localISO(new Date());$$("xst").value="";drawSched();xview("sched")}
-  else if(k==="dis"){drawDis();xview("dis")}};
+  else if(k==="dis"){drawDis();xview("dis")}
+  else if(k==="pin"){xshut();togglePin(room)}
+  else if(k==="star"){xshut();toggleStar(room)}
+  else if(k==="lock"){xshut();if(isLocked(room))unlockChat(room);else lockChat(room)}};
 function localISO(d){return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,16)}
 
 /* ---------- polls ---------- */
 window.pollHTML=function(m){var p=m.poll||{},o=Array.isArray(p.o)?p.o:[],v=m.votes||{},vals=Object.keys(v).map(function(k){return v[k]}),tot=vals.length,my=v[uname()];
-  return '<div class="poll"><div class="pq">📊 '+esc(p.q||"")+'</div>'+o.map(function(t,i){var c=vals.filter(function(x){return x===i}).length,pc=tot?Math.round(c*100/tot):0;return '<div class="po'+(my===i?" on":"")+'" data-pi="'+i+'"><i style="width:'+pc+'%"></i><span>'+esc(t)+'</span><b>'+c+'</b></div>'}).join("")+'<div class="pt">'+tot+' vote'+(tot===1?"":"s")+' · tap to '+(my===undefined?"vote":"change")+'</div></div>'};
+  return '<div class="poll"><div class="pl">Poll</div><div class="pq">'+esc(p.q||"")+'</div>'+o.map(function(t,i){var c=vals.filter(function(x){return x===i}).length,pc=tot?Math.round(c*100/tot):0;return '<div class="po'+(my===i?" on":"")+'" data-pi="'+i+'"><i style="width:'+pc+'%"></i><span>'+esc(t)+'</span><b>'+c+'</b></div>'}).join("")+'<div class="pt">'+tot+' vote'+(tot===1?"":"s")+' · tap to '+(my===undefined?"vote":"change")+'</div></div>'};
 $$("xpsend").onclick=async function(){if(!room)return;var q=$$("xpq").value.trim();var o=[].slice.call(document.querySelectorAll(".xpo")).map(function(i){return i.value.trim()}).filter(Boolean);
   if(!q)return alert("Type a question for the poll.");if(o.length<2)return alert("Add at least 2 options.");
-  xshut();await postRaw({room:room,name:me.name,uid:me.id,ts:Date.now(),text:"📊 "+q,poll:{q:q,o:o.slice(0,4)},votes:{}})};
+  xshut();await postRaw({room:room,name:me.name,uid:me.id,ts:Date.now(),text:"Poll: "+q,poll:{q:q,o:o.slice(0,4)},votes:{}})};
 $$("msgs").addEventListener("click",function(e){var po=e.target.closest(".po");if(!po)return;var el=po.closest(".m");if(!el)return;e.stopPropagation();e.preventDefault();
   var id=el.dataset.id,m=cur.find(function(x){return (x.id||String(x.ts))===id});if(m&&!m.del)votePoll(m,+po.dataset.pi)},true);
 async function votePoll(m,i){var u=uname(),v=Object.assign({},m.votes||{});if(v[u]===i)delete v[u];else v[u]=i;m.votes=v;try{render(rawCur)}catch(e){}
@@ -1803,7 +1874,7 @@ function disGet(r){try{return +localStorage.getItem("chatly_dis_"+r)||0}catch(e)
 function disLabel(ms){for(var i=0;i<DIS.length;i++)if(DIS[i][1]===ms)return DIS[i][0];return "Off"}
 window.chatDisScan=function(arr){try{var last=null;for(var i=0;i<arr.length;i++){var m=arr[i];if(m&&m.sys&&typeof m.dis==="number"&&(!last||m.ts>=last.ts))last=m}if(last)localStorage.setItem("chatly_dis_"+(last.room||room),String(last.dis))}catch(e){}};
 window.chatApplyExp=function(d){if(!d||d.sys||!d.room||d.exp)return;var dur=disGet(d.room);if(dur>0)d.exp=(d.ts||Date.now())+dur};
-function drawDis(){var cur_=disGet(room);$$("xdlist").innerHTML=DIS.map(function(x){return '<button type="button" class="xi'+(x[1]===cur_?" on":"")+'" data-d="'+x[1]+'"><span>'+x[0]+'</span><small>'+(x[1]===cur_?"✓ current":"")+'</small></button>'}).join("")}
+function drawDis(){var cur_=disGet(room);$$("xdlist").innerHTML=DIS.map(function(x){return '<button type="button" class="xi'+(x[1]===cur_?" on":"")+'" data-d="'+x[1]+'"><span>'+x[0]+'</span><small>'+(x[1]===cur_?"Selected":"")+'</small></button>'}).join("")}
 $$("xdlist").onclick=async function(e){var b=e.target.closest("[data-d]");if(!b||!room)return;var ms=+b.dataset.d;if(ms===disGet(room)){xshut();return}
   var lab=disLabel(ms),nm=me.name||"Someone";
   try{localStorage.setItem("chatly_dis_"+room,String(ms))}catch(_){}
@@ -1833,20 +1904,19 @@ async function schTick(){if(schBusy||!me||!uname())return;var a=schGet(),n=Date.
 setInterval(schTick,10000);setTimeout(schTick,4000);
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")schTick()});
 
-/* ---------- app lock (PIN) ---------- */
-var LKK="chatly_lock",LKF="chatly_lockfail";
+/* ---------- PIN (used for locked chats) ---------- */
+var LKK="chatly_clpin",LKF="chatly_clfail";
 function lkGet(){try{return JSON.parse(localStorage.getItem(LKK)||"null")}catch(e){return null}}
 function lkSave(o){try{if(o)localStorage.setItem(LKK,JSON.stringify(o));else localStorage.removeItem(LKK)}catch(e){}}
 async function xhash(s){try{var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,"0")}).join("")}catch(e){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return "f"+h}}
-function loggedIn(){try{var u=JSON.parse(localStorage.getItem("chatly_user")||"null");return !!(u&&u.name)}catch(e){return false}}
-var lkMode="unlock",lkBuf="",lkTmp="",lkCb=null;
+var lkMode="verify",lkBuf="",lkTmp="",lkCb=null;
 function lkDots(){var d=$$("lkdots").children;for(var i=0;i<4;i++)d[i].classList.toggle("on",i<lkBuf.length)}
-function lkShow(mode,title,cb,cancelable){lkMode=mode;lkBuf="";lkTmp="";lkCb=cb||null;$$("lkh").textContent=title;$$("lkmsg").textContent="";lkDots();$$("lkcancel").hidden=!cancelable;$$("lkforgot").hidden=mode!=="unlock";$$("lockov").hidden=false}
+function lkShow(mode,title,cb,cancelable){lkMode=mode;lkBuf="";lkTmp="";lkCb=cb||null;$$("lkh").textContent=title;$$("lkmsg").textContent="";lkDots();$$("lkcancel").hidden=!cancelable;$$("lkforgot").hidden=mode!=="verify";$$("lockov").hidden=false}
 function lkClose(){$$("lockov").hidden=true;lkBuf="";lkDots()}
 function failState(){try{return JSON.parse(localStorage.getItem(LKF)||"{}")}catch(e){return{}}}
 async function lkDone(){var pin=lkBuf;lkBuf="";lkDots();
   if(lkMode==="set1"){lkTmp=pin;lkMode="set2";$$("lkh").textContent="Confirm PIN";$$("lkmsg").textContent="";return}
-  if(lkMode==="set2"){if(pin===lkTmp){var old=lkGet(),salt=Math.random().toString(36).slice(2)+Date.now().toString(36);lkSave({s:salt,h:await xhash(pin+salt),a:old&&typeof old.a==="number"?old.a:60});lkClose();syncPriv();toast("App lock is on");return}
+  if(lkMode==="set2"){if(pin===lkTmp){var salt=Math.random().toString(36).slice(2)+Date.now().toString(36);lkSave({s:salt,h:await xhash(pin+salt)});var cb0=lkCb;lkClose();syncPriv();toast("Chat lock PIN saved");if(cb0)cb0();return}
     lkMode="set1";lkTmp="";$$("lkh").textContent="Create a 4-digit PIN";$$("lkmsg").textContent="PINs didn’t match. Try again.";return}
   var f=failState();if(f.until&&f.until>Date.now()){$$("lkmsg").textContent="Too many attempts. Try again in "+Math.ceil((f.until-Date.now())/1000)+"s";return}
   var L=lkGet();if(!L){lkClose();return}
@@ -1856,15 +1926,59 @@ async function lkDone(){var pin=lkBuf;lkBuf="";lkDots();
 $$("lkpad").onclick=function(e){var b=e.target.closest("[data-k]");if(!b)return;var k=b.dataset.k;if(k==="x"){lkBuf=lkBuf.slice(0,-1)}else if(lkBuf.length<4){lkBuf+=k}lkDots();if(lkBuf.length===4)lkDone()};
 document.addEventListener("keydown",function(e){if($$("lockov").hidden)return;if(/^[0-9]$/.test(e.key)&&lkBuf.length<4){lkBuf+=e.key;lkDots();if(lkBuf.length===4)lkDone()}else if(e.key==="Backspace"){lkBuf=lkBuf.slice(0,-1);lkDots()}});
 $$("lkcancel").onclick=lkClose;
-$$("lkforgot").onclick=function(){if(!confirm("To reset the PIN you must log out. Log out and remove app lock?"))return;
-  lkSave(null);try{localStorage.removeItem(LKF)}catch(e){}lkClose();prof=null;try{localStorage.removeItem("chatly_user")}catch(err){}$$("ln").value="";$$("sub").textContent="";applyLogin()};
-$$("ep-lock").onclick=function(){var L=lkGet();if(!L){lkShow("set1","Create a 4-digit PIN",null,true)}else{$$("xl-time").value=String(L.a||0);xopen("lock")}};
+$$("lkforgot").onclick=function(){if(!confirm("To reset the PIN you must log out. This removes the PIN and unlocks all chats on this device. Continue?"))return;
+  lkSave(null);clSet([]);try{localStorage.removeItem(LKF)}catch(e){}UNL={};lkClose();if(room)try{$$("back").click()}catch(e){}prof=null;try{localStorage.removeItem("chatly_user")}catch(err){}$$("ln").value="";$$("sub").textContent="";applyLogin()};
+$$("ep-lock").onclick=function(){if(!lkGet()){lkShow("set1","Create a 4-digit PIN",null,true)}else{xopen("lock")}};
 $$("xl-chg").onclick=function(){xshut();lkShow("verify","Enter current PIN",function(){lkShow("set1","Create a new 4-digit PIN",null,true)},true)};
-$$("xl-time").onchange=function(){var L=lkGet();if(L){L.a=+$$("xl-time").value;lkSave(L);toast("Saved")}};
-$$("xl-off").onclick=function(){xshut();lkShow("verify","Enter PIN to turn off",function(){lkSave(null);syncPriv();toast("App lock is off")},true)};
-var hiddenAt=0;
-document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"){hiddenAt=Date.now()}else{var L=lkGet();if(L&&hiddenAt&&loggedIn()&&$$("lockov").hidden&&Date.now()-hiddenAt>=(L.a||0)*1000)lkShow("unlock","Enter PIN")}});
-if(lkGet()&&loggedIn())lkShow("unlock","Enter PIN");
+$$("xl-off").onclick=function(){xshut();lkShow("verify","Enter PIN to remove it",function(){lkSave(null);clSet([]);UNL={};syncPriv();decorate();toast("PIN removed. All chats unlocked")},true)};
+
+/* ---------- pin / star / lock chats ---------- */
+var UNL={},needRe=false;
+function arr(k){var a=uc(uname())[k];return Array.isArray(a)?a:[]}
+function isPinned(id){return arr("pins").indexOf(id)>=0}
+window.isStarC=function(id){return arr("stars").indexOf(id)>=0};
+function isStarCx(id){return window.isStarC(id)}
+function clKey(){return "chatly_cl_"+uname()}
+function clGet(){try{var a=JSON.parse(localStorage.getItem(clKey())||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+function clSet(a){try{localStorage.setItem(clKey(),JSON.stringify(a))}catch(e){}}
+window.isLocked=function(id){return clGet().indexOf(id)>=0};
+async function togglePin(id){if(!id)return;var a=arr("pins").slice(),i=a.indexOf(id);if(i>=0)a.splice(i,1);else{if(a.length>=5){toast("You can pin up to 5 chats");return}a.unshift(id)}await upUser({pins:a});decorate();toast(i>=0?"Chat unpinned":"Chat pinned")}
+async function toggleStar(id){if(!id)return;var a=arr("stars").slice(),i=a.indexOf(id);if(i>=0)a.splice(i,1);else a.unshift(id);await upUser({stars:a});decorate();toast(i>=0?"Removed from starred":"Chat starred")}
+function lockNow(id){var a=clGet();if(a.indexOf(id)<0)a.push(id);clSet(a);if(room===id)UNL[id]=true;decorate();toast("Chat locked")}
+function lockChat(id){if(!id)return;if(!lkGet())lkShow("set1","Create a PIN for locked chats",function(){lockNow(id)},true);else lockNow(id)}
+function unlockChat(id){lkShow("verify","Enter PIN to unlock this chat",function(){clSet(clGet().filter(function(x){return x!==id}));decorate();toast("Chat unlocked")},true)}
+(function(){var O=open;open=function(r){if(r&&isLocked(r)&&!UNL[r]){lkShow("verify","Enter PIN to open this chat",function(){UNL[r]=true;O.call(window,r)},true);return}return O.apply(this,arguments)}})();
+$$("back").addEventListener("click",function(){UNL={}});
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"){if(room&&isLocked(room))needRe=true}else if(needRe){needRe=false;UNL={};if(room&&isLocked(room))try{$$("back").click()}catch(e){}}});
+
+/* chat long-press sheet */
+(function(){var cs=$$("cs-me");if(!cs)return;
+  [["cs-pin",SV.pin,"Pin chat"],["cs-star",SV.star.replace(' class="sts"',""),"Star chat"],["cs-lock",SV.lock,"Lock chat"]].forEach(function(a){var b=document.createElement("button");b.type="button";b.id=a[0];b.className="csi";b.innerHTML=a[1]+'<span>'+a[2]+'</span>';cs.parentNode.insertBefore(b,cs)});
+  function id_(){return typeof csel==="string"?csel:null}
+  $$("cs-pin").onclick=function(){var id=id_();$$("csheet").hidden=true;if(id)togglePin(id)};
+  $$("cs-star").onclick=function(){var id=id_();$$("csheet").hidden=true;if(id)toggleStar(id)};
+  $$("cs-lock").onclick=function(){var id=id_();$$("csheet").hidden=true;if(!id)return;if(isLocked(id))unlockChat(id);else lockChat(id)};
+  var OC=openCSheet;openCSheet=function(id){OC.apply(this,arguments);try{$$("cs-pin").lastChild.textContent=isPinned(id)?"Unpin chat":"Pin chat";$$("cs-star").lastChild.textContent=isStarCx(id)?"Unstar chat":"Star chat";$$("cs-lock").lastChild.textContent=isLocked(id)?"Unlock chat":"Lock chat"}catch(e){}}})();
+
+/* chat list: badges, locked preview, pinned first */
+var decBusy=false,decRaf=0,mo=null;
+function decorate(){var list=$$("list");if(!list||window._tab==="inbox")return;
+  var els=[].slice.call(list.querySelectorAll(".room[data-r]"));if(!els.length)return;
+  decBusy=true;
+  try{
+    els.forEach(function(el){var id=el.dataset.r,p=isPinned(id),s=isStarCx(id),l=isLocked(id),k=(p?"p":"")+(s?"s":"")+(l?"l":"");
+      var b=el.querySelector(":scope>div>b");
+      if(b&&(el.dataset.dec!==k||(k&&!b.querySelector(".rbd")))){var o=b.querySelector(".rbd");if(o)o.remove();if(k){var i=document.createElement("i");i.className="rbd";i.innerHTML=(p?SV.pin:"")+(s?SV.star:"")+(l?SV.lock:"");b.appendChild(i)}el.dataset.dec=k}
+      if(l){var sp=el.querySelector(":scope>div>span");if(sp&&sp.textContent!=="Locked chat")sp.textContent="Locked chat"}});
+    var pins=arr("pins"),want=els.map(function(e,i){return{e:e,i:i,r:pins.indexOf(e.dataset.r)}}).sort(function(a,b){var pa=a.r>=0,pb=b.r>=0;if(pa!==pb)return pa?-1:1;if(pa&&pb)return a.r-b.r;return a.i-b.i}).map(function(x){return x.e});
+    if(want.some(function(e,i){return e!==els[i]}))want.forEach(function(e){list.appendChild(e)});
+    try{chipApply()}catch(e){}
+  }finally{if(mo)mo.takeRecords();decBusy=false}}
+function sched(){if(decBusy||decRaf)return;decRaf=requestAnimationFrame(function(){decRaf=0;decorate()})}
+mo=new MutationObserver(sched);mo.observe($$("list"),{childList:true,subtree:true,characterData:true});
+setTimeout(decorate,300);
+
+/* suspend check on startup is handled by the app; nothing else needed here */
 })();
 </script>
 </body></html>
