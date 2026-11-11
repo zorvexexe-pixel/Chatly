@@ -595,13 +595,17 @@ button{transition:transform .2s var(--ease),opacity .2s}
 .czg button,.czg label{width:50px;height:50px;border-radius:14px;border:2px solid var(--line);padding:0;cursor:pointer;display:grid;place-items:center;font-size:12px;font-weight:700;background-size:cover;background-position:center}
 .czg .on{border-color:#25d366;box-shadow:0 0 0 2px #25d36655}
 .czg .pl{background:var(--bg);color:var(--sub);font-size:22px}.czg label input{display:none}
-.czg button.sh{width:auto;height:38px;padding:0 16px;background:var(--bg);color:var(--text);font-size:14px}
+.czg button.sh{width:auto;min-width:76px;height:40px;padding:0 13px;background:var(--bg);color:var(--text);font-size:13px;border-radius:12px}.czg button.sh.on{background:#14b8a61c;color:#14b8a6;border-color:#14b8a6;box-shadow:0 0 0 2px #14b8a622}
 #czr{width:100%;margin-top:16px;background:none;border:1px solid #fe2c55;color:#fe2c55;border-radius:14px;padding:11px;font:inherit;font-weight:600;cursor:pointer}
 
 /* ===== Chatly 2.0 settings hub + premium bubble presets ===== */
-#chatlySettingsBtn,#chatlyBell{position:relative;display:none!important;align-items:center;justify-content:center;width:38px;height:38px;border:0;border-radius:13px;background:#ffffff20;color:inherit;cursor:pointer}
+/* Premium top-bar actions: icon-only, balanced on home and chat headers */
+#chatlySettingsBtn,#chatlyBell{position:relative;display:none!important;flex:none;align-items:center;justify-content:center;width:40px;height:40px;margin-left:7px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--text);cursor:pointer;box-shadow:0 2px 8px #0000000a;transition:transform .18s ease,background .18s ease,border-color .18s ease}
 #chatlySettingsBtn svg,#chatlyBell svg{width:21px;height:21px;fill:currentColor}
 #chatlySettingsBtn.ready,#chatlyBell.ready{display:flex!important}
+#chatlySettingsBtn:active,#chatlyBell:active{transform:scale(.92)}
+header:has(#back:not([hidden])) #chatlySettingsBtn,header:has(#back:not([hidden])) #chatlyBell{background:#ffffff1c;border-color:#ffffff55;color:#fff;box-shadow:none}
+@media(hover:hover){#chatlySettingsBtn:hover,#chatlyBell:hover{background:#14b8a61a;border-color:#14b8a6}}
 #chatlyBell .badge{position:absolute;right:-3px;top:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:10px;background:#ff3b30;color:#fff;font-size:10px;line-height:17px;font-weight:800;text-align:center}
 #chatlyBell .badge[hidden]{display:none}
 #chatlySettings,#chatlyNotifications{position:fixed;inset:0;z-index:110;background:var(--bg);color:var(--text);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -629,8 +633,9 @@ button{transition:transform .2s var(--ease),opacity .2s}
 #owstats{padding:0 12px 8px}.cly-ownerstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.cly-ownerstats .cly-stat{padding:10px}
 /* 24 selectable message bubble presets */
 #chat[data-bubble]{--b-in:var(--theirs);--b-out:linear-gradient(135deg,#0f766e,#14b8a6);--b-radius:18px 18px 18px 6px;--b-shadow:0 2px 7px #00000016;--b-border:transparent}
-#chat[data-bubble] .m{background:var(--b-in)!important;border:1px solid var(--b-border)!important;border-radius:var(--b-radius)!important;box-shadow:var(--b-shadow)!important;color:var(--text)}
-#chat[data-bubble] .m.me{background:var(--b-out)!important;border-radius:var(--b-radius) 6px var(--b-radius) var(--b-radius)!important;color:#fff}
+/* Bubble presets now respect per-chat colour and shape overrides. */
+#chat[data-bubble] .m{background:var(--b-in)!important;border:1px solid var(--b-border)!important;border-radius:var(--mr,var(--b-radius))!important;box-shadow:var(--b-shadow)!important;color:var(--text)}
+#chat[data-bubble] .m.me{background:var(--mc,var(--b-out))!important;border-radius:var(--mrm,var(--b-radius))!important;color:#fff}
 #chat[data-bubble] .m.me .t,#chat[data-bubble] .m.me .n{color:#ffffffc9}
 #chat[data-bubble="ios"]{--b-in:#e9e9eb;--b-out:#0a84ff;--b-radius:20px 20px 20px 5px;--b-shadow:none}
 :root[data-theme="dark"] #chat[data-bubble="ios"]{--b-in:#343438;--b-out:#0a84ff}
@@ -1164,15 +1169,34 @@ $("cs-me").onclick=async()=>{const id=csel;$("csheet").hidden=true;if(!id)return
     if(t0&&vis)ctm.textContent=fmt(Date.now()-t0);
     if(!vis&&t0){const d=Date.now()-t0;t0=0;ctm.hidden=true;window._cdur=Math.round(d/1000)}},500)})();
 const FONTS=[
- {k:"system",n:"Default",s:'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif'},
+ {k:"system",n:"System Default",s:'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif'},
  {k:"poppins",n:"Poppins",s:'"Poppins",system-ui,sans-serif',g:"Poppins:wght@400;500;600;700"},
  {k:"inter",n:"Inter",s:'"Inter",system-ui,sans-serif',g:"Inter:wght@400;500;600;700"},
- {k:"nunito",n:"Nunito (rounded)",s:'"Nunito",system-ui,sans-serif',g:"Nunito:wght@400;600;700"},
- {k:"playfair",n:"Playfair (serif)",s:'"Playfair Display",Georgia,serif',g:"Playfair+Display:wght@400;600;700"},
- {k:"mono",n:"Roboto Mono",s:'"Roboto Mono",ui-monospace,Menlo,monospace',g:"Roboto+Mono:wght@400;600"},
- {k:"caveat",n:"Caveat (handwriting)",s:'"Caveat",cursive',g:"Caveat:wght@400;600;700"},
- {k:"pacifico",n:"Pacifico (script)",s:'"Pacifico",cursive',g:"Pacifico"},
- {k:"serif",n:"Georgia",s:'Georgia,"Times New Roman",serif'}];
+ {k:"nunito",n:"Nunito",s:'"Nunito",system-ui,sans-serif',g:"Nunito:wght@400;500;600;700;800"},
+ {k:"playfair",n:"Playfair Display",s:'"Playfair Display",Georgia,serif',g:"Playfair+Display:wght@400;500;600;700"},
+ {k:"mono",n:"Roboto Mono",s:'"Roboto Mono",ui-monospace,Menlo,monospace',g:"Roboto+Mono:wght@400;500;600;700"},
+ {k:"caveat",n:"Caveat",s:'"Caveat",cursive',g:"Caveat:wght@400;500;600;700"},
+ {k:"pacifico",n:"Pacifico",s:'"Pacifico",cursive',g:"Pacifico"},
+ {k:"georgia",n:"Georgia",s:'Georgia,"Times New Roman",serif'},
+ {k:"roboto",n:"Roboto",s:'"Roboto",Arial,sans-serif',g:"Roboto:wght@400;500;700"},
+ {k:"opensans",n:"Open Sans",s:'"Open Sans",Arial,sans-serif',g:"Open+Sans:wght@400;500;600;700"},
+ {k:"lato",n:"Lato",s:'"Lato",Arial,sans-serif',g:"Lato:wght@400;700;900"},
+ {k:"montserrat",n:"Montserrat",s:'"Montserrat",Arial,sans-serif',g:"Montserrat:wght@400;500;600;700;800"},
+ {k:"raleway",n:"Raleway",s:'"Raleway",Arial,sans-serif',g:"Raleway:wght@400;500;600;700"},
+ {k:"oswald",n:"Oswald",s:'"Oswald",Arial,sans-serif',g:"Oswald:wght@400;500;600;700"},
+ {k:"ubuntu",n:"Ubuntu",s:'"Ubuntu",Arial,sans-serif',g:"Ubuntu:wght@400;500;700"},
+ {k:"rubik",n:"Rubik",s:'"Rubik",Arial,sans-serif',g:"Rubik:wght@400;500;600;700"},
+ {k:"manrope",n:"Manrope",s:'"Manrope",Arial,sans-serif',g:"Manrope:wght@400;500;600;700;800"},
+ {k:"dm-sans",n:"DM Sans",s:'"DM Sans",Arial,sans-serif',g:"DM+Sans:wght@400;500;600;700"},
+ {k:"outfit",n:"Outfit",s:'"Outfit",Arial,sans-serif',g:"Outfit:wght@400;500;600;700;800"},
+ {k:"lexend",n:"Lexend",s:'"Lexend",Arial,sans-serif',g:"Lexend:wght@400;500;600;700"},
+ {k:"merriweather",n:"Merriweather",s:'"Merriweather",Georgia,serif',g:"Merriweather:wght@400;700"},
+ {k:"lora",n:"Lora",s:'"Lora",Georgia,serif',g:"Lora:wght@400;500;600;700"},
+ {k:"dancing",n:"Dancing Script",s:'"Dancing Script",cursive',g:"Dancing+Script:wght@400;500;600;700"},
+ {k:"bebas",n:"Bebas Neue",s:'"Bebas Neue",Impact,sans-serif',g:"Bebas+Neue"},
+ {k:"comfortaa",n:"Comfortaa",s:'"Comfortaa",cursive',g:"Comfortaa:wght@400;500;600;700"},
+ {k:"space-grotesk",n:"Space Grotesk",s:'"Space Grotesk",Arial,sans-serif',g:"Space+Grotesk:wght@400;500;600;700"},
+ {k:"archivo",n:"Archivo",s:'"Archivo",Arial,sans-serif',g:"Archivo:wght@400;500;600;700"}];
 const fontsLoaded={};
 function loadFonts(list){const g=list.filter(f=>f.g&&!fontsLoaded[f.k]);if(!g.length)return;g.forEach(f=>fontsLoaded[f.k]=1);
   const l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?"+g.map(f=>"family="+f.g).join("&")+"&display=swap";document.head.appendChild(l)}
@@ -1515,13 +1539,21 @@ function czApply(){const st=$("chat").style;["--wpi","--wpc","--wps","--mc","--m
   else if((c.wp||"").startsWith("data:")){st.setProperty("--wpi",'url("'+c.wp+'")');st.setProperty("--wps","cover")}
   else if(c.wp){const p=WPS.find(x=>x.id===c.wp);if(p&&p.i){st.setProperty("--wpi",p.i);if(p.c)st.setProperty("--wpc",p.c);st.setProperty("--wps",p.s||"cover")}}
   const k=CZC.find(x=>x[0]===c.c);if(k){st.setProperty("--mc","linear-gradient(135deg,"+k[1]+","+k[2]+")");st.setProperty("--mc1",k[1])}
-  if(c.sh==="classic"){st.setProperty("--mr","20px 20px 20px 5px");st.setProperty("--mrm","20px 20px 5px 20px")}else if(c.sh==="square"){st.setProperty("--mr","8px");st.setProperty("--mrm","8px")}}
+  const shapes={
+    round:["20px","20px"],classic:["20px 20px 20px 5px","20px 20px 5px 20px"],
+    square:["8px","8px"],pill:["28px","28px"],soft:["24px 24px 24px 8px","24px 24px 8px 24px"],
+    cut:["18px 18px 4px 18px","18px 18px 18px 4px"],
+    bubble:["22px 22px 22px 6px","22px 22px 6px 22px"],
+    sharp:["3px","3px"]
+  };
+  const sh=shapes[c.sh||"round"]||shapes.round;st.setProperty("--mr",sh[0]);st.setProperty("--mrm",sh[1])}
 function czDraw(){const c=czGet(),w=c.wp||"";
   $("czw").innerHTML='<button type="button" data-w="off" class="'+(w==="off"?"on":"")+'" style="background:var(--bg);color:var(--sub)">Off</button>'
    +WPS.filter(p=>p.i).map(p=>'<button type="button" data-w="'+p.id+'" class="'+(w===p.id?"on":"")+'" style="background:'+(p.c?p.c+",":"")+p.i+(p.s?";background-size:"+p.s:"")+'"></button>').join("")
    +'<label class="pl'+(w.startsWith("data:")?" on":"")+'">+<input type="file" accept="image/*" id="czf"></label>';
-  $("czc").innerHTML=CZC.map(k=>'<button type="button" data-c="'+k[0]+'" class="'+((c.c||"pink")===k[0]?"on":"")+'" style="background:linear-gradient(135deg,'+k[1]+','+k[2]+')"></button>').join("");
-  $("czh").innerHTML=[["round","Round"],["classic","Classic"],["square","Square"]].map(x=>'<button type="button" class="sh'+((c.sh||"round")===x[0]?" on":"")+'" data-s="'+x[0]+'">'+x[1]+'</button>').join("")}
+  $("czc").innerHTML=CZC.map(k=>'<button type="button" aria-label="'+k[0]+' bubble colour" data-c="'+k[0]+'" class="'+((c.c||"pink")===k[0]?"on":"")+'" style="background:linear-gradient(135deg,'+k[1]+','+k[2]+')"></button>').join("");
+  const shapes=[["round","Round"],["classic","Classic"],["square","Square"],["pill","Pill"],["soft","Soft"],["cut","Cut corner"],["bubble","Chat tail"],["sharp","Sharp"]];
+  $("czh").innerHTML=shapes.map(x=>'<button type="button" class="sh'+((c.sh||"round")===x[0]?" on":"")+'" data-s="'+x[0]+'">'+x[1]+'</button>').join("")}
 (function(){const m=document.createElement("div");m.id="cz";m.hidden=true;
   m.innerHTML='<div id="czb"><div class="czh"><b>Customize chat</b><button type="button" id="czx">Done</button></div><div class="czs">Wallpaper</div><div class="czg" id="czw"></div><div class="czs">Your bubble colour</div><div class="czg" id="czc"></div><div class="czs">Bubble shape</div><div class="czg" id="czh"></div><button type="button" id="czr">Reset this chat</button></div>';
   document.body.appendChild(m);
@@ -1551,10 +1583,9 @@ function czDraw(){const c=czGet(),w=c.wp||"";
  const svg=(d)=>'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+d+'"/></svg>';
  const h=document.querySelector('header');
  if(h){
-  const profileSettings=document.createElement('button');profileSettings.type='button';profileSettings.id='pfsettings';profileSettings.textContent='⚙  Settings';profileSettings.onclick=()=>openSettings();const profileEdit=$('pfedit');if(profileEdit&&profileEdit.parentNode)profileEdit.parentNode.insertBefore(profileSettings,profileEdit.nextSibling);
- const bell=document.createElement('button');bell.type='button';bell.id='chatlyBell';bell.setAttribute('aria-label','Notifications');bell.innerHTML=svg('M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.91V4a1 1 0 0 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h16v-1z')+'<span class="badge" id="chatlyBellCount" hidden>0</span>';
-  const gear=document.createElement('button');gear.type='button';gear.id='chatlySettingsBtn';gear.setAttribute('aria-label','Settings');gear.innerHTML=svg('M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.4-2.4 1a7.5 7.5 0 0 0-1.7-1L15 3h-4l-.4 3.1a7.5 7.5 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.5a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a7.5 7.5 0 0 0 1.7 1L11 21h4l.4-3.1a7.5 7.5 0 0 0 1.7-1l2.4 1 2-3.4zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z');
-  const callbox=$('calls');h.insertBefore(bell,callbox||null);h.insertBefore(gear,callbox||null);
+ const bell=document.createElement('button');bell.type='button';bell.id='chatlyBell';bell.setAttribute('aria-label','Notifications');bell.title='Notifications';bell.innerHTML=svg('M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.91V4a1 1 0 0 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h16v-1z')+'<span class="badge" id="chatlyBellCount" hidden>0</span>';
+  const gear=document.createElement('button');gear.type='button';gear.id='chatlySettingsBtn';gear.setAttribute('aria-label','Open settings');gear.title='';gear.innerHTML=svg('M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.4-2.4 1a7.5 7.5 0 0 0-1.7-1L15 3h-4l-.4 3.1a7.5 7.5 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.5a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a7.5 7.5 0 0 0 1.7 1L11 21h4l.4-3.1a7.5 7.5 0 0 0 1.7-1l2.4 1 2-3.4zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z');
+  h.append(bell,gear);
   bell.onclick=()=>openNotifications();gear.onclick=()=>openSettings();
  }
  const settings=document.createElement('section');settings.id='chatlySettings';settings.hidden=true;
@@ -1580,7 +1611,7 @@ function czDraw(){const c=czGet(),w=c.wp||"";
   isOwner().then(v=>{$('clyOwnerCard').style.display=v?'':'none'}).catch(()=>{$('clyOwnerCard').style.display='none'})}
  $('clyTheme').onchange=e=>{const v=e.target.value;saveLocal({theme:v});if(v==='system')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',v)};
  $('clyFont').onchange=e=>{const v=e.target.value;saveLocal({font:v});try{setFont(v)}catch(x){}};
- $('clyBubble').onchange=e=>{saveLocal({bubble:e.target.value});applyBubble()};
+ $('clyBubble').onchange=e=>{saveLocal({bubble:e.target.value});applyBubble();try{czApply()}catch(x){}};
  async function setPrivacy(k,v){saveLocal({[k]:v});const field={privacyOnline:'privacyOnline',privacyLastSeen:'privacyLastSeen',privacyReadReceipts:'privacyReadReceipts'}[k];if(field){await upUser({[field]:v});drawRooms();if(room)refreshPresence()}}
  $('clyOnline').onchange=e=>setPrivacy('privacyOnline',e.target.checked);$('clyLastSeen').onchange=e=>setPrivacy('privacyLastSeen',e.target.checked);$('clyRead').onchange=e=>setPrivacy('privacyReadReceipts',e.target.checked);
  $('clySound').onchange=e=>saveLocal({notificationSound:e.target.checked});$('clyVibrate').onchange=e=>saveLocal({vibration:e.target.checked});$('clyCompress').onchange=e=>saveLocal({mediaCompress:e.target.checked});$('clyPreview').onchange=e=>saveLocal({mediaPreview:e.target.checked});
