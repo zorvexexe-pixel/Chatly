@@ -333,17 +333,6 @@ body,button,input,textarea,select{font-family:var(--appfont,system-ui,-apple-sys
 #nav button.on{background:linear-gradient(135deg,#14b8a626,#6366f126)!important;box-shadow:inset 0 0 0 1px #14b8a68c}
 #list{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important}
 #fab{bottom:calc(104px + env(safe-area-inset-bottom,0px))!important}
-
-.identity-edit{margin:4px 4px 12px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--bg);display:flex;flex-direction:column;gap:7px}
-.identity-edit label{font-size:12px;font-weight:800;letter-spacing:.3px;color:var(--sub);margin-top:5px}
-.identity-edit input{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font:inherit;padding:12px;outline:none}
-.identity-edit input:focus{border-color:#14b8a6;box-shadow:0 0 0 3px #14b8a622}
-.identity-edit small{font-size:11px;line-height:1.4;color:var(--sub)}
-.handle-input{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding-left:12px;color:#14b8a6;font-weight:800}
-.handle-input input{border:0!important;background:transparent!important;box-shadow:none!important}
-#ep-identity-save{border:0;border-radius:12px;background:linear-gradient(120deg,#14b8a6,#6366f1);color:white;font:inherit;font-weight:800;padding:13px;margin-top:8px}
-#ep-identity-save:disabled{opacity:.55}
-#ep-identity-status{font-size:12px;color:var(--sub);min-height:16px;overflow-wrap:anywhere}
 #esheet{position:fixed;left:0;right:0;bottom:0;z-index:72;background:var(--panel);border-top:1px solid var(--line);border-radius:18px 18px 0 0;display:flex;flex-direction:column;padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));max-width:640px;margin:0 auto;max-height:86vh;overflow:auto}
 #esheet[hidden]{display:none}
 #esheet:not([hidden]){animation:slideup .22s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 0 100vmax #0000004d}
@@ -695,23 +684,6 @@ header:has(#back:not([hidden])) #chatlySettingsBtn,header:has(#back:not([hidden]
 #chat[data-bubble="lava"]{--b-in:#fee2e2;--b-out:linear-gradient(135deg,#b91c1c,#f97316);--b-radius:18px;--b-shadow:0 4px 14px #ef444433}
 @media(prefers-reduced-motion:no-preference){#chatlySettings:not([hidden]),#chatlyNotifications:not([hidden]){animation:slidein .22s cubic-bezier(.2,.8,.2,1)}.cly-card{animation:fadein .2s ease}}
 
-
-/* ===== Chatly chat viewport + gesture stability patch ===== */
-html,body{width:100%;max-width:100%;overflow-x:hidden;overscroll-behavior-x:none}
-body{min-width:0}
-#app{width:100%;max-width:100%;min-width:0;height:100vh;height:100dvh;margin:0 auto;overflow:hidden}
-#chat{width:100%;max-width:100%;min-width:0;flex:1 1 auto;overflow:hidden;animation:chatFadeIn .18s ease!important}
-#chat>*,#msgs,#f,header{min-width:0;max-width:100%}
-#msgs{width:100%;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y}
-#f{width:100%;flex:none}
-header{width:100%;flex:none;overflow:hidden;touch-action:pan-y}
-header button{flex:none;touch-action:manipulation}
-#titlew{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#calls{flex:none;align-items:center;gap:2px}
-#calls button{width:40px;height:40px;display:grid;place-items:center}
-#in{min-width:0;touch-action:manipulation}
-@keyframes chatFadeIn{from{opacity:.82}to{opacity:1}}
-@media (max-width:700px){#app{max-width:100vw}}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -729,16 +701,7 @@ header button{flex:none;touch-action:manipulation}
 <form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.zip"></span><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
 <div id="prof" hidden><div id="pfb"><div id="pfban"><div id="pfbimg"></div></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><input type="file" id="pbi" accept="image/*" hidden><button type="button" id="pfedit"><svg viewBox="0 0 24 24" class=""><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit profile</span></button><div id="pfn"></div><div id="pfu"></div><div id="pfbio"></div><div id="pfstars"><button type="button" id="pfstarsbtn"><svg viewBox="0 0 24 24" class="st"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>Starred messages</span><svg viewBox="0 0 24 24" class="chv"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button></div><div id="pfst"><div class="sc c1"><svg viewBox="0 0 24 24" class=""><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><i class="sv"><b id="st1">0</b><span>Chats</span></i></div><div id="stfg" class="sc c2 clk"><svg viewBox="0 0 24 24" class=""><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><i class="sv"><b id="st2">0</b><span>Following</span></i></div><div id="stfr" class="sc c3 clk"><svg viewBox="0 0 24 24" class=""><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><i class="sv"><b id="st3">0</b><span>Followers</span></i></div></div><div id="pfact"><button type="button" id="pfsh"><svg viewBox="0 0 24 24" class=""><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span>Share account</span></button><button type="button" id="pfcp"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy link</span></button></div><div id="pflink"><span class="lic"><svg viewBox="0 0 24 24" class=""><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span><input id="pfs" readonly><button type="button" id="pfcp2" aria-label="Copy"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button></div><div id="pferr"></div><div id="pfnc"><span class="lic sh"><svg viewBox="0 0 24 24" class=""><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span><div class="nt"><b>Notifications</b><div id="pfntm"></div></div><button type="button" id="pfnt">Enable</button></div><div id="pfver">App version 2026-11-10 · d</div><div id="pfbl"></div><button type="button" id="pfout"><svg viewBox="0 0 24 24" class=""><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg><span>Sign out</span></button></div></div>
-<div id="esheet" hidden><div id="esh">Edit profile</div>
-<div id="identity-edit" class="identity-edit">
-  <label for="ep-nick">Nickname</label><input id="ep-nick" maxlength="32" placeholder="Your display name" autocomplete="nickname">
-  <small id="ep-nick-note">You can change your nickname once every 7 days.</small>
-  <label for="ep-user">Username</label><div class="handle-input"><span>@</span><input id="ep-user" maxlength="20" placeholder="username" autocomplete="username"></div>
-  <small id="ep-user-note">You can change your username once every 30 days. Your login username changes too.</small>
-  <label for="ep-pass">Current password</label><input id="ep-pass" type="password" maxlength="128" placeholder="Required to change username" autocomplete="current-password">
-  <button type="button" id="ep-identity-save">Save changes</button><div id="ep-identity-status" role="status"></div>
-</div>
-<button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><button type="button" id="ep-x">Done</button></div>
+<div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><button type="button" id="ep-x">Done</button></div>
 <div id="crp" hidden><div id="crph"><button type="button" id="crpx">Cancel</button><span>Crop banner</span><button type="button" id="crpa">Apply</button></div><div id="crps"><canvas id="crpc"></canvas></div><div id="crpz"><span>Zoom</span><input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom"></div></div>
 <div id="npop" hidden><div id="npb"><div class="npi"><svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg></div><b>Turn on notifications</b><p>Get an alert for every new message, even when Chatly is closed.</p><button type="button" id="npy">Allow notifications</button><button type="button" id="npn">Not now</button></div></div>
 <div id="owp" hidden><div id="owh"><button type="button" id="owx" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span>Owner tools</span></div><input id="owq" placeholder="Search accounts" autocomplete="off"><div id="owc"></div><div id="owl"></div></div>
@@ -816,8 +779,7 @@ function open(r){
   $("msgs").innerHTML="";
   if(db){unsub=db.collection("messages").where("room","==",r).limit(300).onSnapshot(s=>render(s.docs.map(d=>({...d.data(),id:d.id}))),()=>{})}
   else render(local.filter(m=>m.room===r));
-  // Keep the composer idle when a conversation opens. Focus only after the user taps it.
-  try{$("in").blur()}catch(e){}
+  $("in").focus();
 }
 async function render(arr){
   rawCur=arr;if(window._sw){window._rp=1;return}arr=arr.filter(m=>!isBlocked(m));arr.sort((a,b)=>a.ts-b.ts);markRead(arr);cur=arr;
@@ -883,9 +845,9 @@ async function initCalls(){try{R=await SB.room()}catch(e){R=null}if(!R)return;
   })}
 let prof=null;
 try{prof=JSON.parse(localStorage.getItem("chatly_user"))}catch(e){}
-function applyLogin(){const on=!!prof;$("login").hidden=on;$("out").hidden=!on||!!room;$("pf").hidden=!on||!!room;$("nav").hidden=!on||!!room;$("sbar").hidden=!on||!!room;if(on){me.name=prof.nickname||prof.name;names[me.id]=me.name;if(!room)$("sub").textContent="Signed in as "+prof.name;reg();initNotify()}}
+function applyLogin(){const on=!!prof;$("login").hidden=on;$("out").hidden=!on||!!room;$("pf").hidden=!on||!!room;$("nav").hidden=!on||!!room;$("sbar").hidden=!on||!!room;if(on){me.name=prof.name;names[me.id]=prof.name;if(!room)$("sub").textContent="Signed in as "+prof.name;reg();initNotify()}}
 async function pwh(u,p){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("chatly:"+u+":"+p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
-function fin(n,ph,display){const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);prof={name:n,handle:n,nickname:display||n,phone:"",sess:tok};me.id=n.toLowerCase().replace(/[\s\/]/g,"");me.name=display||n;window._sa=Date.now();try{localStorage.setItem("chatly_user",JSON.stringify(prof))}catch(e){}usersCache[uname()]={...(usersCache[uname()]||{}),session:tok};if(db)db.doc("users/"+uname()).update({session:tok}).catch(()=>{});applyLogin()}
+function fin(n,ph){const tok=Math.random().toString(36).slice(2)+Date.now().toString(36);prof={name:n,phone:"",sess:tok};me.id=n.toLowerCase().replace(/[\s\/]/g,"");window._sa=Date.now();try{localStorage.setItem("chatly_user",JSON.stringify(prof))}catch(e){}usersCache[uname()]={...(usersCache[uname()]||{}),session:tok};if(db)db.doc("users/"+uname()).update({session:tok}).catch(()=>{});applyLogin()}
 async function acct(create){
   $("lerr").textContent="";const n=$("ln").value.trim().slice(0,24),p=$("lw").value,u=n.toLowerCase().replace(/[\s\/]/g,"");
   if(!u)return alert("Enter a username.");if(create&&$("lc").value!==p)return alert("Passwords don’t match.");if(p.length<6)return alert("Password must be at least 6 characters.");
@@ -894,8 +856,8 @@ async function acct(create){
   const h=await pwh(u,p);
   if(create){if(!(await isOwner())&&(await devAll()).length>=DEV_MAX)return alert("Only "+DEV_MAX+" accounts can be created on one device. Please log in to one of your existing accounts.");if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists&&s.data()&&s.data().pw)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
     const ph="";
-    try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph,n)}
-  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");fin(n,d.phone,d.nickname||d.name||n)}
+    try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph)}
+  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");fin(d.name||n,d.phone)}
 }
 let signup=false;
 $("ln").addEventListener("input",function(){if(signup){const c=this.value.replace(/[^A-Za-z0-9_@-]/g,"");if(c!==this.value)this.value=c}});
@@ -1018,7 +980,7 @@ $("fvlist").onclick=async e=>{const b=e.target.closest("button");if(!b)return;co
   drawFV();fillProfile()};
 $("bl").onclick=async()=>{const o=dmOther(room);if(!o)return;const b=myBlocked();const nb=b.includes(o)?b.filter(x=>x!==o):[...b,o];await upUser({blocked:nb});alert(nb.includes(o)?"Blocked @"+o+". You won’t see their messages.":"Unblocked @"+o);render(rawCur)};
 window.openGroupInfo=openGroupInfo;
-function fillProfile(){const u=uname();$("st1").textContent=allRooms().length;$("st2").textContent=following().length;$("st3").textContent=followers().length;$("pfav").innerHTML=avatar(u,me.name,104);$("pfn").textContent=prof.nickname||me.name;$("pfu").textContent="@"+(prof.handle||u);
+function fillProfile(){const u=uname();$("st1").textContent=allRooms().length;$("st2").textContent=following().length;$("st3").textContent=followers().length;$("pfav").innerHTML=avatar(u,me.name,104);$("pfn").textContent=me.name;$("pfu").textContent="@"+u;
   $("pfs").value=`Add me on Chatly! My username is: ${u}\nhttps://zorvexexe-pixel.github.io/Chatly/`;
   $("pfbl").innerHTML="";reqDot()}
 $("pf").onclick=()=>{$("pferr").textContent="";fillProfile();$("prof").hidden=false};
@@ -1265,52 +1227,9 @@ try{const l=localStorage.getItem("chatly_font");if(l)applyFont(l)}catch(e){}
 function applyBanner(){const b=uc(uname()).banner;const e=$("pfbimg");if(e)e.style.backgroundImage=b?'url("'+b+'")':""}
 function openEdit(){loadFonts(FONTS);let cur="system";try{cur=localStorage.getItem("chatly_font")||uc(uname()).font||"system"}catch(e){}
   $("fontlist").innerHTML=FONTS.map(f=>`<button type="button" class="fo${f.k===cur?" on":""}" data-f="${f.k}" style="font-family:${f.s.replace(/"/g,"&quot;")}!important"><b>${f.n}</b><small>The quick brown fox</small></button>`).join("");
-  $("esheet").hidden=false;
-  const ud=uc(uname()),now=Date.now(),ncd=ud.nicknameChangedAt?ud.nicknameChangedAt+7*86400000:0,ucd=ud.usernameChangedAt?ud.usernameChangedAt+30*86400000:0;
-  $("ep-nick").value=prof.nickname||me.name||"";$("ep-user").value=prof.handle||uname();$("ep-pass").value="";$("ep-identity-status").textContent="";
-  $("ep-nick-note").textContent=ncd>now?"Nickname available in "+Math.ceil((ncd-now)/86400000)+" day(s).":"Nickname can be changed now; next change after 7 days.";
-  $("ep-user-note").textContent=ucd>now?"Username available in "+Math.ceil((ucd-now)/86400000)+" day(s).":"Username can be changed now; next change after 30 days. Login username changes too.";
-}
+  $("esheet").hidden=false}
 $("pfedit").onclick=openEdit;
 $("ep-x").onclick=()=>{$("esheet").hidden=true};
-$("ep-identity-save").onclick=async()=>{
- const btn=$("ep-identity-save"),status=$("ep-identity-status"),old=uname(),nick=$("ep-nick").value.trim().slice(0,32),next=$("ep-user").value.trim().replace(/^@/,""),pass=$("ep-pass").value;
- const ud=uc(old),now=Date.now(),nickChanged=nick!==(prof.nickname||me.name||""),userChanged=next.toLowerCase()!==old;
- status.textContent="";
- if(!nick)return status.textContent="Nickname cannot be empty.";
- if(nickChanged&&ud.nicknameChangedAt&&now-ud.nicknameChangedAt<7*86400000)return status.textContent="You can change your nickname once every 7 days.";
- if(userChanged&&!/^[A-Za-z0-9_@-]{3,20}$/.test(next))return status.textContent="Username must be 3–20 characters: letters, numbers, _ or -.";
- if(userChanged&&ud.usernameChangedAt&&now-ud.usernameChangedAt<30*86400000)return status.textContent="You can change your username once every 30 days.";
- if(userChanged&&!pass)return status.textContent="Enter your current password to change your login username.";
- if(!nickChanged&&!userChanged)return status.textContent="No changes to save.";
- btn.disabled=true;btn.textContent="Saving…";
- try{
-   if(!db)throw new Error("Live sync is not connected. Reconnect and try again.");
-   if(userChanged){
-     const oldHash=await pwh(old,pass);if(!ud.pw||oldHash!==ud.pw)throw new Error("Current password is incorrect.");
-     const newKey=next.toLowerCase();if(newKey===old)throw new Error("Choose a different username.");
-     const check=await db.doc("users/"+newKey).get();if(check.exists&&check.data()&&check.data().pw)throw new Error("That username is already taken.");
-     const newHash=await pwh(newKey,pass);
-     const {data,error}=await SB.raw.rpc("chatly_change_username",{p_old_username:old,p_new_username:newKey,p_old_pw_hash:oldHash,p_new_pw_hash:newHash,p_nickname:nick});
-     if(error)throw new Error(error.message||"Username migration failed.");
-     if(data===false)throw new Error("Username change was rejected. Check the SQL setup is installed.");
-     const previous=prof.name;prof.name=newKey;prof.handle=newKey;prof.nickname=nick;prof.sess=prof.sess||"";
-     me.id=newKey;me.name=nick;names[newKey]=nick;usersCache[newKey]={...ud,name:nick,nickname:nick,pw:newHash,usernameChangedAt:now,nicknameChangedAt:now};delete usersCache[old];
-     try{localStorage.setItem("chatly_user",JSON.stringify(prof))}catch(e){}
-     try{const a=JSON.parse(localStorage.getItem("chatly_devices")||"[]");localStorage.setItem("chatly_devices",JSON.stringify(a.map(x=>x===previous?newKey:x)))}catch(e){}
-     status.textContent="Username and login updated successfully.";
-   }else{
-     const patch={name:nick,nickname:nick,nicknameChangedAt:now};
-     await db.doc("users/"+old).update(patch);usersCache[old]={...ud,...patch};prof.nickname=nick;me.name=nick;
-     try{localStorage.setItem("chatly_user",JSON.stringify(prof))}catch(e){}
-     status.textContent="Nickname updated successfully.";
-   }
-   fillProfile();$("ep-nick").value=prof.nickname||me.name;$("ep-user").value=prof.handle||uname();$("ep-pass").value="";
-   const fresh=usersCache[uname()]||{};$("ep-nick-note").textContent="Next nickname change: "+new Date((fresh.nicknameChangedAt||now)+7*86400000).toLocaleDateString();
-   if(userChanged)$("ep-user-note").textContent="Next username change: "+new Date(Date.now()+30*86400000).toLocaleDateString();
-   setTimeout(()=>{if(status.textContent)status.textContent=""},5000);
- }catch(e){status.textContent=e.message||String(e)}finally{btn.disabled=false;btn.textContent="Save changes"}
-};
 $("ep-photo").onclick=()=>{$("esheet").hidden=true;$("pfi").click()};
 $("ep-banner").onclick=()=>{$("esheet").hidden=true;$("pbi").click()};
 $("ep-rmb").onclick=async()=>{$("esheet").hidden=true;try{await upUser({banner:""});fillProfile();alert("Banner removed")}catch(e){alert("Couldn’t remove banner: "+((e&&e.message)||e))}};
@@ -1488,7 +1407,7 @@ async function devSave(l){try{localStorage.setItem(DEV_K,JSON.stringify(l))}catc
   await dvIDB(l)}
 
 /* ===== owner mode: unlimited accounts (tap the logo 7 times on the login screen) ===== */
-var OWNER_HASH="38b37547629135ffb9d1549c7814bf3cad9b2b75436f604eedfdcddacf76dd65";
+var OWNER_HASH="9a900403ac313ba27a1bc81f0932652b8020dac92c234d98fa0b06bf0040ecfd";
 async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
 async function isOwner(){try{return localStorage.getItem("chatly_owner")===await sha256(OWNER_HASH+"|ok")}catch(e){return false}}
 (function(){const lg=$("biglogo");if(!lg)return;let n=0,t=0;
