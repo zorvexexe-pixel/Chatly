@@ -642,6 +642,93 @@ button{transition:transform .2s var(--ease),opacity .2s}
 .ts-preview button{border:0;border-radius:10px;background:var(--accent);color:white;padding:8px 11px;font:inherit;font-size:12px}
 #ts-reset{color:var(--sub)}
 @media(prefers-reduced-motion:reduce){#tyb .d:before,#tyb .d span,#tyn{animation:none!important}}
+
+/* ===== v2: links, profile viewer, fixes ===== */
+.room>.av,.room>img.av,.frow>.av,.frow>img.av{flex:none!important;flex-grow:0!important;aspect-ratio:1/1;object-fit:cover}
+.frow>.av,.frow>img.av{width:40px!important;height:40px!important}
+#pflinks{align-self:flex-start;display:flex;flex-wrap:wrap;gap:8px;margin:10px 16px 0;max-width:calc(100% - 32px)}
+#pflinks:empty{display:none}
+#pflinks a,#vplinks a{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:var(--panel);border:1px solid var(--line);color:var(--accent);font-size:14px;font-weight:600;text-decoration:none;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pflinks a svg,#vplinks a svg{width:15px;height:15px;fill:currentColor;flex:none}
+#lklist{display:flex;flex-direction:column}
+.lkrow{display:flex;align-items:center;gap:8px;padding:8px;border-top:1px solid var(--line);color:var(--text)}
+.lkrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.lkrow b{margin-right:6px}
+.lkrow button{background:none;border:0;color:#ef4444;font:inherit;font-weight:700;padding:6px 10px;cursor:pointer}
+#lkadd{display:flex;gap:8px;padding:8px}
+#lkadd input{flex:1;min-width:0;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;font-size:15px;outline:none}
+#lkadd button{padding:0 18px;border:0;border-radius:12px;background:linear-gradient(135deg,#14b8a6,#6366f1);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+#lkerr{padding:0 10px 6px;font-size:13px;color:#ef4444}
+#vprof{position:fixed;inset:0;z-index:68;background:var(--bg);overflow:auto;padding-top:env(safe-area-inset-top,0px);overscroll-behavior:contain}
+#vprof[hidden]{display:none}
+#vpb{max-width:640px;margin:0 auto;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:flex-start}
+#vpban{width:100%;aspect-ratio:3/1;background:linear-gradient(135deg,#0d9488 0%,#0f172a 48%,#5b21b6 100%);position:relative;overflow:hidden}
+#vpbimg{position:absolute;inset:0;background-size:cover;background-position:center}
+#vpx{position:absolute;left:10px;top:10px;width:38px;height:38px;border-radius:50%;border:0;background:#0009;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+#vpx svg{width:22px;height:22px;fill:#fff}
+#vpav{margin:-44px 0 0 16px;position:relative;z-index:1}
+#vpav .av{border:4px solid var(--bg)!important;box-sizing:content-box;flex:none}
+#vpn{font-size:22px;font-weight:800;margin:8px 16px 0;color:var(--text)}
+#vpu{font-size:15px;color:var(--sub);margin:2px 16px 0}
+#vpst{display:flex;gap:18px;margin:12px 16px 0;font-size:15px;color:var(--sub)}
+#vpst b{color:var(--text);margin-right:4px}
+#vplinks{display:flex;flex-wrap:wrap;gap:8px;margin:12px 16px 0;max-width:calc(100% - 32px)}
+#vplinks:empty{display:none}
+#vpact{display:flex;gap:10px;margin:18px 16px 0;width:calc(100% - 32px)}
+#vpact button{flex:1;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
+#vpact button.pri{background:linear-gradient(135deg,#14b8a6,#6366f1);color:#fff;border:0}
+#vpact span{flex:1;text-align:center;padding:12px;color:var(--sub);font-weight:600}
+/* ===== v2: chat tools, polls, disappearing, privacy, app lock ===== */
+#xtb{width:40px;height:40px;flex:none;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--sub);padding:0}
+#xtb svg{width:26px;height:26px;fill:currentColor}
+.m.sys{align-self:center!important;margin:8px auto!important;max-width:88%!important;background:transparent!important;box-shadow:none!important;border:0!important;color:var(--sub)!important;font-size:12.5px!important;text-align:center!important;padding:4px 10px!important}
+.m.sys::before,.m.sys::after{display:none!important}
+.m.sys .n,.m.sys .t,.m.sys .mm{display:none!important}
+.poll{min-width:230px}
+.pq{font-weight:700;margin-bottom:4px}
+.po{position:relative;display:flex;justify-content:space-between;gap:10px;padding:9px 12px;margin-top:6px;border-radius:10px;background:rgba(127,127,127,.16);overflow:hidden;cursor:pointer}
+.po i{position:absolute;left:0;top:0;bottom:0;background:rgba(20,184,166,.38);z-index:0;transition:width .3s}
+.po span,.po b{position:relative;z-index:1}
+.po.on{outline:2px solid #14b8a6}
+.pt{font-size:11px;opacity:.7;margin-top:6px}
+#xsheet,#xtoast{position:fixed;z-index:73}
+#xsheet{inset:0;background:#0000004d;display:flex;align-items:flex-end}
+#xsheet[hidden]{display:none}
+#xsb{width:100%;max-width:640px;margin:0 auto;background:var(--panel);border-radius:18px 18px 0 0;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto;color:var(--text)}
+#xsb .xh{font-weight:800;font-size:18px;padding:8px 6px}
+#xsb button.xi{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;background:none;border:0;border-top:1px solid var(--line);color:var(--text);font:inherit;padding:15px 8px;cursor:pointer}
+#xsb button.xi small{color:var(--sub)}
+#xsb button.xi.on{color:#14b8a6;font-weight:700}
+#xsb input,#xsb textarea,#xsb select{width:100%;box-sizing:border-box;margin-top:8px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;font-size:15px;outline:none}
+#xsb textarea{min-height:84px;resize:none}
+#xsb .xb{width:100%;margin-top:12px;padding:13px;border:0;border-radius:14px;background:linear-gradient(135deg,#14b8a6,#6366f1);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+#xsb .xb.gr{background:var(--line);color:var(--text)}
+#xsb .xs{font-size:13px;color:var(--sub);padding:2px 6px}
+.schrow{display:flex;gap:8px;align-items:center;border-top:1px solid var(--line);padding:10px 4px}
+.schrow div{flex:1;min-width:0;font-size:14px}
+.schrow small{display:block;color:var(--sub)}
+.schrow button{background:none;border:0;color:#ef4444;font:inherit;font-weight:700;cursor:pointer}
+#xtoast{left:50%;bottom:90px;transform:translateX(-50%);background:#111c;color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;max-width:86%;text-align:center}
+#xtoast[hidden]{display:none}
+#esheet>button.tg{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#esheet>button.tg small{display:block;font-size:12px;color:var(--sub);margin-top:2px}
+.tg .sw{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.tg .sw::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0004;transition:left .2s}
+.tg.on .sw{background:#14b8a6}
+.tg.on .sw::after{left:21px}
+#lockov{position:fixed;inset:0;z-index:99999;background:#0b141a;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:24px}
+#lockov[hidden]{display:none}
+#lockov h2{margin:8px 0 18px;font-size:20px}
+.lki{font-size:42px}
+#lkdots{display:flex;gap:16px;margin-bottom:10px}
+#lkdots i{width:16px;height:16px;border-radius:50%;border:2px solid #fff8}
+#lkdots i.on{background:#14b8a6;border-color:#14b8a6}
+#lkmsg{min-height:20px;color:#fca5a5;font-size:14px;margin-bottom:12px;text-align:center}
+#lkpad{display:grid;grid-template-columns:repeat(3,76px);gap:14px}
+#lkpad button{height:76px;border-radius:50%;border:0;background:#ffffff1a;color:#fff;font:inherit;font-size:28px;cursor:pointer}
+#lkpad button:active{background:#ffffff40}
+#lkpad button.nb{background:transparent}
+#lockov .lkl{margin-top:22px;background:none;border:0;color:#9fb3c8;font:inherit;cursor:pointer;padding:8px}
 </style>
 
 </head>
@@ -653,10 +740,10 @@ button{transition:transform .2s var(--ease),opacity .2s}
 <div id="rbar" hidden><span id="rtxt"></span><button id="rx" type="button" aria-label="Cancel reply">×</button></div>
 <div id="lockbar" hidden></div>
 <div id="tyb" hidden><span class="d"><span></span><span></span><span></span></span><i id="tyn"></i></div>
-<form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file"></span><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
+<form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file"></span><button type="button" id="xtb" aria-label="More: poll, schedule, disappearing"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
-<div id="prof" hidden><div id="pfb"><div id="pfban"><div id="pfbimg"></div></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><input type="file" id="pbi" accept="image/*" hidden><button type="button" id="pfedit"><svg viewBox="0 0 24 24" class=""><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit profile</span></button><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn"><svg viewBox="0 0 24 24" class="st"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>Starred messages</span><svg viewBox="0 0 24 24" class="chv"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button></div><div id="pfst"><div class="sc c1"><svg viewBox="0 0 24 24" class=""><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><i class="sv"><b id="st1">0</b><span>Chats</span></i></div><div id="stfg" class="sc c2 clk"><svg viewBox="0 0 24 24" class=""><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><i class="sv"><b id="st2">0</b><span>Following</span></i></div><div id="stfr" class="sc c3 clk"><svg viewBox="0 0 24 24" class=""><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><i class="sv"><b id="st3">0</b><span>Followers</span></i></div></div><div id="pfact"><button type="button" id="pfsh"><svg viewBox="0 0 24 24" class=""><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span>Share account</span></button><button type="button" id="pfcp"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy link</span></button></div><div id="pflink"><span class="lic"><svg viewBox="0 0 24 24" class=""><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span><input id="pfs" readonly><button type="button" id="pfcp2" aria-label="Copy"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button></div><div id="pferr"></div><div id="pfnc"><span class="lic sh"><svg viewBox="0 0 24 24" class=""><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span><div class="nt"><b>Notifications</b><div id="pfntm"></div></div><button type="button" id="pfnt">Enable</button></div><div id="pfver">App version 2026-11-10 · d</div><div id="pfbl"></div><button type="button" id="pfout"><svg viewBox="0 0 24 24" class=""><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg><span>Sign out</span></button></div></div>
-<div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><div class="eh">Chat wallpaper</div><div id="wplist"></div><div class="eh">Chat bubble style</div><div id="bblist"></div>
+<div id="prof" hidden><div id="pfb"><div id="pfban"><div id="pfbimg"></div></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><input type="file" id="pbi" accept="image/*" hidden><button type="button" id="pfedit"><svg viewBox="0 0 24 24" class=""><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit profile</span></button><div id="pfn"></div><div id="pfu"></div><div id="pflinks"></div><div id="pfstars"><button type="button" id="pfstarsbtn"><svg viewBox="0 0 24 24" class="st"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>Starred messages</span><svg viewBox="0 0 24 24" class="chv"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button></div><div id="pfst"><div class="sc c1"><svg viewBox="0 0 24 24" class=""><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><i class="sv"><b id="st1">0</b><span>Chats</span></i></div><div id="stfg" class="sc c2 clk"><svg viewBox="0 0 24 24" class=""><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><i class="sv"><b id="st2">0</b><span>Following</span></i></div><div id="stfr" class="sc c3 clk"><svg viewBox="0 0 24 24" class=""><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><i class="sv"><b id="st3">0</b><span>Followers</span></i></div></div><div id="pfact"><button type="button" id="pfsh"><svg viewBox="0 0 24 24" class=""><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span>Share account</span></button><button type="button" id="pfcp"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy link</span></button></div><div id="pflink"><span class="lic"><svg viewBox="0 0 24 24" class=""><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span><input id="pfs" readonly><button type="button" id="pfcp2" aria-label="Copy"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button></div><div id="pferr"></div><div id="pfnc"><span class="lic sh"><svg viewBox="0 0 24 24" class=""><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span><div class="nt"><b>Notifications</b><div id="pfntm"></div></div><button type="button" id="pfnt">Enable</button></div><div id="pfver">App version 2026-11-10 · d</div><div id="pfbl"></div><button type="button" id="pfout"><svg viewBox="0 0 24 24" class=""><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg><span>Sign out</span></button></div></div>
+<div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-rmp">Remove profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><div class="eh">Chat wallpaper</div><div id="wplist"></div><div class="eh">Chat bubble style</div><div id="bblist"></div>
 <div class="eh">Theme Studio</div>
 <div id="theme-studio">
   <div class="ts-label">Appearance</div>
@@ -669,7 +756,7 @@ button{transition:transform .2s var(--ease),opacity .2s}
   <div class="ts-preview"><span class="ts-dot"></span><span><b>Chatly preview</b><small>Your selected accent appears across buttons and highlights.</small></span><button type="button">Preview</button></div>
   <button type="button" id="ts-reset">Reset theme</button>
 </div>
-<button type="button" id="ep-x">Done</button></div>
+<div class="eh">Links (TikTok, Instagram, website…)</div><div id="lklist"></div><div id="lkadd"><input id="lkin" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Paste your link here" maxlength="300"><button type="button" id="lkbtn">Add</button></div><div id="lkerr"></div><div class="eh">Privacy &amp; security</div><button type="button" class="tg" id="ep-hs"><span>Hide last seen &amp; online<small>Others won’t see when you were last active</small></span><i class="sw"></i></button><button type="button" class="tg" id="ep-rr"><span>Read receipts<small>Off = no blue ticks sent or shown</small></span><i class="sw"></i></button><button type="button" id="ep-lock">App lock</button><button type="button" id="ep-x">Done</button></div>
 <div id="crp" hidden><div id="crph"><button type="button" id="crpx">Cancel</button><span>Crop banner</span><button type="button" id="crpa">Apply</button></div><div id="crps"><canvas id="crpc"></canvas></div><div id="crpz"><span>Zoom</span><input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom"></div></div>
 <div id="npop" hidden><div id="npb"><div class="npi"><svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg></div><b>Turn on notifications</b><p>Get an alert for every new message, even when Chatly is closed.</p><button type="button" id="npy">Allow notifications</button><button type="button" id="npn">Not now</button></div></div>
 <div id="owp" hidden><div id="owh"><button type="button" id="owx" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span>Owner tools</span></div><input id="owq" placeholder="Search accounts" autocomplete="off"><div id="owc"></div><div id="owl"></div></div>
@@ -678,7 +765,7 @@ button{transition:transform .2s var(--ease),opacity .2s}
 <div id="csheet" hidden><div id="csh"></div><button type="button" id="cs-me">Delete for me</button><button type="button" id="cs-x">Cancel</button></div>
 <div id="sheet" hidden><div id="rxrow"><button type="button" data-e="👍">👍</button><button type="button" data-e="❤️">❤️</button><button type="button" data-e="😂">😂</button><button type="button" data-e="😮">😮</button><button type="button" data-e="😢">😢</button><button type="button" data-e="🙏">🙏</button></div><button id="s-re">Reply</button><button id="s-cp">Copy</button><button id="s-dl">Download</button><button id="s-fw">Forward</button><button id="s-star">Star</button><button id="s-del">Delete for everyone</button><button id="s-x">Cancel</button></div>
 <div id="starview" hidden><div id="svh"><button id="svx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Starred messages</b></div><div id="svlist"></div></div>
-<div id="fview" hidden><div id="fvb"><div id="fvh"><button id="fvx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Friends</b></div><div id="fvtabs"><button id="fvt1" class="on">Following</button><button id="fvt2">Followers</button></div><div id="fvlist"></div></div></div>
+<div id="vprof" hidden><div id="vpb"><div id="vpban"><div id="vpbimg"></div><button id="vpx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button></div><div id="vpav"></div><div id="vpn"></div><div id="vpu"></div><div id="vpst"></div><div id="vplinks"></div><div id="vpact"></div></div></div><div id="fview" hidden><div id="fvb"><div id="fvh"><button id="fvx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Friends</b></div><div id="fvtabs"><button id="fvt1" class="on">Following</button><button id="fvt2">Followers</button></div><div id="fvlist"></div></div></div>
 <div id="fwpick" hidden><div id="fwb"><b>Forward to...</b><div id="fwlist"></div><button type="button" id="fwx">Cancel</button></div></div>
 <div id="login"><span id="biglogo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><h2 id="lt">Chatly</h2><form id="lf"><input id="ln" placeholder="Username" maxlength="24" required><input id="lw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password"><input id="lc" type="password" placeholder="Confirm password" autocomplete="new-password" hidden><button id="lb">Log in</button><button type="button" id="su">Create account</button></form><div id="lerr"></div><div id="lconn">Connecting…</div></div>
 <div id="call" hidden><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><div id="ctm" hidden>00:00:00</div><div id="cs"></div><div id="cb"><button id="acc" hidden>Accept</button><button id="end">End</button></div></div>
@@ -699,7 +786,7 @@ function docRef(path){return{
  async acquire(o){const{error}=await sb.from("docs").insert({path,collection:path.split("/")[0],data:o||{}});return{acquired:!error}}}}
 function colRef(name,flt,lim){const q={
  where(f,op,v){return colRef(name,{f,v},lim)},limit(n){return colRef(name,flt,n)},
- async add(d){const id=rid();const{error}=await sb.from("docs").insert({path:name+"/"+id,collection:name,data:d});if(error)throw error;return{id}},
+ async add(d){try{if(name==="messages"&&window.chatApplyExp)window.chatApplyExp(d)}catch(e){}const id=rid();const{error}=await sb.from("docs").insert({path:name+"/"+id,collection:name,data:d});if(error)throw error;return{id}},
  onSnapshot(cb,err){const rows=new Map();let t=null;
   const ok=r=>(!flt||(r.data&&r.data[flt.f]===flt.v));
   const emit=()=>{let a=[...rows.values()];a.sort((x,y)=>(x.data.ts||0)-(y.data.ts||0));if(lim)a=a.slice(-lim);cb({docs:a.map(r=>snap(r.path,r.data))})};
@@ -750,12 +837,12 @@ function open(r){
   $("in").focus();
 }
 async function render(arr){
-  rawCur=arr;if(window._sw){window._rp=1;return}arr=arr.filter(m=>!isBlocked(m));arr.sort((a,b)=>a.ts-b.ts);markRead(arr);cur=arr;
+  rawCur=arr;if(window._sw){window._rp=1;return}try{window.chatDisScan&&chatDisScan(arr)}catch(e){}arr=arr.filter(m=>!isBlocked(m)&&!(m.exp&&m.exp<=Date.now()));arr.sort((a,b)=>a.ts-b.ts);markRead(arr);cur=arr;
   const ids=[...new Set(arr.map(m=>m.uid))].filter(i=>i&&!names[i]);
   if(ids.length){try{const u=await SB.user();const p=await u.profiles(ids);ids.forEach(i=>names[i]=p[i]?.name||"Someone")}catch(e){}}
   const box=$("msgs"),atEnd=box.scrollHeight-box.scrollTop-box.clientHeight<80;
   box.innerHTML=arr.map(m=>{const mine=su(m)===uname();const t=new Date(m.ts).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
-    return `<div class="m${mine?" me":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.fwd&&!m.del?'<div class="fwdtag">Forwarded</div>':''}${m.del?'<span class="del">This message was deleted</span>':body(m)}${m.del?"":rch(m)}<div class="t">${mine&&!m.del?'<span class="mm">⋮</span> ':""}${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
+    return `<div class="m${mine?" me":""}${m.sys?" sys":""}" data-id="${esc(m.id||String(m.ts))}">${mine?"":`<div class="n" data-pu="${esc(m.uid||"")}">${esc(m.name||names[m.uid]||"Someone")}</div>`}${m.fwd&&!m.del?'<div class="fwdtag">Forwarded</div>':''}${m.del?'<span class="del">This message was deleted</span>':body(m)}${m.del?"":rch(m)}<div class="t">${mine&&!m.del?'<span class="mm">⋮</span> ':""}${t}${mine&&!m.del?ticks(m):""}</div></div>`}).join("");
   if(atEnd||arr.length<2)box.scrollTop=box.scrollHeight;
 }
 $("f").onsubmit=async e=>{
@@ -839,17 +926,17 @@ function subOf(id){const r=allRooms().find(x=>x.id===id);if(r&&r.dm)return"Priva
 async function removeFromGroup(roomId,who){const r=allRooms().find(x=>x.id===roomId);if(!r||!r.members)return;const nm=r.members.filter(x=>x!==who);if(!db)return;try{await db.doc("rooms/"+roomId).update({members:nm})}catch(e){alert("Couldn’t update group: "+((e&&e.message)||e))}}
 function openGroupInfo(roomId){const r=allRooms().find(x=>x.id===roomId);if(!r||!r.members)return;
   $("svh").querySelector("b").textContent="Group members";
-  $("svlist").innerHTML=r.members.map(x=>`<div class="svrow" style="display:flex;justify-content:space-between;align-items:center"><span>@${esc(x)}</span>${x!==uname()?`<button type="button" class="rmbtn" data-rm="${esc(x)}">Remove</button>`:""}</div>`).join("");
-  $("svlist").onclick=e=>{const b=e.target.closest(".rmbtn");if(!b)return;if(confirm("Remove @"+b.dataset.rm+" from this group?")){removeFromGroup(roomId,b.dataset.rm);openGroupInfo(roomId)}};
+  $("svlist").innerHTML=r.members.map(x=>`<div class="svrow" style="display:flex;justify-content:space-between;align-items:center"><span data-pu="${esc(x)}" style="cursor:pointer">@${esc(x)}</span>${x!==uname()?`<button type="button" class="rmbtn" data-rm="${esc(x)}">Remove</button>`:""}</div>`).join("");
+  $("svlist").onclick=e=>{const pu=e.target.closest("[data-pu]");if(pu&&!e.target.closest(".rmbtn")&&window.openUserProfile){openUserProfile(pu.dataset.pu);return}const b=e.target.closest(".rmbtn");if(!b)return;if(confirm("Remove @"+b.dataset.rm+" from this group?")){removeFromGroup(roomId,b.dataset.rm);openGroupInfo(roomId)}};
   $("starview").hidden=false}
 function reg(){}
-const body=m=>{let h="";if(m.re)h+=`<div class="q"><b>${esc(m.re.name)}</b><br>${esc(m.re.text)}</div>`;
+const body=m=>{if(m.sys)return esc(m.text||"");if(m.poll&&window.pollHTML)return pollHTML(m);let h="";if(m.re)h+=`<div class="q"><b>${esc(m.re.name)}</b><br>${esc(m.re.text)}</div>`;
   if(typeof m.img==="string"&&m.img.startsWith("data:image/"))h+=`<img src="${esc(m.img)}" alt="photo">`;
   if(typeof m.aud==="string"&&m.aud.startsWith("data:audio/"))h+=vmHTML("m"+(m.id||m.ts),m.aud);
   if(m.file&&m.file.id)h+=fileCard(m.file);
   return h+linkify(m.text||"")};
-const ticks=m=>{const r=(m.rb||[]).length>0;return `<svg viewBox="0 0 18 11" class="${r?"rd":""}"><path d="M1 6l3 3L11 1"/>${r?'<path d="M7 9l1 .9L15 1"/>':""}</svg>`};
-function markRead(arr){if(!db||document.visibilityState!=="visible")return;const u=uname();arr.forEach(m=>{if(su(m)!==u&&m.id&&!m.del&&!(m.rb||[]).includes(u))db.doc("messages/"+m.id).update({rb:[...(m.rb||[]),u]}).catch(()=>{})})}
+const ticks=m=>{const r=(m.rb||[]).length>0&&!uc(uname()).noRead;return `<svg viewBox="0 0 18 11" class="${r?"rd":""}"><path d="M1 6l3 3L11 1"/>${r?'<path d="M7 9l1 .9L15 1"/>':""}</svg>`};
+function markRead(arr){if(!db||document.visibilityState!=="visible")return;if(uc(uname()).noRead)return;const u=uname();arr.forEach(m=>{if(su(m)!==u&&m.id&&!m.del&&!(m.rb||[]).includes(u))db.doc("messages/"+m.id).update({rb:[...(m.rb||[]),u]}).catch(()=>{})})}
 function hlRx(){const m=cur.find(x=>(x.id||String(x.ts))===sel),my=m&&m.rc&&m.rc[uname()];document.querySelectorAll("#rxrow button").forEach(b=>b.classList.toggle("on",b.dataset.e===my));$("s-cp").hidden=!(m&&!m.del&&(m.text||m.img));$("s-dl").hidden=!(m&&!m.del&&(m.img||m.file||m.aud))}
 const rch=m=>{const r=m.rc||{},c={};Object.values(r).forEach(x=>c[x]=(c[x]||0)+1);const k=Object.keys(c);if(!k.length)return"";const my=r[uname()];return`<div class="rch">${k.map(x=>`<span data-e="${esc(x)}" class="${my===x?"on":""}">${esc(x)}${c[x]>1?" "+c[x]:""}</span>`).join("")}</div>`};
 async function react(id,e){const m=cur.find(x=>(x.id||String(x.ts))===id);if(!m||m.del)return;const u=uname(),rc={...(m.rc||{})};if(rc[u]===e)delete rc[u];else rc[u]=e;m.rc=rc;render(rawCur);
@@ -905,7 +992,7 @@ $("sq").oninput=drawRooms;
 const myBlocked=()=>(usersCache[uname()]&&usersCache[uname()].blocked)||[];
 const isBlocked=m=>su(m)!==uname()&&myBlocked().includes(su(m));
 const dmBlocked=()=>{const o=dmOther(room);return !!o&&myBlocked().includes(o)};
-async function upUser(p){const u=uname();usersCache[u]={...(usersCache[u]||{}),...p};if(!db)return;try{await db.doc("users/"+u).update(p)}catch(e){}}
+async function upUser(p){const u=uname();usersCache[u]={...(usersCache[u]||{}),...p};if(!db)return true;try{await db.doc("users/"+u).update(p);return true}catch(e){try{await db.doc("users/"+u).set(p,{merge:true});return true}catch(e2){window._upErr=(e2&&e2.message)||String(e2);return false}}}
 function uc(x){return usersCache[x]||{}}
 function mySent(){return uc(uname()).sent||[]}
 function myFriendsL(){return uc(uname()).friends||[]}
@@ -952,9 +1039,14 @@ function fillProfile(){const u=uname();$("st1").textContent=allRooms().length;$(
 $("pf").onclick=()=>{$("pferr").textContent="";fillProfile();$("prof").hidden=false};
 $("pfx").onclick=()=>{$("prof").hidden=true};
 $("pfch").onclick=()=>$("pfi").click();
-$("pfi").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const im=new Image();im.onload=async()=>{
-  const c=document.createElement("canvas");c.width=c.height=160;const k=Math.max(160/im.width,160/im.height),w=im.width*k,h=im.height*k;c.getContext("2d").drawImage(im,(160-w)/2,(160-h)/2,w,h);
-  await upUser({photo:c.toDataURL("image/jpeg",.8)});fillProfile();$("pferr").textContent="Photo updated."};im.src=URL.createObjectURL(f)};
+$("pfi").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const im=new Image();
+  im.onerror=()=>alert("Couldn’t open this photo. Please choose a JPG or PNG image.");
+  im.onload=async()=>{const S=256,c=document.createElement("canvas");c.width=c.height=S;const k=Math.max(S/im.width,S/im.height),w=im.width*k,h=im.height*k;
+    c.getContext("2d").drawImage(im,(S-w)/2,(S-h)/2,w,h);URL.revokeObjectURL(im.src);
+    const ok=await upUser({photo:c.toDataURL("image/jpeg",.82)});fillProfile();
+    try{drawRooms()}catch(_){}
+    alert(ok?"Profile photo updated":"Photo couldn’t be saved online"+(window._upErr?" ("+window._upErr+")":"")+". Try again or check your internet.")};
+  im.src=URL.createObjectURL(f)};
 $("pfsh").onclick=()=>{const t=$("pfs").value;if(navigator.share)navigator.share({text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>{$("pferr").textContent="Copied. Send it to your friend."}).catch(()=>{$("pfs").select()});else $("pfs").select()};
 $("pfbl").onclick=async e=>{const x=e.target.dataset.ub;if(!x)return;await upUser({blocked:myBlocked().filter(y=>y!==x)});fillProfile()};
 function setTab(t){window._tab=t;const p=t==="profile",ib=t==="inbox";$("tc").classList.toggle("on",t==="chats");$("ti").classList.toggle("on",ib);$("tp").classList.toggle("on",p);if(p){$("pferr").textContent="";fillProfile()}$("prof").hidden=!p;if(!p){$("fab").style.display=ib?"none":"";$("sbar").style.display=ib?"none":"";drawRooms()}}
@@ -1187,21 +1279,21 @@ $("pbi").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;
 document.addEventListener("pointerdown",e=>{const c=$("esheet");if(c&&!c.hidden&&!c.contains(e.target)){c.hidden=true;e.stopPropagation();e.preventDefault()}},true);
 (function(){const FP=fillProfile;fillProfile=function(){FP.apply(this,arguments);try{applyBanner();syncFont()}catch(e){}}})();
 function setHTML(el,h){if(el._h===h)return;el._h=h;el.innerHTML=h}
-function isOnline(u){if(!isFriend(u))return false;const t=(usersCache[u]||{}).seen;return !!t&&Date.now()-t<60000}
-function presence(u){if(!isFriend(u))return"";const t=(usersCache[u]||{}).seen;if(!t)return"";if(Date.now()-t<60000)return"● online";
+function isOnline(u){if(!isFriend(u))return false;if(uc(u).hideSeen)return false;const t=(usersCache[u]||{}).seen;return !!t&&Date.now()-t<60000}
+function presence(u){if(!isFriend(u))return"";if(uc(u).hideSeen)return"";const t=(usersCache[u]||{}).seen;if(!t)return"";if(Date.now()-t<60000)return"● online";
   const d=new Date(t),n=new Date(),hm=d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}),day=x=>new Date(x.getFullYear(),x.getMonth(),x.getDate()).getTime(),df=Math.round((day(n)-day(d))/864e5);
   return "last seen "+(df<=0?"today at "+hm:df===1?"yesterday at "+hm:d.toLocaleDateString([],{day:"numeric",month:"short"})+" at "+hm)}
 function refreshPresence(){if(!room)return;const o=dmOther(room);if(!o)return;const p=presence(o);$("sub").textContent=p||baseSub}
 (function(){let hb=0;
-  const beat=()=>{if(!db||!me||document.visibilityState!=="visible"||$("login")&&!$("login").hidden)return;upUser({seen:Date.now()})};
+  const beat=()=>{if(!db||!me||document.visibilityState!=="visible"||$("login")&&!$("login").hidden)return;(window.seenPing?seenPing():upUser({seen:Date.now()}))};
   setInterval(beat,25000);setInterval(()=>{refreshPresence();drawRooms()},20000);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")beat()});
-  window.addEventListener("pagehide",()=>{if(db&&me)upUser({seen:Date.now()})});
+  window.addEventListener("pagehide",()=>{if(db&&me)(window.seenPing?seenPing():upUser({seen:Date.now()}))});
   const o=open;open=function(){const r=o.apply(this,arguments);try{refreshPresence()}catch(e){}return r};
   setTimeout(beat,1500);
 })();
 (function(){const R=render,D=drawRooms;let last="",raf=0,pend=null,dr=0;
-  const sig=a=>room+"|"+JSON.stringify(myBlocked())+"|"+a.map(m=>(m.id||m.ts)+(m.del?"d":"")+(m.text||"")+JSON.stringify(m.rb||0)+JSON.stringify(m.rc||0)).join("§");
+  const sig=a=>room+"|"+JSON.stringify(myBlocked())+"|"+a.map(m=>(m.id||m.ts)+(m.del?"d":"")+(m.text||"")+JSON.stringify(m.rb||0)+JSON.stringify(m.rc||0)+JSON.stringify(m.votes||0)+(m.exp||0)+(uc(uname()).noRead?"n":"")).join("§");
   window._rl=function(){last=""};
   render=function(arr){arr=arr.filter(m=>!(m.ts&&m.ts<=clrOf(room)));pend=arr;if(window._sw&&Date.now()-(window._swd||0)<2500){rawCur=arr;window._rp=1;return Promise.resolve()}
     if(raf)return Promise.resolve();
@@ -1579,4 +1671,200 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
 })();
 </script>
 
+
+<div id="xsheet" hidden><div id="xsb">
+ <div id="xv-menu"><div class="xh">Chat tools</div>
+  <button type="button" class="xi" data-x="poll"><span>📊 Create poll</span></button>
+  <button type="button" class="xi" data-x="sched"><span>⏰ Schedule message</span></button>
+  <button type="button" class="xi" data-x="dis"><span>⏳ Disappearing messages</span><small id="xdisv">Off</small></button>
+ </div>
+ <div id="xv-poll" hidden><div class="xh">Create poll</div>
+  <input id="xpq" placeholder="Ask a question" maxlength="120">
+  <input class="xpo" placeholder="Option 1" maxlength="60"><input class="xpo" placeholder="Option 2" maxlength="60">
+  <input class="xpo" placeholder="Option 3 (optional)" maxlength="60"><input class="xpo" placeholder="Option 4 (optional)" maxlength="60">
+  <button type="button" class="xb" id="xpsend">Send poll</button></div>
+ <div id="xv-sched" hidden><div class="xh">Schedule message</div>
+  <div class="xs" id="xsto"></div>
+  <textarea id="xst" placeholder="Message to send later" maxlength="1000"></textarea>
+  <input id="xsd" type="datetime-local">
+  <button type="button" class="xb" id="xsgo">Schedule</button>
+  <div class="xs" style="margin-top:10px">Sent automatically while Chatly is open. If the app is closed, it sends the next time you open it.</div>
+  <div id="xslist"></div></div>
+ <div id="xv-dis" hidden><div class="xh">Disappearing messages</div>
+  <div class="xs">New messages in this chat will disappear after the time you choose. Everyone in the chat is notified.</div><div id="xdlist"></div></div>
+ <div id="xv-lock" hidden><div class="xh">App lock</div>
+  <button type="button" class="xi" id="xl-chg"><span>Change PIN</span></button>
+  <div class="xs" style="margin-top:10px">Lock after leaving the app for</div>
+  <select id="xl-time"><option value="0">Immediately</option><option value="60">1 minute</option><option value="300">5 minutes</option><option value="1800">30 minutes</option></select>
+  <button type="button" class="xb gr" id="xl-off" style="color:#ef4444">Turn off app lock</button></div>
+ <button type="button" class="xb gr" id="xclose">Close</button>
+</div></div>
+<div id="lockov" hidden><div class="lki">🔒</div><h2 id="lkh">Enter PIN</h2><div id="lkdots"><i></i><i></i><i></i><i></i></div><div id="lkmsg"></div>
+ <div id="lkpad"><button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="nb" disabled></button><button data-k="0">0</button><button data-k="x" aria-label="Delete">⌫</button></div>
+ <button type="button" class="lkl" id="lkforgot">Forgot PIN? Log out</button><button type="button" class="lkl" id="lkcancel" hidden>Cancel</button></div>
+<div id="xtoast" hidden></div>
+
+<script>
+/* ===== Chatly v2 features ===== */
+(function(){
+var $$=function(i){return document.getElementById(i)};
+function toast(t){var b=$$("xtoast");b.textContent=t;b.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){b.hidden=true},3200)}
+
+/* ---------- profile links ---------- */
+var LK_MAX=5;
+var LK_NAMES=[["tiktok.com","TikTok"],["instagram.com","Instagram"],["youtube.com","YouTube"],["youtu.be","YouTube"],["twitter.com","X"],["x.com","X"],["facebook.com","Facebook"],["fb.com","Facebook"],["snapchat.com","Snapchat"],["linkedin.com","LinkedIn"],["github.com","GitHub"],["t.me","Telegram"],["wa.me","WhatsApp"],["discord.gg","Discord"],["discord.com","Discord"],["twitch.tv","Twitch"],["pinterest.com","Pinterest"],["spotify.com","Spotify"],["threads.net","Threads"]];
+function lkName(u){try{var h=new URL(u).hostname.replace(/^www\./,"").toLowerCase();for(var i=0;i<LK_NAMES.length;i++){var d=LK_NAMES[i][0];if(h===d||h.endsWith("."+d))return LK_NAMES[i][1]}return h}catch(e){return u}}
+function lkClean(v){v=String(v||"").trim();if(!v)return null;if(!/^[a-z][a-z0-9+.-]*:/i.test(v))v="https://"+v;try{var u=new URL(v);if(u.protocol!=="https:"&&u.protocol!=="http:")return null;if(u.hostname.indexOf(".")<0)return null;return u.href}catch(e){return null}}
+function linksOf(x){var l=uc(x).links;return Array.isArray(l)?l.filter(function(v){return typeof v==="string"&&lkClean(v)}):[]}
+var LK_ICON='<svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>';
+function chips(L){return L.map(function(u){return '<a href="'+esc(u).replace(/"/g,"&quot;")+'" target="_blank" rel="noopener noreferrer nofollow">'+LK_ICON+esc(lkName(u))+'</a>'}).join("")}
+function drawLinks(){var L=linksOf(uname()),box=$$("pflinks");
+  if(box)box.innerHTML=chips(L);
+  var ls=$$("lklist");if(ls)ls.innerHTML=L.map(function(u,i){return '<div class="lkrow"><span><b>'+esc(lkName(u))+'</b>'+esc(u.replace(/^https?:\/\/(www\.)?/,""))+'</span><button type="button" data-lkdel="'+i+'">Remove</button></div>'}).join("");
+  var add=$$("lkadd");if(add)add.style.display=L.length>=LK_MAX?"none":""}
+async function addLink(){var err=$$("lkerr");err.textContent="";var u=lkClean($$("lkin").value);
+  if(!u){err.textContent="Enter a valid link, e.g. instagram.com/yourname";return}
+  var L=linksOf(uname());if(L.length>=LK_MAX){err.textContent="You can add up to "+LK_MAX+" links";return}
+  if(L.indexOf(u)>=0){err.textContent="That link is already added";return}
+  L.push(u);await upUser({links:L});$$("lkin").value="";drawLinks()}
+$$("lkbtn").onclick=addLink;
+$$("lkin").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addLink()}});
+$$("lklist").onclick=async function(e){var b=e.target.closest("[data-lkdel]");if(!b)return;var L=linksOf(uname());L.splice(+b.dataset.lkdel,1);await upUser({links:L});drawLinks()};
+$$("ep-rmp").onclick=async function(){$$("esheet").hidden=true;var ok=await upUser({photo:""});fillProfile();try{drawRooms()}catch(_){}alert(ok?"Profile photo removed":"Couldn’t remove photo")};
+(function(){var FP=fillProfile;fillProfile=function(){FP.apply(this,arguments);try{drawLinks()}catch(e){}}})();
+
+/* ---------- view any user's profile ---------- */
+var vpUser=null;
+window.openUserProfile=function(x){x=String(x||"").toLowerCase();if(!x)return;
+  if(x===uname()){try{$$("esheet").hidden=true;$$("fview").hidden=true}catch(e){}if($$("pf"))$$("pf").click();return}
+  if(!usersCache[x]){alert("This user’s profile isn’t available.");return}
+  vpUser=x;drawVP();$$("vprof").hidden=false;$$("vprof").scrollTop=0};
+function drawVP(){var x=vpUser;if(!x)return;var u=uc(x),n=u.name||x;
+  $$("vpbimg").style.backgroundImage=u.banner?'url("'+String(u.banner).replace(/["\\)]/g,"")+'")':"";
+  $$("vpav").innerHTML=avatar(x,n,96);$$("vpn").textContent=n;$$("vpu").textContent="@"+x;
+  var fg=(u.sent||[]).filter(function(k){return usersCache[k]}).length,fr=Object.keys(usersCache).filter(function(k){return k!==x&&(usersCache[k].sent||[]).indexOf(x)>=0}).length;
+  $$("vpst").innerHTML='<span><b>'+fg+'</b>Following</span><span><b>'+fr+'</b>Followers</span>';
+  $$("vplinks").innerHTML=chips(linksOf(x));
+  var b;
+  if(isFriend(x))b='<button class="pri" data-va="msg">Message</button><button data-va="unf">Unfollow</button>';
+  else if(mySent().indexOf(x)>=0)b='<span>Requested</span><button data-va="unf">Cancel request</button>';
+  else if(pendingIn().indexOf(x)>=0)b='<button class="pri" data-va="acc">Accept request</button><button data-va="dec">Decline</button>';
+  else b='<button class="pri" data-va="add">Add friend</button>';
+  $$("vpact").innerHTML=b}
+$$("vpx").onclick=function(){$$("vprof").hidden=true;vpUser=null};
+$$("vpact").onclick=async function(e){var b=e.target.closest("[data-va]");if(!b||!vpUser)return;var x=vpUser,a=b.dataset.va;
+  if(a==="msg"){$$("vprof").hidden=true;try{$$("fview").hidden=true;$$("prof").hidden=true}catch(_){}vpUser=null;openDM(x);return}
+  if(a==="add")await sendReq(x);else if(a==="unf")await unfollow(x);else if(a==="acc")await acceptReq(x);else if(a==="dec")await declineReq(x);
+  drawVP();try{drawRooms()}catch(_){}};
+$$("list").addEventListener("click",function(e){var r=e.target.closest(".room[data-u]");if(!r||e.target.closest("button")||e.target.closest(".rs"))return;e.stopImmediatePropagation();openUserProfile(r.dataset.u)},true);
+$$("fvlist").addEventListener("click",function(e){var r=e.target.closest(".frow");if(!r||e.target.closest("button")||e.target.closest(".rs"))return;var t=r.querySelector(".fi span");if(!t)return;e.stopImmediatePropagation();openUserProfile(t.textContent.replace(/^@/,""))},true);
+$$("titlew").addEventListener("click",function(e){var o=room&&dmOther(room);if(!o)return;e.stopImmediatePropagation();openUserProfile(o)},true);
+$$("msgs").addEventListener("click",function(e){var n=e.target.closest(".n[data-pu]");if(!n)return;var k=String(n.dataset.pu||"").toLowerCase();if(!k||!usersCache[k])return;e.stopPropagation();openUserProfile(k)},true);
+(function(){var DF=drawFV;drawFV=function(){DF.apply(this,arguments);try{if(!$$("vprof").hidden)drawVP()}catch(e){}}})();
+
+/* ---------- hide last seen / read receipts ---------- */
+window.seenPing=function(){if(!uc(uname()).hideSeen)upUser({seen:Date.now()})};
+function syncPriv(){var me_=uc(uname());
+  $$("ep-hs").classList.toggle("on",!!me_.hideSeen);
+  $$("ep-rr").classList.toggle("on",!me_.noRead);
+  var L=lkGet();$$("ep-lock").textContent=L?"App lock: On · change or turn off":"App lock: Off · set a PIN"}
+$$("ep-hs").onclick=async function(){var on=!uc(uname()).hideSeen;await upUser(on?{hideSeen:true,seen:0}:{hideSeen:false,seen:Date.now()});syncPriv();toast(on?"Last seen & online hidden":"Last seen & online visible")};
+$$("ep-rr").onclick=async function(){var off=!uc(uname()).noRead;await upUser({noRead:off});syncPriv();try{window._rl&&window._rl();render(rawCur)}catch(e){}toast(off?"Read receipts off":"Read receipts on")};
+$$("pfedit").addEventListener("click",function(){setTimeout(function(){$$("lkerr").textContent="";try{drawLinks();syncPriv()}catch(e){}},0)});
+
+/* ---------- chat tools sheet ---------- */
+var VIEWS=["menu","poll","sched","dis","lock"];
+function xview(v){VIEWS.forEach(function(k){$$("xv-"+k).hidden=k!==v});$$("xclose").textContent=v==="menu"?"Close":"Back"}
+function xopen(v){$$("xsheet").hidden=false;xview(v||"menu")}
+function xshut(){$$("xsheet").hidden=true}
+$$("xtb").onclick=function(){if(!room)return;$$("xdisv").textContent=disLabel(disGet(room));xopen("menu")};
+$$("xclose").onclick=function(){var inMenu=!$$("xv-menu").hidden;var fromLock=!$$("xv-lock").hidden;if(inMenu||fromLock)xshut();else xview("menu")};
+$$("xsheet").addEventListener("click",function(e){if(e.target===$$("xsheet"))xshut()});
+$$("xv-menu").onclick=function(e){var b=e.target.closest("[data-x]");if(!b)return;var k=b.dataset.x;
+  if(k==="poll"){$$("xpq").value="";document.querySelectorAll(".xpo").forEach(function(i){i.value=""});xview("poll")}
+  else if(k==="sched"){$$("xsto").textContent="To: "+($$("title").textContent||"this chat");var d=new Date(Date.now()+3600e3);d.setMinutes(0,0,0);$$("xsd").value=localISO(d);$$("xsd").min=localISO(new Date());$$("xst").value="";drawSched();xview("sched")}
+  else if(k==="dis"){drawDis();xview("dis")}};
+function localISO(d){return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,16)}
+
+/* ---------- polls ---------- */
+window.pollHTML=function(m){var p=m.poll||{},o=Array.isArray(p.o)?p.o:[],v=m.votes||{},vals=Object.keys(v).map(function(k){return v[k]}),tot=vals.length,my=v[uname()];
+  return '<div class="poll"><div class="pq">📊 '+esc(p.q||"")+'</div>'+o.map(function(t,i){var c=vals.filter(function(x){return x===i}).length,pc=tot?Math.round(c*100/tot):0;return '<div class="po'+(my===i?" on":"")+'" data-pi="'+i+'"><i style="width:'+pc+'%"></i><span>'+esc(t)+'</span><b>'+c+'</b></div>'}).join("")+'<div class="pt">'+tot+' vote'+(tot===1?"":"s")+' · tap to '+(my===undefined?"vote":"change")+'</div></div>'};
+$$("xpsend").onclick=async function(){if(!room)return;var q=$$("xpq").value.trim();var o=[].slice.call(document.querySelectorAll(".xpo")).map(function(i){return i.value.trim()}).filter(Boolean);
+  if(!q)return alert("Type a question for the poll.");if(o.length<2)return alert("Add at least 2 options.");
+  xshut();await postRaw({room:room,name:me.name,uid:me.id,ts:Date.now(),text:"📊 "+q,poll:{q:q,o:o.slice(0,4)},votes:{}})};
+$$("msgs").addEventListener("click",function(e){var po=e.target.closest(".po");if(!po)return;var el=po.closest(".m");if(!el)return;e.stopPropagation();e.preventDefault();
+  var id=el.dataset.id,m=cur.find(function(x){return (x.id||String(x.ts))===id});if(m&&!m.del)votePoll(m,+po.dataset.pi)},true);
+async function votePoll(m,i){var u=uname(),v=Object.assign({},m.votes||{});if(v[u]===i)delete v[u];else v[u]=i;m.votes=v;try{render(rawCur)}catch(e){}
+  if(db&&m.id){try{var path="messages/"+m.id,c=await db.doc(path).get(),base=Object.assign({},(c.exists&&c.data().votes)||{});if(v[u]===undefined)delete base[u];else base[u]=v[u];await db.doc(path).update({votes:base})}catch(e){}}}
+
+/* ---------- disappearing messages ---------- */
+var DIS=[["Off",0],["1 hour",3600e3],["24 hours",864e5],["7 days",6048e5]];
+function disGet(r){try{return +localStorage.getItem("chatly_dis_"+r)||0}catch(e){return 0}}
+function disLabel(ms){for(var i=0;i<DIS.length;i++)if(DIS[i][1]===ms)return DIS[i][0];return "Off"}
+window.chatDisScan=function(arr){try{var last=null;for(var i=0;i<arr.length;i++){var m=arr[i];if(m&&m.sys&&typeof m.dis==="number"&&(!last||m.ts>=last.ts))last=m}if(last)localStorage.setItem("chatly_dis_"+(last.room||room),String(last.dis))}catch(e){}};
+window.chatApplyExp=function(d){if(!d||d.sys||!d.room||d.exp)return;var dur=disGet(d.room);if(dur>0)d.exp=(d.ts||Date.now())+dur};
+function drawDis(){var cur_=disGet(room);$$("xdlist").innerHTML=DIS.map(function(x){return '<button type="button" class="xi'+(x[1]===cur_?" on":"")+'" data-d="'+x[1]+'"><span>'+x[0]+'</span><small>'+(x[1]===cur_?"✓ current":"")+'</small></button>'}).join("")}
+$$("xdlist").onclick=async function(e){var b=e.target.closest("[data-d]");if(!b||!room)return;var ms=+b.dataset.d;if(ms===disGet(room)){xshut();return}
+  var lab=disLabel(ms),nm=me.name||"Someone";
+  try{localStorage.setItem("chatly_dis_"+room,String(ms))}catch(_){}
+  xshut();await postRaw({room:room,name:me.name,uid:me.id,ts:Date.now(),sys:true,dis:ms,text:ms?nm+" turned on disappearing messages. New messages disappear after "+lab+".":nm+" turned off disappearing messages."})};
+setInterval(function(){try{if(!room||!Array.isArray(cur))return;var n=Date.now(),ex=cur.filter(function(m){return m.exp&&m.exp<=n});if(!ex.length)return;
+  ex.forEach(function(m){if(db&&m.id&&su(m)===uname())db.doc("messages/"+m.id).delete().catch(function(){})});window._rl&&window._rl();render(rawCur)}catch(e){}},15000);
+
+/* ---------- scheduled messages ---------- */
+function schKey(){return "chatly_sched_"+uname()}
+function schGet(){try{var a=JSON.parse(localStorage.getItem(schKey())||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+function schSet(a){try{localStorage.setItem(schKey(),JSON.stringify(a))}catch(e){}}
+function drawSched(){var a=schGet().filter(function(x){return x.room===room}).sort(function(p,q){return p.at-q.at});
+  $$("xslist").innerHTML=a.length?'<div class="xs" style="margin-top:12px">Scheduled in this chat</div>'+a.map(function(x){return '<div class="schrow"><div>'+esc(x.text.slice(0,60))+'<small>'+new Date(x.at).toLocaleString([],{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})+'</small></div><button type="button" data-sd="'+esc(x.id)+'">Cancel</button></div>'}).join(""):""}
+$$("xslist").onclick=function(e){var b=e.target.closest("[data-sd]");if(!b)return;schSet(schGet().filter(function(x){return x.id!==b.dataset.sd}));drawSched()};
+$$("xsgo").onclick=function(){if(!room)return;var t=$$("xst").value.trim(),at=new Date($$("xsd").value).getTime();
+  if(!t)return alert("Type the message to schedule.");if(!at||at<Date.now()+10000)return alert("Pick a time in the future.");
+  var a=schGet();a.push({id:Math.random().toString(36).slice(2),room:room,text:t,at:at});schSet(a);$$("xst").value="";drawSched();toast("Scheduled for "+new Date(at).toLocaleString([],{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}))};
+var schBusy=false;
+async function schTick(){if(schBusy||!me||!uname())return;var a=schGet(),n=Date.now(),due=a.filter(function(x){return x.at<=n});if(!due.length)return;schBusy=true;
+  try{var keep=a.filter(function(x){return x.at>n}),sent=0,fail=0;
+    for(var i=0;i<due.length;i++){var it=due[i],o=dmOther(it.room);
+      if(o&&(myBlocked().indexOf(o)>=0||!isFriend(o))){fail++;continue}
+      var m={room:it.room,text:it.text,uid:me.id,name:me.name,ts:Date.now()};
+      try{if(db){await db.collection("messages").add(m)}else{local.push(m);if(room===it.room)render(local.filter(function(x){return x.room===room}))}sent++}catch(e){keep.push(it)}}
+    schSet(keep);if(sent)toast("Scheduled message"+(sent>1?"s":"")+" sent");else if(fail)toast("A scheduled message couldn’t be sent (blocked or not friends)")}
+  finally{schBusy=false}}
+setInterval(schTick,10000);setTimeout(schTick,4000);
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")schTick()});
+
+/* ---------- app lock (PIN) ---------- */
+var LKK="chatly_lock",LKF="chatly_lockfail";
+function lkGet(){try{return JSON.parse(localStorage.getItem(LKK)||"null")}catch(e){return null}}
+function lkSave(o){try{if(o)localStorage.setItem(LKK,JSON.stringify(o));else localStorage.removeItem(LKK)}catch(e){}}
+async function xhash(s){try{var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,"0")}).join("")}catch(e){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return "f"+h}}
+function loggedIn(){try{var u=JSON.parse(localStorage.getItem("chatly_user")||"null");return !!(u&&u.name)}catch(e){return false}}
+var lkMode="unlock",lkBuf="",lkTmp="",lkCb=null;
+function lkDots(){var d=$$("lkdots").children;for(var i=0;i<4;i++)d[i].classList.toggle("on",i<lkBuf.length)}
+function lkShow(mode,title,cb,cancelable){lkMode=mode;lkBuf="";lkTmp="";lkCb=cb||null;$$("lkh").textContent=title;$$("lkmsg").textContent="";lkDots();$$("lkcancel").hidden=!cancelable;$$("lkforgot").hidden=mode!=="unlock";$$("lockov").hidden=false}
+function lkClose(){$$("lockov").hidden=true;lkBuf="";lkDots()}
+function failState(){try{return JSON.parse(localStorage.getItem(LKF)||"{}")}catch(e){return{}}}
+async function lkDone(){var pin=lkBuf;lkBuf="";lkDots();
+  if(lkMode==="set1"){lkTmp=pin;lkMode="set2";$$("lkh").textContent="Confirm PIN";$$("lkmsg").textContent="";return}
+  if(lkMode==="set2"){if(pin===lkTmp){var old=lkGet(),salt=Math.random().toString(36).slice(2)+Date.now().toString(36);lkSave({s:salt,h:await xhash(pin+salt),a:old&&typeof old.a==="number"?old.a:60});lkClose();syncPriv();toast("App lock is on");return}
+    lkMode="set1";lkTmp="";$$("lkh").textContent="Create a 4-digit PIN";$$("lkmsg").textContent="PINs didn’t match. Try again.";return}
+  var f=failState();if(f.until&&f.until>Date.now()){$$("lkmsg").textContent="Too many attempts. Try again in "+Math.ceil((f.until-Date.now())/1000)+"s";return}
+  var L=lkGet();if(!L){lkClose();return}
+  if(await xhash(pin+L.s)===L.h){try{localStorage.removeItem(LKF)}catch(e){}var cb=lkCb;lkClose();if(cb)cb();return}
+  var n=(f.n||0)+1,u=0;if(n%5===0)u=Date.now()+30000*Math.pow(2,Math.min(4,n/5-1));try{localStorage.setItem(LKF,JSON.stringify({n:n,until:u}))}catch(e){}
+  $$("lkmsg").textContent=u?"Too many attempts. Try again in "+Math.ceil((u-Date.now())/1000)+"s":"Wrong PIN. "+(5-n%5)+" tries left."}
+$$("lkpad").onclick=function(e){var b=e.target.closest("[data-k]");if(!b)return;var k=b.dataset.k;if(k==="x"){lkBuf=lkBuf.slice(0,-1)}else if(lkBuf.length<4){lkBuf+=k}lkDots();if(lkBuf.length===4)lkDone()};
+document.addEventListener("keydown",function(e){if($$("lockov").hidden)return;if(/^[0-9]$/.test(e.key)&&lkBuf.length<4){lkBuf+=e.key;lkDots();if(lkBuf.length===4)lkDone()}else if(e.key==="Backspace"){lkBuf=lkBuf.slice(0,-1);lkDots()}});
+$$("lkcancel").onclick=lkClose;
+$$("lkforgot").onclick=function(){if(!confirm("To reset the PIN you must log out. Log out and remove app lock?"))return;
+  lkSave(null);try{localStorage.removeItem(LKF)}catch(e){}lkClose();prof=null;try{localStorage.removeItem("chatly_user")}catch(err){}$$("ln").value="";$$("sub").textContent="";applyLogin()};
+$$("ep-lock").onclick=function(){var L=lkGet();if(!L){lkShow("set1","Create a 4-digit PIN",null,true)}else{$$("xl-time").value=String(L.a||0);xopen("lock")}};
+$$("xl-chg").onclick=function(){xshut();lkShow("verify","Enter current PIN",function(){lkShow("set1","Create a new 4-digit PIN",null,true)},true)};
+$$("xl-time").onchange=function(){var L=lkGet();if(L){L.a=+$$("xl-time").value;lkSave(L);toast("Saved")}};
+$$("xl-off").onclick=function(){xshut();lkShow("verify","Enter PIN to turn off",function(){lkSave(null);syncPriv();toast("App lock is off")},true)};
+var hiddenAt=0;
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"){hiddenAt=Date.now()}else{var L=lkGet();if(L&&hiddenAt&&loggedIn()&&$$("lockov").hidden&&Date.now()-hiddenAt>=(L.a||0)*1000)lkShow("unlock","Enter PIN")}});
+if(lkGet()&&loggedIn())lkShow("unlock","Enter PIN");
+})();
+</script>
 </body></html>
