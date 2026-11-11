@@ -435,7 +435,7 @@ header:has(#back:not([hidden])) #title{font-size:17px;font-weight:700;letter-spa
 #list{background:var(--panel)}
 .room{padding:10px 16px!important;gap:14px!important;border-bottom:0!important;background-image:linear-gradient(var(--line),var(--line));background-repeat:no-repeat;background-size:calc(100% - 82px) 1px;background-position:right bottom}
 .room .avw .av,.room .avw img.av,.room>.av,.room>img.av{width:52px!important;height:52px!important;font-size:22px!important}
-.room>div{min-width:0;flex:1}.room b{font-size:16px;font-weight:600}
+.room>div:not(.av){min-width:0;flex:1}.room>.av,.room>img.av{flex:none!important}.room b{font-size:16px;font-weight:600}
 .room>div span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #fab{background:#25d366!important;box-shadow:0 6px 18px #25d36666!important;bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
 #list{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))!important}
@@ -575,6 +575,28 @@ button{transition:transform .2s var(--ease),opacity .2s}
 #call.vid #cav{display:none}#call.vid #cnm{font-size:20px;margin-top:0}#call.vid #ctm{font-size:18px!important}
 .m.callm{align-self:center!important;max-width:90%!important;background:color-mix(in srgb,var(--text) 8%,var(--panel))!important;color:var(--text)!important;font-size:13.5px;text-align:center;border-radius:18px!important}
 .m.callm .n{display:none}.m.callm .t{text-align:center;color:var(--sub)!important}
+
+/* ===== per-chat customize ===== */
+#calls[hidden]{display:none!important}
+.m.me{background:var(--mc,linear-gradient(135deg,#fe2c55,#ff5c7c))!important}
+#mic,#send{background:var(--mc,linear-gradient(135deg,#fe2c55,#ff5c7c))!important}
+.m.me .vp svg{fill:var(--mc1,#fe2c55)}
+.m{border-radius:var(--mr,20px)!important}.m.me{border-radius:var(--mrm,20px)!important}
+.m.callm,.m.me.callm{border-radius:18px!important}
+#cst{display:none;background:none;border:0;color:inherit;padding:0 6px;cursor:pointer}header:has(#back:not([hidden])) #cst{display:flex}
+#cst svg{width:24px;height:24px;fill:currentColor}
+#cz{position:fixed;inset:0;z-index:100;background:#0007;display:flex;align-items:flex-end;justify-content:center;animation:fadein .2s ease}
+#cz[hidden]{display:none}
+#czb{width:100%;max-width:640px;max-height:82vh;overflow:auto;background:var(--glass2);-webkit-backdrop-filter:saturate(180%) blur(28px);backdrop-filter:saturate(180%) blur(28px);color:var(--text);border-radius:24px 24px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px));animation:slideup .3s cubic-bezier(.32,.72,0,1)}
+.czh{display:flex;justify-content:space-between;align-items:center;font-size:18px;margin-bottom:6px}
+.czh button{background:#25d366;color:#fff;border:0;border-radius:16px;padding:7px 18px;font:inherit;font-weight:700;cursor:pointer}
+.czs{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sub);margin:12px 0 6px}
+.czg{display:flex;flex-wrap:wrap;gap:10px}
+.czg button,.czg label{width:50px;height:50px;border-radius:14px;border:2px solid var(--line);padding:0;cursor:pointer;display:grid;place-items:center;font-size:12px;font-weight:700;background-size:cover;background-position:center}
+.czg .on{border-color:#25d366;box-shadow:0 0 0 2px #25d36655}
+.czg .pl{background:var(--bg);color:var(--sub);font-size:22px}.czg label input{display:none}
+.czg button.sh{width:auto;height:38px;padding:0 16px;background:var(--bg);color:var(--text);font-size:14px}
+#czr{width:100%;margin-top:16px;background:none;border:1px solid #fe2c55;color:#fe2c55;border-radius:14px;padding:11px;font:inherit;font-weight:600;cursor:pointer}
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
@@ -592,7 +614,7 @@ button{transition:transform .2s var(--ease),opacity .2s}
 <form id="f"><span id="attw"><button type="button" id="att" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6z"/></svg></button><input type="file" id="fi" aria-label="Attach file"></span><input id="in" placeholder="Type a message" autocomplete="off"><button type="button" id="mic" aria-label="Voice message"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></button><button id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></div>
 </div>
 <div id="prof" hidden><div id="pfb"><div id="pfban"><div id="pfbimg"></div></div><div id="pfh"><button id="pfx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><b>Profile</b></div><div id="pfavw"><div id="pfav"></div><button type="button" id="pfch" aria-label="Change photo"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></button></div><input type="file" id="pfi" accept="image/*" hidden><input type="file" id="pbi" accept="image/*" hidden><button type="button" id="pfedit"><svg viewBox="0 0 24 24" class=""><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit profile</span></button><div id="pfn"></div><div id="pfu"></div><div id="pfstars"><button type="button" id="pfstarsbtn"><svg viewBox="0 0 24 24" class="st"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>Starred messages</span><svg viewBox="0 0 24 24" class="chv"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button></div><div id="pfst"><div class="sc c1"><svg viewBox="0 0 24 24" class=""><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><i class="sv"><b id="st1">0</b><span>Chats</span></i></div><div id="stfg" class="sc c2 clk"><svg viewBox="0 0 24 24" class=""><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><i class="sv"><b id="st2">0</b><span>Following</span></i></div><div id="stfr" class="sc c3 clk"><svg viewBox="0 0 24 24" class=""><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><i class="sv"><b id="st3">0</b><span>Followers</span></i></div></div><div id="pfact"><button type="button" id="pfsh"><svg viewBox="0 0 24 24" class=""><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span>Share account</span></button><button type="button" id="pfcp"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg><span>Copy link</span></button></div><div id="pflink"><span class="lic"><svg viewBox="0 0 24 24" class=""><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span><input id="pfs" readonly><button type="button" id="pfcp2" aria-label="Copy"><svg viewBox="0 0 24 24" class=""><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button></div><div id="pferr"></div><div id="pfnc"><span class="lic sh"><svg viewBox="0 0 24 24" class=""><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span><div class="nt"><b>Notifications</b><div id="pfntm"></div></div><button type="button" id="pfnt">Enable</button></div><div id="pfver">App version 2026-11-10 · d</div><div id="pfbl"></div><button type="button" id="pfout"><svg viewBox="0 0 24 24" class=""><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg><span>Sign out</span></button></div></div>
-<div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><div class="eh">Chat wallpaper</div><div id="wplist"></div><button type="button" id="ep-x">Done</button></div>
+<div id="esheet" hidden><div id="esh">Edit profile</div><button type="button" id="ep-photo">Change profile photo</button><button type="button" id="ep-banner">Add / change banner</button><button type="button" id="ep-rmb">Remove banner</button><div class="eh">App font (applies to the whole app)</div><div id="fontlist"></div><button type="button" id="ep-x">Done</button></div>
 <div id="crp" hidden><div id="crph"><button type="button" id="crpx">Cancel</button><span>Crop banner</span><button type="button" id="crpa">Apply</button></div><div id="crps"><canvas id="crpc"></canvas></div><div id="crpz"><span>Zoom</span><input type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom"></div></div>
 <div id="npop" hidden><div id="npb"><div class="npi"><svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg></div><b>Turn on notifications</b><p>Get an alert for every new message, even when Chatly is closed.</p><button type="button" id="npy">Allow notifications</button><button type="button" id="npn">Not now</button></div></div>
 <div id="owp" hidden><div id="owh"><button type="button" id="owx" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span>Owner tools</span></div><input id="owq" placeholder="Search accounts" autocomplete="off"><div id="owc"></div><div id="owl"></div></div>
@@ -1419,4 +1441,36 @@ function logCall(t){const id=_cmid,d=_cst?Math.round((Date.now()-_cst)/1000):0;_
     call.classList.toggle("on",/^Connected/.test($("cs").textContent))},400)})();
 function markCalls(){document.querySelectorAll("#msgs .m").forEach(el=>{const t=el.textContent||"";if(t.length<100&&/(📞|📹)/.test(t))el.classList.add("callm")})}
 (function(){let t=0;new MutationObserver(()=>{clearTimeout(t);t=setTimeout(markCalls,30)}).observe($("msgs"),{childList:true,subtree:true})})();
+
+/* ===== per-chat wallpaper + bubble customize (opened from the chat header) ===== */
+var CZC=[["pink","#fe2c55","#ff5c7c"],["green","#3bd35f","#2fbf55"],["blue","#0a84ff","#5ac8fa"],["purple","#7c4dff","#b388ff"],["orange","#ff9500","#ffb340"],["teal","#0f766e","#14b8a6"],["dark","#2c2c2e","#48484a"]],_czr=null;
+function czGet(){try{return JSON.parse(localStorage.getItem("chatly_cz_"+room)||"{}")}catch(e){return{}}}
+function czSet(k,v){const c=czGet();c[k]=v;try{localStorage.setItem("chatly_cz_"+room,JSON.stringify(c))}catch(e){alert("Not enough space to save this wallpaper");return}czApply();czDraw()}
+function czApply(){const st=$("chat").style;["--wpi","--wpc","--wps","--mc","--mc1","--mr","--mrm"].forEach(k=>st.removeProperty(k));if(!room)return;const c=czGet();
+  if(c.wp==="off"){st.setProperty("--wpi","none");st.setProperty("--wpc","var(--panel)")}
+  else if((c.wp||"").startsWith("data:")){st.setProperty("--wpi",'url("'+c.wp+'")');st.setProperty("--wps","cover")}
+  else if(c.wp){const p=WPS.find(x=>x.id===c.wp);if(p&&p.i){st.setProperty("--wpi",p.i);if(p.c)st.setProperty("--wpc",p.c);st.setProperty("--wps",p.s||"cover")}}
+  const k=CZC.find(x=>x[0]===c.c);if(k){st.setProperty("--mc","linear-gradient(135deg,"+k[1]+","+k[2]+")");st.setProperty("--mc1",k[1])}
+  if(c.sh==="classic"){st.setProperty("--mr","20px 20px 20px 5px");st.setProperty("--mrm","20px 20px 5px 20px")}else if(c.sh==="square"){st.setProperty("--mr","8px");st.setProperty("--mrm","8px")}}
+function czDraw(){const c=czGet(),w=c.wp||"";
+  $("czw").innerHTML='<button type="button" data-w="off" class="'+(w==="off"?"on":"")+'" style="background:var(--bg);color:var(--sub)">Off</button>'
+   +WPS.filter(p=>p.i).map(p=>'<button type="button" data-w="'+p.id+'" class="'+(w===p.id?"on":"")+'" style="background:'+(p.c?p.c+",":"")+p.i+(p.s?";background-size:"+p.s:"")+'"></button>').join("")
+   +'<label class="pl'+(w.startsWith("data:")?" on":"")+'">+<input type="file" accept="image/*" id="czf"></label>';
+  $("czc").innerHTML=CZC.map(k=>'<button type="button" data-c="'+k[0]+'" class="'+((c.c||"pink")===k[0]?"on":"")+'" style="background:linear-gradient(135deg,'+k[1]+','+k[2]+')"></button>').join("");
+  $("czh").innerHTML=[["round","Round"],["classic","Classic"],["square","Square"]].map(x=>'<button type="button" class="sh'+((c.sh||"round")===x[0]?" on":"")+'" data-s="'+x[0]+'">'+x[1]+'</button>').join("")}
+(function(){const m=document.createElement("div");m.id="cz";m.hidden=true;
+  m.innerHTML='<div id="czb"><div class="czh"><b>Customize chat</b><button type="button" id="czx">Done</button></div><div class="czs">Wallpaper</div><div class="czg" id="czw"></div><div class="czs">Your bubble colour</div><div class="czg" id="czc"></div><div class="czs">Bubble shape</div><div class="czg" id="czh"></div><button type="button" id="czr">Reset this chat</button></div>';
+  document.body.appendChild(m);
+  m.onclick=e=>{if(e.target===m||e.target.id==="czx"){m.hidden=true;return}
+    if(e.target.id==="czr"){try{localStorage.removeItem("chatly_cz_"+room)}catch(x){}czApply();czDraw();return}
+    const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.w!==undefined)czSet("wp",b.dataset.w);else if(b.dataset.c)czSet("c",b.dataset.c);else if(b.dataset.s)czSet("sh",b.dataset.s)};
+  m.onchange=e=>{if(e.target.id!=="czf")return;const f=e.target.files[0];e.target.value="";if(!f)return;const im=new Image(),u=URL.createObjectURL(f);
+    im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);czSet("wp",c.toDataURL("image/jpeg",.7))};im.onerror=()=>URL.revokeObjectURL(u);im.src=u};
+  const b=document.createElement("button");b.id="cst";b.type="button";b.setAttribute("aria-label","Customize chat");
+  b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.7-.5-1.2 0-1.1.9-2 2-2h2.4a3.6 3.6 0 0 0 3.6-3.6C21 6.5 17 3 12 3zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>';
+  const h=document.querySelector("header"),cl=$("calls");if(h)h.insertBefore(b,cl||null);
+  b.onclick=()=>{if(!room)return;czDraw();m.hidden=false};
+  setInterval(()=>{if(room!==_czr){_czr=room;czApply();if(!room)m.hidden=true}},250)})();
 </script></body></html>
