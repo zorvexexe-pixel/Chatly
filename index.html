@@ -684,11 +684,47 @@ header:has(#back:not([hidden])) #chatlySettingsBtn,header:has(#back:not([hidden]
 #chat[data-bubble="lava"]{--b-in:#fee2e2;--b-out:linear-gradient(135deg,#b91c1c,#f97316);--b-radius:18px;--b-shadow:0 4px 14px #ef444433}
 @media(prefers-reduced-motion:no-preference){#chatlySettings:not([hidden]),#chatlyNotifications:not([hidden]){animation:slidein .22s cubic-bezier(.2,.8,.2,1)}.cly-card{animation:fadein .2s ease}}
 
+
+/* ===== Chatly final polish: compact chat header, immersive wallpaper, spider web bubble ===== */
+header:has(#back:not([hidden])) #chatlySettingsBtn,
+header:has(#back:not([hidden])) #chatlyBell{display:none!important}
+header:has(#back:not([hidden])) #cst{display:flex!important;align-items:center;justify-content:center;width:42px;height:42px;margin-left:auto;border-radius:15px;background:#ffffff20;border:1px solid #ffffff55;color:#fff;box-shadow:0 5px 16px #0002;backdrop-filter:blur(14px)}
+header:has(#back:not([hidden])) #cst svg{width:23px;height:23px}
+#msgs{background-repeat:no-repeat!important;background-size:cover!important;background-position:center center!important;background-attachment:local!important;background-origin:border-box!important;isolation:isolate}
+#msgs .m{position:relative;overflow:visible;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);transition:transform .18s ease,box-shadow .2s ease}
+#czb{max-height:min(84dvh,760px)!important;padding:18px 18px calc(22px + env(safe-area-inset-bottom,0px))!important}
+#czw button{position:relative;overflow:hidden}
+#czw button:not([data-w="off"]){box-shadow:inset 0 0 0 1px #ffffff45}
+#czw button.on,#czc button.on,#czh button.on{outline:2px solid #25d366;outline-offset:2px}
+#czh button.sh{min-width:92px!important}
+#czh button[data-s="spider"]{background:linear-gradient(145deg,#17132c,#3b155b)!important;color:#fff!important;border-color:#a855f7!important}
+#czh button[data-s="spider"]::after{content:"🕷";margin-left:6px}
+#chat[data-cly-shape="spider"] .m{background:linear-gradient(145deg,#21152f,#42205b)!important;color:#fff!important;border:1px solid #c084fc66!important;box-shadow:0 5px 18px #160b2c55,0 0 0 1px #a855f722!important;overflow:hidden!important}
+#chat[data-cly-shape="spider"] .m.me{background:linear-gradient(145deg,#301044,#701c74)!important;color:#fff!important}
+#chat[data-cly-shape="spider"] .m .n,#chat[data-cly-shape="spider"] .m .t{color:#f3ddff!important}
+#chat[data-cly-shape="spider"] .m::after{content:"";position:absolute;right:2px;top:2px;width:54px;height:54px;pointer-events:none;opacity:.46;background-repeat:no-repeat;background-size:contain;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23f3ddff' stroke-width='1.7' opacity='.95'%3E%3Cpath d='M100 0H0v100M100 0L0 100M100 0L0 50M100 0L50 100M100 0L25 100M100 0L0 75M100 0L75 100M100 0L0 25M100 0L100 100M100 0L50 0'/%3E%3Cpath d='M0 16Q42 15 16 0M0 34Q65 34 34 0M0 52Q85 52 52 0M0 70Q100 70 70 0M0 88Q100 88 88 0'/%3E%3C/g%3E%3C/svg%3E")}
+#chat[data-cly-shape="spider"] .m::before{content:"🕷";position:absolute;right:7px;top:7px;z-index:1;font-size:14px;opacity:.9;filter:drop-shadow(0 1px 2px #0008);pointer-events:none}
+#chat[data-cly-shape="spider"] .m>*{position:relative;z-index:2}
+#chat[data-cly-shape="spider"] .m::after{z-index:1}
+#chat[data-cly-shape="spider"] .m{padding-right:46px!important}
+#cst:focus-visible,#cz button:focus-visible{outline:3px solid #25d366;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){#czb,#cst,#msgs .m{animation:none!important;transition:none!important}}
+
 </style><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+
+<style>
+#msgs{background-color:var(--wpc,var(--bg))!important;background-image:var(--wpi,none)!important;background-repeat:no-repeat!important;background-size:cover!important;background-position:center!important}
+#msgs .m{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#chat[data-cly-shape="spider"] .m{isolation:isolate}
+#chat[data-cly-shape="spider"] .m::after{mix-blend-mode:screen}
+#chat[data-cly-shape="spider"] .m::before{line-height:1}
+#chatlySettingsBtn.cly-chat-hidden,#chatlyBell.cly-chat-hidden{display:none!important}
+</style>
+
 </head>
 <body><div id="app">
 <header><button id="back" hidden aria-label="Back"><svg viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></button><span id="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#25d366"/><path fill="#fff" d="M24 8a16 16 0 0 0-13.8 24.1L8 40l8.2-2.1A16 16 0 1 0 24 8z"/><path fill="#25d366" transform="translate(14 14) scale(.83)" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></span><div id="titlew" style="cursor:pointer"><span id="title">Chatly</span><small id="sub"></small></div><span style="flex:1"></span><button id="bl" aria-label="Block or unblock" hidden><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 6.3 3.1L7.1 18.3A8 8 0 0 1 12 4zm0 16a8 8 0 0 1-6.3-3.1L16.9 5.7A8 8 0 0 1 12 20z"/></svg></button><div id="calls" hidden><button id="ac" aria-label="Audio call"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></button><button id="vc" aria-label="Video call"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg></button></div><button id="pf" aria-label="Profile" hidden><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></button><button id="out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 4h8V2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-2H4z"/></svg></button></header>
@@ -857,7 +893,7 @@ async function acct(create){
   if(create){if(!(await isOwner())&&(await devAll()).length>=DEV_MAX)return alert("Only "+DEV_MAX+" accounts can be created on one device. Please log in to one of your existing accounts.");if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists&&s.data()&&s.data().pw)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
     const ph="";
     try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph)}
-  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");if(d.pw!==h)return alert("Wrong password.");fin(d.name||n,d.phone)}
+  else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");const su=Number(d.suspendedUntil)||0;if((d.suspended===true&&(!su||su>Date.now()))||su>Date.now())return alert("This account is suspended by the owner."+(su>Date.now()?"\nTry again after "+new Date(su).toLocaleString():""));if(d.pw!==h)return alert("Wrong password.");fin(d.name||n,d.phone)}
 }
 let signup=false;
 $("ln").addEventListener("input",function(){if(signup){const c=this.value.replace(/[^A-Za-z0-9_@-]/g,"");if(c!==this.value)this.value=c}});
@@ -1476,7 +1512,7 @@ function wpDraw(){const box=$("wplist");if(!box)return;const v=wpGet();
    +'<label class="pl'+(v.startsWith("data:")?" on":"")+'">+<input type="file" accept="image/*" id="wpf"></label>';
   box.querySelectorAll("button").forEach(b=>b.onclick=()=>{try{localStorage.setItem("chatly_wp",b.dataset.w)}catch(e){}wpApply();wpDraw()});
   $("wpf").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const im=new Image(),u=URL.createObjectURL(f);
-    im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+    im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));
       c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
       try{localStorage.setItem("chatly_wp",c.toDataURL("image/jpeg",.72))}catch(err){alert("Photo is too big to save as wallpaper");return}wpApply();wpDraw()};
     im.onerror=()=>URL.revokeObjectURL(u);im.src=u}}
@@ -1553,7 +1589,7 @@ function markCalls(){document.querySelectorAll("#msgs .m").forEach(el=>{const t=
 var CZC=[["pink","#fe2c55","#ff5c7c"],["green","#3bd35f","#2fbf55"],["blue","#0a84ff","#5ac8fa"],["purple","#7c4dff","#b388ff"],["orange","#ff9500","#ffb340"],["teal","#0f766e","#14b8a6"],["dark","#2c2c2e","#48484a"]],_czr=null;
 function czGet(){try{return JSON.parse(localStorage.getItem("chatly_cz_"+room)||"{}")}catch(e){return{}}}
 function czSet(k,v){const c=czGet();c[k]=v;try{localStorage.setItem("chatly_cz_"+room,JSON.stringify(c))}catch(e){alert("Not enough space to save this wallpaper");return}czApply();czDraw()}
-function czApply(){const st=$("chat").style;["--wpi","--wpc","--wps","--mc","--mc1","--mr","--mrm"].forEach(k=>st.removeProperty(k));if(!room)return;const c=czGet();
+function czApply(){const st=$("chat").style;["--wpi","--wpc","--wps","--mc","--mc1","--mr","--mrm"].forEach(k=>st.removeProperty(k));$("chat").removeAttribute("data-cly-shape");if(!room)return;const c=czGet();if(c.sh==="spider")$("chat").setAttribute("data-cly-shape","spider");
   if(c.wp==="off"){st.setProperty("--wpi","none");st.setProperty("--wpc","var(--panel)")}
   else if((c.wp||"").startsWith("data:")){st.setProperty("--wpi",'url("'+c.wp+'")');st.setProperty("--wps","cover")}
   else if(c.wp){const p=WPS.find(x=>x.id===c.wp);if(p&&p.i){st.setProperty("--wpi",p.i);if(p.c)st.setProperty("--wpc",p.c);st.setProperty("--wps",p.s||"cover")}}
@@ -1563,7 +1599,7 @@ function czApply(){const st=$("chat").style;["--wpi","--wpc","--wps","--mc","--m
     square:["8px","8px"],pill:["28px","28px"],soft:["24px 24px 24px 8px","24px 24px 8px 24px"],
     cut:["18px 18px 4px 18px","18px 18px 18px 4px"],
     bubble:["22px 22px 22px 6px","22px 22px 6px 22px"],
-    sharp:["3px","3px"]
+    sharp:["3px","3px"],spider:["19px 19px 19px 6px","19px 19px 6px 19px"]
   };
   const sh=shapes[c.sh||"round"]||shapes.round;st.setProperty("--mr",sh[0]);st.setProperty("--mrm",sh[1])}
 function czDraw(){const c=czGet(),w=c.wp||"";
@@ -1571,7 +1607,7 @@ function czDraw(){const c=czGet(),w=c.wp||"";
    +WPS.filter(p=>p.i).map(p=>'<button type="button" data-w="'+p.id+'" class="'+(w===p.id?"on":"")+'" style="background:'+(p.c?p.c+",":"")+p.i+(p.s?";background-size:"+p.s:"")+'"></button>').join("")
    +'<label class="pl'+(w.startsWith("data:")?" on":"")+'">+<input type="file" accept="image/*" id="czf"></label>';
   $("czc").innerHTML=CZC.map(k=>'<button type="button" aria-label="'+k[0]+' bubble colour" data-c="'+k[0]+'" class="'+((c.c||"pink")===k[0]?"on":"")+'" style="background:linear-gradient(135deg,'+k[1]+','+k[2]+')"></button>').join("");
-  const shapes=[["round","Round"],["classic","Classic"],["square","Square"],["pill","Pill"],["soft","Soft"],["cut","Cut corner"],["bubble","Chat tail"],["sharp","Sharp"]];
+  const shapes=[["round","Round"],["classic","Classic"],["square","Square"],["pill","Pill"],["soft","Soft"],["cut","Cut corner"],["bubble","Chat tail"],["sharp","Sharp"],["spider","Spider Web 🕷"]];
   $("czh").innerHTML=shapes.map(x=>'<button type="button" class="sh'+((c.sh||"round")===x[0]?" on":"")+'" data-s="'+x[0]+'">'+x[1]+'</button>').join("")}
 (function(){const m=document.createElement("div");m.id="cz";m.hidden=true;
   m.innerHTML='<div id="czb"><div class="czh"><b>Customize chat</b><button type="button" id="czx">Done</button></div><div class="czs">Wallpaper</div><div class="czg" id="czw"></div><div class="czs">Your bubble colour</div><div class="czg" id="czc"></div><div class="czs">Bubble shape</div><div class="czg" id="czh"></div><button type="button" id="czr">Reset this chat</button></div>';
@@ -1582,7 +1618,7 @@ function czDraw(){const c=czGet(),w=c.wp||"";
     if(b.dataset.w!==undefined)czSet("wp",b.dataset.w);else if(b.dataset.c)czSet("c",b.dataset.c);else if(b.dataset.s)czSet("sh",b.dataset.s)};
   m.onchange=e=>{if(e.target.id!=="czf")return;const f=e.target.files[0];e.target.value="";if(!f)return;const im=new Image(),u=URL.createObjectURL(f);
     im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
-      c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);czSet("wp",c.toDataURL("image/jpeg",.7))};im.onerror=()=>URL.revokeObjectURL(u);im.src=u};
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);try{czSet("wp",c.toDataURL("image/jpeg",.76))}catch(err){alert("This image could not be saved. Choose a smaller photo.")}};im.onerror=()=>URL.revokeObjectURL(u);im.src=u};
   const b=document.createElement("button");b.id="cst";b.type="button";b.setAttribute("aria-label","Customize chat");
   b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.7-.5-1.2 0-1.1.9-2 2-2h2.4a3.6 3.6 0 0 0 3.6-3.6C21 6.5 17 3 12 3zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>';
   const h=document.querySelector("header"),cl=$("calls");if(h)h.insertBefore(b,cl||null);
@@ -1697,4 +1733,403 @@ function czDraw(){const c=czGet(),w=c.wp||"";
  setTimeout(()=>{if(room)applyBubble();const b=$('pfbio');if(b&&prof)b.textContent=String(uc(uname()).bio||st.bio||'')},500);
 })();
 </script>
+
+<script>
+/* ===== Chatly final patch: compact chat header + owner suspension ===== */
+(()=>{
+  const $=id=>document.getElementById(id);
+  function compactChatHeader(){
+    const inChat=!!(typeof room!=="undefined"&&room);
+    $("chatlySettingsBtn")?.classList.toggle("cly-chat-hidden",inChat);
+    $("chatlyBell")?.classList.toggle("cly-chat-hidden",inChat);
+    $("cst")?.classList.toggle("cly-chat-visible",inChat);
+  }
+  const style=document.createElement("style");
+  style.textContent="#chatlySettingsBtn.cly-chat-hidden,#chatlyBell.cly-chat-hidden{display:none!important}#cst.cly-chat-visible{display:flex!important}";
+  document.head.appendChild(style);
+  const chatRoot=$("chat");
+  if(chatRoot)new MutationObserver(compactChatHeader).observe(chatRoot,{attributes:true,attributeFilter:["style"]});
+  const back=$("back");if(back)back.addEventListener("click",()=>setTimeout(compactChatHeader,0));
+  setInterval(compactChatHeader,700);compactChatHeader();
+
+  if(typeof open==="function"&&typeof czApply==="function"){
+    const baseOpen=open;
+    open=function(){const result=baseOpen.apply(this,arguments);try{czApply()}catch(e){}compactChatHeader();return result};
+  }
+
+  if(typeof owDraw==="function"&&$("owl")){
+    const baseOwnerDraw=owDraw;
+    function suspended(d){const until=Number(d&&d.suspendedUntil)||0;return !!((d&&d.suspended===true&&(!until||until>Date.now()))||until>Date.now())}
+    owDraw=function(){
+      baseOwnerDraw();
+      const q=$("owq").value.trim().toLowerCase().replace(/^@/,""),me=uname();
+      const ks=Object.keys(usersCache).filter(k=>usersCache[k]).filter(k=>!q||k.includes(q)||String(usersCache[k].name||"").toLowerCase().includes(q)).sort();
+      $("owl").innerHTML=ks.map(k=>{
+        const d=usersCache[k]||{},n=d.name||k,is=suspended(d),until=Number(d.suspendedUntil)||0;
+        const status=is?'<small class="owstatus">● Suspended'+(until?' · until '+new Date(until).toLocaleString():' · permanent')+'</small>':'<small class="owstatus ok">● Active</small>';
+        const controls=k===me?"":is
+          ?'<button type="button" class="owunsuspend" data-u="'+esc(k)+'">Unsuspend</button>'
+          :'<select class="owduration" data-u="'+esc(k)+'" aria-label="Suspension duration"><option value="86400000">1 day</option><option value="604800000" selected>7 days</option><option value="2592000000">30 days</option><option value="0">Permanent</option></select><button type="button" class="owsuspend" data-u="'+esc(k)+'">Suspend</button>';
+        return '<div class="owr"><span class="owa">'+avatar(k,n,40)+'</span><div class="owi"><b>'+esc(n)+'</b><small>@'+esc(k)+(k===me?' · you':'')+'</small>'+status+'</div><div class="owactions">'+controls+(k===me?'':'<button type="button" class="owdel" data-u="'+esc(k)+'">Delete</button>')+'</div></div>';
+      }).join("")||'<div class="empty">No accounts found.</div>';
+    };
+    const css=document.createElement("style");
+    css.textContent='.owr{align-items:center;flex-wrap:wrap}.owactions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}.owduration{max-width:100px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);padding:7px 5px;font:inherit;font-size:12px}.owsuspend,.owunsuspend{border:1px solid #f59e0b;background:#f59e0b18;color:#d97706;border-radius:12px;padding:7px 10px;font:inherit;font-size:12px;font-weight:700}.owunsuspend{border-color:#14b8a6;background:#14b8a61a;color:#0f9f8d}.owstatus{display:block;margin-top:3px;color:#e59a22;font-size:11px}.owstatus.ok{color:#16a36d}.owdel{font-size:12px;padding:7px 10px}@media(max-width:390px){.owactions{width:100%;padding-left:52px;justify-content:flex-start}.owduration{max-width:105px}}';
+    document.head.appendChild(css);
+    $("owl").addEventListener("click",async e=>{
+      const b=e.target.closest(".owsuspend,.owunsuspend");if(!b)return;
+      const u=b.dataset.u;if(!u||u===uname())return;
+      if(!(await isOwner())){alert("Owner mode is required.");return}
+      if(!window.SB||!SB.raw||typeof SB.raw.rpc!=="function"){alert("Server connection is unavailable.");return}
+      let code=window._oc;
+      if(!code){code=prompt("Owner passcode");if(!code)return;code=code.trim();if(await sha256(code)!==OWNER_HASH){alert("Wrong owner passcode.");return}window._oc=code}
+      const unsuspend=b.classList.contains("owunsuspend");
+      const duration=$("owl").querySelector('.owduration[data-u="'+CSS.escape(u)+'"]');
+      const choice=Number(duration&&duration.value);
+      const until=unsuspend?-1:choice===0?0:Date.now()+(choice||604800000);
+      if(!confirm(unsuspend?"Unsuspend @"+u+"?":"Suspend @"+u+(until?" until "+new Date(until).toLocaleString():" permanently")+"?"))return;
+      b.disabled=true;b.textContent="…";
+      try{
+        const r=await SB.raw.rpc("owner_suspend_user",{target:u,until_ms:until,code:code});
+        if(r.error){
+          const msg=String(r.error.message||"");
+          if(/wrong owner code/i.test(msg))window._oc="";
+          throw new Error(/could not find the function|schema cache/i.test(msg)?"Run the supplied owner_suspend_user SQL once in Supabase SQL Editor, then reload Chatly.":msg);
+        }
+        const snap=await db.doc("users/"+u).get();
+        if(!snap.exists)throw new Error("Account not found after update.");
+        usersCache[u]=snap.data();owDraw();
+      }catch(err){b.disabled=false;b.textContent=unsuspend?"Unsuspend":"Suspend";alert("Couldn’t update suspension: "+(err.message||err))}
+    });
+  }
+
+  setInterval(async()=>{
+    try{
+      if(!prof||!db)return;
+      const u=uname(),snap=await db.doc("users/"+u).get();if(!snap.exists)return;
+      const d=snap.data()||{},until=Number(d.suspendedUntil)||0;
+      if((d.suspended===true&&(!until||until>Date.now()))||until>Date.now()){
+        if(room)$("back").click();
+        prof=null;try{localStorage.removeItem("chatly_user")}catch(e){}
+        $("prof").hidden=true;if($("owp"))$("owp").hidden=true;applyLogin();
+        alert("Your Chatly account has been suspended by the owner."+(until>Date.now()?"\nSuspension ends: "+new Date(until).toLocaleString():""));
+      }
+    }catch(e){}
+  },25000);
+})();
+</script>
+
+
+<style id="chatly-ultimate-upgrade">
+:root{--cly-accent:#14b8a6}
+#clyLockedFolderBtn{display:flex;align-items:center;gap:10px;width:calc(100% - 24px);margin:10px 12px 4px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(120deg,#14b8a615,#6366f110);color:var(--text);font:inherit;font-weight:750;text-align:left;cursor:pointer}
+#clyLockedFolderBtn[hidden]{display:none}
+#clyLockedFolderBtn .cly-lock-count{margin-left:auto;padding:3px 8px;border-radius:20px;background:var(--bg);font-size:11px;color:var(--sub)}
+#clyLockModal,#clyLockedFolder{position:fixed;inset:0;z-index:260;background:#050914b8;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:22px}
+#clyLockModal[hidden],#clyLockedFolder[hidden]{display:none}
+.cly-lock-card{width:min(100%,380px);padding:23px;border:1px solid #ffffff25;border-radius:26px;background:var(--panel);color:var(--text);box-shadow:0 24px 80px #0006;animation:clyLockIn .25s ease}
+@keyframes clyLockIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.cly-lock-mark{width:58px;height:58px;margin:0 auto 14px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(140deg,#14b8a6,#6366f1);color:white;font-size:26px}
+.cly-lock-card h2{text-align:center;font-size:20px;margin:0 0 6px}
+.cly-lock-card p{text-align:center;color:var(--sub);font-size:13px;margin:0 0 18px}
+.cly-pin{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:700 22px/1.2 system-ui;letter-spacing:12px;text-align:center;outline:0}
+.cly-pin:focus{border-color:#14b8a6;box-shadow:0 0 0 3px #14b8a622}
+.cly-lock-actions{display:flex;gap:9px;margin-top:14px}
+.cly-lock-actions button{flex:1;border:0;border-radius:13px;padding:12px;background:linear-gradient(135deg,#0f9f91,#6366f1);color:white;font-weight:800;font-size:14px}
+.cly-lock-actions button.secondary{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+.cly-lock-error{min-height:18px;margin-top:8px;text-align:center;color:#ef4444;font-size:12px}
+#clyLockedFolder .cly-lock-card{max-height:82dvh;overflow:auto}
+.cly-locked-item{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line);border-radius:15px;background:var(--bg);margin:8px 0;cursor:pointer}
+.cly-locked-item b{display:block;font-size:14px}.cly-locked-item small{color:var(--sub)}
+.cly-lock-toolrow{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.cly-lock-toolrow button,.cly-toolbtn{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:10px 12px;font:inherit;font-size:13px;font-weight:700}
+#czb .cly-extra-controls{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+#czb .cly-extra-controls select{width:100%;padding:11px;border-radius:12px;background:var(--bg);color:var(--text);border:1px solid var(--line);font:inherit}
+#czb .cly-extra-controls .cly-toolbtn{margin:5px 5px 0 0}
+#chat[data-cly-effect="pop"] .m{animation:clyMsgPop .26s cubic-bezier(.2,.8,.2,1) both}
+#chat[data-cly-effect="float"] .m{animation:clyMsgFloat .38s cubic-bezier(.2,.8,.2,1) both}
+#chat[data-cly-effect="glow"] .m{animation:clyMsgGlow .55s ease both}
+@keyframes clyMsgPop{from{opacity:0;transform:scale(.92) translateY(7px)}to{opacity:1;transform:none}}
+@keyframes clyMsgFloat{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes clyMsgGlow{0%{opacity:0;box-shadow:0 0 0 #14b8a600}45%{opacity:1;box-shadow:0 0 24px #14b8a655}100%{box-shadow:var(--b-shadow,0 2px 8px #0002)}}
+.cly-profile-accent{border-color:var(--cly-profile-accent,#14b8a6)!important}
+#pfedit{border-color:var(--cly-profile-accent,#14b8a6)!important}
+.cly-owner-extra{padding:12px;margin:10px 12px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.cly-owner-extra h3{margin:0 0 8px;font-size:14px}
+.cly-audit-row{padding:9px 0;border-top:1px solid var(--line);font-size:12px;color:var(--sub)}
+.cly-audit-row b{color:var(--text)}
+.cly-report-row{padding:10px;border:1px solid var(--line);border-radius:12px;margin:7px 0;font-size:12px}
+.cly-profile-fields{display:grid;gap:9px;margin-top:10px}
+.cly-profile-fields label{font-size:12px;color:var(--sub);font-weight:700}
+.cly-profile-fields input{display:block;width:100%;margin-top:5px;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);font:inherit}
+@media(prefers-reduced-motion:reduce){#chat[data-cly-effect] .m,.cly-lock-card{animation:none!important}}
+</style>
+
+
+
+<style id="chatly-ultimate-upgrade">
+:root{--cly-accent:#14b8a6}
+#clyLockedFolderBtn{display:flex;align-items:center;gap:10px;width:calc(100% - 24px);margin:10px 12px 4px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(120deg,#14b8a615,#6366f110);color:var(--text);font:inherit;font-weight:750;text-align:left;cursor:pointer}
+#clyLockedFolderBtn[hidden]{display:none}
+#clyLockedFolderBtn .cly-lock-count{margin-left:auto;padding:3px 8px;border-radius:20px;background:var(--bg);font-size:11px;color:var(--sub)}
+#clyLockModal,#clyLockedFolder{position:fixed;inset:0;z-index:260;background:#050914b8;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:22px}
+#clyLockModal[hidden],#clyLockedFolder[hidden]{display:none}
+.cly-lock-card{width:min(100%,380px);padding:23px;border:1px solid #ffffff25;border-radius:26px;background:var(--panel);color:var(--text);box-shadow:0 24px 80px #0006;animation:clyLockIn .25s ease}
+@keyframes clyLockIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.cly-lock-mark{width:58px;height:58px;margin:0 auto 14px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(140deg,#14b8a6,#6366f1);color:white;font-size:26px}
+.cly-lock-card h2{text-align:center;font-size:20px;margin:0 0 6px}
+.cly-lock-card p{text-align:center;color:var(--sub);font-size:13px;margin:0 0 18px}
+.cly-pin{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:700 22px/1.2 system-ui;letter-spacing:12px;text-align:center;outline:0}
+.cly-pin:focus{border-color:#14b8a6;box-shadow:0 0 0 3px #14b8a622}
+.cly-lock-actions{display:flex;gap:9px;margin-top:14px}
+.cly-lock-actions button{flex:1;border:0;border-radius:13px;padding:12px;background:linear-gradient(135deg,#0f9f91,#6366f1);color:white;font-weight:800;font-size:14px}
+.cly-lock-actions button.secondary{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+.cly-lock-error{min-height:18px;margin-top:8px;text-align:center;color:#ef4444;font-size:12px}
+#clyLockedFolder .cly-lock-card{max-height:82dvh;overflow:auto}
+.cly-locked-item{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line);border-radius:15px;background:var(--bg);margin:8px 0;cursor:pointer}
+.cly-locked-item b{display:block;font-size:14px}.cly-locked-item small{color:var(--sub)}
+.cly-lock-toolrow{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.cly-lock-toolrow button,.cly-toolbtn{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:10px 12px;font:inherit;font-size:13px;font-weight:700}
+#czb .cly-extra-controls{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+#czb .cly-extra-controls select{width:100%;padding:11px;border-radius:12px;background:var(--bg);color:var(--text);border:1px solid var(--line);font:inherit}
+#czb .cly-extra-controls .cly-toolbtn{margin:5px 5px 0 0}
+#chat[data-cly-effect="pop"] .m{animation:clyMsgPop .26s cubic-bezier(.2,.8,.2,1) both}
+#chat[data-cly-effect="float"] .m{animation:clyMsgFloat .38s cubic-bezier(.2,.8,.2,1) both}
+#chat[data-cly-effect="glow"] .m{animation:clyMsgGlow .55s ease both}
+@keyframes clyMsgPop{from{opacity:0;transform:scale(.92) translateY(7px)}to{opacity:1;transform:none}}
+@keyframes clyMsgFloat{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes clyMsgGlow{0%{opacity:0;box-shadow:0 0 0 #14b8a600}45%{opacity:1;box-shadow:0 0 24px #14b8a655}100%{box-shadow:var(--b-shadow,0 2px 8px #0002)}}
+.cly-profile-accent{border-color:var(--cly-profile-accent,#14b8a6)!important}
+#pfedit{border-color:var(--cly-profile-accent,#14b8a6)!important}
+.cly-owner-extra{padding:12px;margin:10px 12px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.cly-owner-extra h3{margin:0 0 8px;font-size:14px}
+.cly-audit-row{padding:9px 0;border-top:1px solid var(--line);font-size:12px;color:var(--sub)}
+.cly-audit-row b{color:var(--text)}
+.cly-report-row{padding:10px;border:1px solid var(--line);border-radius:12px;margin:7px 0;font-size:12px}
+.cly-profile-fields{display:grid;gap:9px;margin-top:10px}
+.cly-profile-fields label{font-size:12px;color:var(--sub);font-weight:700}
+.cly-profile-fields input{display:block;width:100%;margin-top:5px;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);font:inherit}
+@media(prefers-reduced-motion:reduce){#chat[data-cly-effect] .m,.cly-lock-card{animation:none!important}}
+</style>
+<script>
+/* Chatly 3.0: additive privacy, effects, disappearing messages, profile and owner tools */
+(()=>{
+ const $=id=>document.getElementById(id);
+ const safeUser=()=>{try{return typeof uname==="function"&&uname()||"guest"}catch(e){return"guest"}};
+ function toast(t){const n=$("note");if(!n)return;n.hidden=false;n.textContent=String(t);clearTimeout(window._clyUltimateToast);window._clyUltimateToast=setTimeout(()=>n.hidden=true,2600)}
+ const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};
+ const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||"null")??d}catch(e){return d}};
+ const lockKey=()=> "chatly_locked_rooms_"+safeUser();
+ const pinKey=()=> "chatly_pin_hash_"+safeUser();
+ const lockSet=()=>new Set(read(lockKey(),[]));
+ const unlocked=new Set();
+ let pendingRoom=null,lockMode="unlock",folderOpen=false,lastLockSignature=null;
+ const roomName=r=>{try{return typeof titleOf==="function"?titleOf(r):r}catch(e){return r}};
+ const hashPin=async p=>await sha256(String(p)+"|"+safeUser()+"|chatly-private-chat-v1");
+ const lockOverlay=document.createElement("div");lockOverlay.id="clyLockModal";lockOverlay.hidden=true;
+ lockOverlay.innerHTML='<div class="cly-lock-card"><div class="cly-lock-mark">⌑</div><h2 id="clyLockTitle">Private chat</h2><p id="clyLockDesc">Enter your 4-digit PIN to continue.</p><form id="clyLockForm"><input id="clyPinOne" class="cly-pin" inputmode="numeric" autocomplete="one-time-code" maxlength="4" pattern="[0-9]{4}" type="password" placeholder="••••" required><input id="clyPinTwo" class="cly-pin" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" type="password" placeholder="Confirm PIN" hidden style="margin-top:9px"><div id="clyLockError" class="cly-lock-error"></div><div class="cly-lock-actions"><button type="button" class="secondary" id="clyLockCancel">Cancel</button><button type="submit" id="clyLockSubmit">Continue</button></div></form></div>';
+ document.body.appendChild(lockOverlay);
+ const folder=document.createElement("div");folder.id="clyLockedFolder";folder.hidden=true;
+ folder.innerHTML='<div class="cly-lock-card"><div style="display:flex;align-items:center;justify-content:space-between"><b style="font-size:18px">🔒 Locked chats</b><button class="cly-toolbtn" id="clyFolderClose">✕</button></div><p style="text-align:left;margin:7px 0 12px">Your private conversations are hidden from the main chat list.</p><div id="clyFolderList"></div><div class="cly-lock-toolrow"><button id="clyChangePin" type="button">Change PIN</button><button id="clyFolderDone" type="button">Done</button></div></div>';
+ document.body.appendChild(folder);
+ function showPin(mode,r){
+   lockMode=mode;pendingRoom=r||null;
+   const first=$("clyPinOne"),second=$("clyPinTwo"),has=!!localStorage.getItem(pinKey());
+   $("clyLockError").textContent="";
+   first.value="";second.value="";
+   second.hidden=mode!=="setup"&&mode!=="change";
+   $("clyLockTitle").textContent=mode==="setup"?"Create private PIN":mode==="change"?"Change private PIN":mode==="folder"?"Unlock locked chats":"Chat locked";
+   $("clyLockDesc").textContent=mode==="setup"?"Create a 4-digit PIN. You will need it to open locked chats.":mode==="change"?"Enter a new 4-digit PIN and confirm it.":mode==="folder"?"Enter your PIN to view your hidden conversations.":"Enter your 4-digit PIN to open this conversation.";
+   $("clyLockSubmit").textContent=mode==="setup"||mode==="change"?"Save PIN":"Unlock";
+   lockOverlay.hidden=false;setTimeout(()=>first.focus(),80);
+ }
+ function hidePin(){lockOverlay.hidden=true}
+ async function pinSubmit(e){
+   e.preventDefault();
+   const a=$("clyPinOne").value.trim(),b=$("clyPinTwo").value.trim();
+   if(!/^\d{4}$/.test(a)){$("clyLockError").textContent="Please enter exactly 4 digits.";return}
+   if(lockMode==="setup"||lockMode==="change"){
+     if(lockMode==="change"){
+       const old=prompt("Enter your current PIN first");if(!old)return;
+       if(await hashPin(old)!==localStorage.getItem(pinKey())){$("clyLockError").textContent="Current PIN is incorrect.";return}
+     }
+     if(a!==b){$("clyLockError").textContent="The PINs do not match.";return}
+     try{localStorage.setItem(pinKey(),await hashPin(a))}catch(err){$("clyLockError").textContent="Could not save your PIN on this device.";return}
+     hidePin();
+     if(lockMode==="setup"&&pendingRoom){const set=lockSet();set.add(pendingRoom);store(lockKey(),[...set]);refreshLockedUI();if(room===pendingRoom&&$("back"))$("back").click();toast("Chat locked 🔒")}
+     else if(lockMode==="change")toast("Private PIN updated");
+     else if(lockMode==="setup")toast("Private PIN created");
+     return;
+   }
+   if(await hashPin(a)!==localStorage.getItem(pinKey())){$("clyLockError").textContent="Incorrect PIN. Try again.";return}
+   hidePin();
+   if(lockMode==="folder"){renderFolder();folder.hidden=false;folderOpen=true;return}
+   if(lockMode==="unlock"&&pendingRoom){unlocked.add(pendingRoom);const r=pendingRoom;pendingRoom=null;originalOpen(r)}
+ }
+ $("clyLockForm").addEventListener("submit",pinSubmit);
+ $("clyLockCancel").onclick=hidePin;
+ $("clyFolderClose").onclick=$("clyFolderDone").onclick=()=>{folder.hidden=true;folderOpen=false};
+ $("clyChangePin").onclick=()=>{folder.hidden=true;showPin("change")};
+ function renderFolder(){
+   const list=$("clyFolderList"),set=[...lockSet()];
+   list.innerHTML=set.length?set.map(r=>'<div class="cly-locked-item" data-room="'+String(r).replace(/&/g,"&amp;").replace(/"/g,"&quot;")+'"><span style="font-size:22px">🔒</span><span style="flex:1;min-width:0"><b>'+String(roomName(r)).replace(/</g,"&lt;")+'</b><small>Private conversation</small></span><span>›</span></div>').join(""):'<div class="empty">No locked conversations yet.</div>';
+ }
+ $("clyFolderList").onclick=e=>{
+   const item=e.target.closest("[data-room]");if(!item)return;
+   const r=item.dataset.room;folder.hidden=true;folderOpen=false;unlocked.add(r);originalOpen(r);
+ };
+ const list=$("list");
+ const folderBtn=document.createElement("button");folderBtn.id="clyLockedFolderBtn";folderBtn.type="button";folderBtn.hidden=true;folderBtn.innerHTML='<span style="font-size:18px">🔒</span><span>Locked chats</span><span class="cly-lock-count" id="clyLockedCount">0</span>';
+ if(list&&list.parentNode)list.parentNode.insertBefore(folderBtn,list);
+ folderBtn.onclick=()=>{if(!lockSet().size){toast("You have no locked chats yet.");return}showPin(localStorage.getItem(pinKey())?"folder":"setup")};
+ function refreshLockedUI(){
+   const set=lockSet(),btn=$("clyLockedFolderBtn");if(btn){btn.hidden=!set.size;btn.style.display=room?"none":"";$("clyLockedCount").textContent=set.size}
+   const sig=safeUser()+"|"+[...set].sort().join("|");
+   if(sig!==lastLockSignature){lastLockSignature=sig;try{if(typeof drawRooms==="function"&&!room)drawRooms()}catch(e){}}
+ }
+ const originalDraw=drawRooms;
+ drawRooms=function(){try{if($("list"))$("list")._h=null}catch(e){}const r=originalDraw.apply(this,arguments);try{const set=lockSet();document.querySelectorAll('#list .room[data-r]').forEach(el=>{if(set.has(el.dataset.r))el.remove()})}catch(e){}return r};
+ const originalOpen=open;
+ open=function(r){
+   if(lockSet().has(r)&&!unlocked.has(r)){showPin(localStorage.getItem(pinKey())?"unlock":"setup",r);return}
+   const result=originalOpen.apply(this,arguments);if(folderBtn)folderBtn.style.display="none";return result;
+ };
+ $("back").addEventListener("click",()=>{if(folderBtn)folderBtn.style.display="";refreshLockedUI()});
+ function setCurrentLocked(){
+   if(!room)return;
+   const r=room,set=lockSet();
+   if(set.has(r)){if(confirm("Unlock this chat and show it in your main list?")){set.delete(r);store(lockKey(),[...set]);unlocked.delete(r);refreshLockedUI();toast("Chat unlocked")};return}
+   if(!localStorage.getItem(pinKey())){showPin("setup",r);return}
+   set.add(r);store(lockKey(),[...set]);unlocked.delete(r);refreshLockedUI();if($("back"))$("back").click();toast("Chat locked 🔒");
+ }
+ // Add controls to the existing customization sheet, without replacing its original wallpaper/bubble controls.
+ const czb=$("czb");
+ if(czb){
+   const extra=document.createElement("div");extra.className="cly-extra-controls";
+   extra.innerHTML='<div class="czs">Privacy & message effects</div><div class="cly-lock-toolrow"><button type="button" id="clyLockCurrent">🔒 Lock this chat</button><button type="button" id="clyReportCurrent">⚑ Report user</button></div><label class="czs" for="clyExpire">Disappearing messages</label><select id="clyExpire"><option value="0">Off</option><option value="3600000">After 1 hour</option><option value="86400000">After 24 hours</option><option value="604800000">After 7 days</option></select><label class="czs" for="clyEffect">Message animation</label><select id="clyEffect"><option value="none">No animation</option><option value="pop">Pop</option><option value="float">Float</option><option value="glow">Glow</option></select><label class="czs" style="display:flex;align-items:center;gap:8px"><input id="clyMuteChat" type="checkbox"> Mute notifications for this chat</label>';
+   czb.appendChild(extra);
+   $("clyLockCurrent").onclick=setCurrentLocked;
+   $("clyReportCurrent").onclick=()=>{
+     const target=typeof dmOther==="function"?dmOther(room):null;if(!target){toast("Report is available for private chats.");return}
+     const reason=prompt("Why are you reporting @"+target+"?");if(!reason||!reason.trim())return;
+     const reports=read("chatly_reports_local",[]);reports.unshift({user:target,room,reason:reason.trim().slice(0,240),by:safeUser(),ts:Date.now(),status:"Open"});store("chatly_reports_local",reports.slice(0,100));
+     addAudit("Reported @"+target);toast("Report saved for owner review");
+   };
+   const oldCzDraw=czDraw;
+   czDraw=function(){oldCzDraw.apply(this,arguments);const c=czGet();$("clyExpire").value=String(c.expire||0);$("clyEffect").value=c.effect||"none";$("clyMuteChat").checked=!!c.muted;const b=$("clyLockCurrent");if(b)b.textContent=lockSet().has(room)?"🔓 Unlock this chat":"🔒 Lock this chat"};
+   $("clyExpire").onchange=e=>czSet("expire",Number(e.target.value));
+   $("clyEffect").onchange=e=>{czSet("effect",e.target.value);applyEffect()};
+   $("clyMuteChat").onchange=e=>czSet("muted",e.target.checked);
+ }
+ function applyEffect(){if(!room)return;const e=czGet().effect||"none";if(e==="none")$("chat").removeAttribute("data-cly-effect");else $("chat").setAttribute("data-cly-effect",e)}
+ const oldCzApply=czApply;czApply=function(){oldCzApply.apply(this,arguments);applyEffect()};
+ // Local PIN is a device-level privacy gate, not end-to-end encryption or protection against clearing browser storage.
+ // Auto-lock a previously unlocked room when the app has been backgrounded for more than 45 seconds.
+ let hiddenAt=0;document.addEventListener("visibilitychange",()=>{if(document.hidden){hiddenAt=Date.now()}else if(hiddenAt&&Date.now()-hiddenAt>45000){unlocked.clear();if(room&&lockSet().has(room)&&$("back"))$("back").click();hiddenAt=0}});
+ const oldBack=$("back").onclick;$("back").addEventListener("click",()=>{if(room)unlocked.delete(room)});
+ // Disappearing-message timers: stamp messages as they are created, then remove expired messages from view and storage.
+ function expiryStamp(m){try{const ms=room?Number(czGet().expire||0):0;if(ms>0&&!m.expireAt)m.expireAt=Date.now()+ms}catch(e){}return m}
+ let patchedDb=null;
+ function patchDb(){
+   if(!db||db===patchedDb)return;
+   const base=db.collection.bind(db);
+   db.collection=function(name){
+     const c=base(name);
+     if(name==="messages"&&c&&typeof c.add==="function"){
+       const add=c.add.bind(c);c.add=m=>add(expiryStamp({...m}));
+     }
+     return c;
+   };
+   patchedDb=db;
+ }
+ const localPush=local.push.bind(local);
+ local.push=function(...items){return localPush(...items.map(x=>expiryStamp({...x})))};
+ const originalRender=render;
+ render=function(arr){
+   const now=Date.now(),valid=[];
+   (arr||[]).forEach(m=>{
+     if(m&&m.expireAt&&Number(m.expireAt)<=now){if(m.id&&db)db.doc("messages/"+m.id).delete().catch(()=>{});return}
+     valid.push(m);
+     if(m&&m.expireAt&&m.id&&db){const wait=Number(m.expireAt)-now;if(wait>0&&wait<2147483647&&!m._clyExpiryTimer){m._clyExpiryTimer=true;setTimeout(()=>{db.doc("messages/"+m.id).delete().catch(()=>{});if(room===m.room)render((rawCur||[]).filter(x=>x.id!==m.id))},wait)}}
+   });
+   return originalRender.call(this,valid);
+ };
+ setInterval(()=>{patchDb();refreshLockedUI()},1800);
+ // Premium profile editing: editable display name, accent colour, profile preview. Handle remains immutable to protect room IDs.
+ const privacyCard=[...document.querySelectorAll("#chatlySettings .cly-card")].find(x=>x.querySelector("#clyOnline"));
+ if(privacyCard){
+   const pinBtn=document.createElement("button");pinBtn.type="button";pinBtn.className="cly-btn secondary";pinBtn.textContent="Set / change private chat PIN";pinBtn.onclick=()=>showPin(localStorage.getItem(pinKey())?"change":"setup");privacyCard.appendChild(pinBtn);
+ }
+ const profileCard=$("chatlySettings")?.querySelector(".cly-card");
+ if(profileCard){
+   const block=document.createElement("div");block.className="cly-profile-fields";
+   block.innerHTML='<label for="clyDisplayName">Display name / nickname<input id="clyDisplayName" maxlength="32" placeholder="Your display name"></label><label for="clyProfileAccent">Profile accent colour<input id="clyProfileAccent" type="color" value="#14b8a6" style="height:44px;padding:4px"></label><button class="cly-btn" id="clySaveProfileExtra" type="button">Save profile design</button><p class="cly-note">Your username stays unchanged so existing private chats and room links keep working.</p>';
+   profileCard.appendChild(block);
+   $("clySaveProfileExtra").onclick=async()=>{
+     const name=$("clyDisplayName").value.trim().slice(0,32);if(!name){toast("Please enter a display name.");return}
+     try{await upUser({name});me.name=name;usersCache[safeUser()]={...(usersCache[safeUser()]||{}),name};localStorage.setItem("chatly_profile_accent_"+safeUser(),$("clyProfileAccent").value);fillProfile();toast("Profile updated")}
+     catch(e){toast("Could not save profile right now.")}
+   };
+ }
+ const hydrateProfileFields=()=>{if($("clyDisplayName"))$("clyDisplayName").value=String(uc(safeUser()).name||me.name||"");if($("clyProfileAccent"))$("clyProfileAccent").value=localStorage.getItem("chatly_profile_accent_"+safeUser())||"#14b8a6"};
+ $("chatlySettingsBtn")?.addEventListener("click",()=>setTimeout(hydrateProfileFields,0));
+ const oldFill=fillProfile;
+ fillProfile=function(){oldFill.apply(this,arguments);const c=localStorage.getItem("chatly_profile_accent_"+safeUser())||"#14b8a6";$("prof")?.style.setProperty("--cly-profile-accent",c)};
+ // Notification upgrades: quiet hours, custom tone, per-chat mute, and existing notification center retained.
+ const notifCard=[...document.querySelectorAll("#chatlySettings .cly-card")].find(x=>x.querySelector("#clySound"));
+ if(notifCard){
+   const extra=document.createElement("div");extra.className="cly-profile-fields";
+   extra.innerHTML='<label for="clySoundStyle">Notification sound style<select id="clySoundStyle" class="cly-select"><option value="classic">Classic chime</option><option value="soft">Soft double tone</option><option value="off">Silent</option></select></label><label for="clyQuietStart">Quiet hours start<input id="clyQuietStart" type="time" value="22:00"></label><label for="clyQuietEnd">Quiet hours end<input id="clyQuietEnd" type="time" value="07:00"></label><p class="cly-note">Quiet hours silence incoming alerts on this device. The notification centre remains available.</p>';
+   notifCard.appendChild(extra);
+   const readN=()=>read("chatly_notif_prefs_"+safeUser(),{style:"classic",start:"22:00",end:"07:00"});
+   const n=readN();$("clySoundStyle").value=n.style||"classic";$("clyQuietStart").value=n.start||"22:00";$("clyQuietEnd").value=n.end||"07:00";
+   ["clySoundStyle","clyQuietStart","clyQuietEnd"].forEach(id=>$(id).addEventListener("change",()=>store("chatly_notif_prefs_"+safeUser(),{style:$("clySoundStyle").value,start:$("clyQuietStart").value,end:$("clyQuietEnd").value})));
+ }
+ function quietNow(){
+   const p=read("chatly_notif_prefs_"+safeUser(),{start:"22:00",end:"07:00"}),now=new Date(),v=now.getHours()*60+now.getMinutes();
+   const toMin=x=>{const z=String(x||"").split(":").map(Number);return(z[0]||0)*60+(z[1]||0)};
+   const a=toMin(p.start),b=toMin(p.end);return a===b?false:a<b?(v>=a&&v<b):(v>=a||v<b);
+ }
+ const oldBeep=beep;
+ beep=function(){const p=read("chatly_notif_prefs_"+safeUser(),{});if(quietNow()||p.style==="off"||!getChatSettings().notificationSound)return;
+   if(p.style==="soft"){try{const c=acx();if(!c)return;const play=()=>{if(c.state!=="running")return;const t=c.currentTime+.02;tone(660,t,.18,.045,"sine");tone(880,t+.17,.2,.04,"sine")};if(c.state==="suspended")c.resume().then(play).catch(()=>{});else play()}catch(e){}}
+   else oldBeep();
+ };
+ const oldToast=showIncomingToast;
+ showIncomingToast=function(m,t,b){if(quietNow()||czGetForRoom(m.room).muted)return;return oldToast(m,t,b)};
+ function czGetForRoom(r){try{return JSON.parse(localStorage.getItem("chatly_cz_"+r)||"{}")}catch(e){return{}}}
+ const oldNotify=notifyShow;
+ notifyShow=async function(m){if(quietNow()||czGetForRoom(m.room).muted)return;return oldNotify.apply(this,arguments)};
+ // Owner dashboard: local report inbox and audit trail. Server-side moderation still uses the existing owner SQL/RPC.
+ function addAudit(action){const a=read("chatly_owner_audit",[]);a.unshift({action,by:safeUser(),ts:Date.now()});store("chatly_owner_audit",a.slice(0,100))}
+ const ownerArea=$("owp");
+ if(ownerArea){
+   const panel=document.createElement("div");panel.id="clyOwnerExtras";panel.className="cly-owner-extra";
+   panel.innerHTML='<h3>Moderation centre</h3><div id="clyReportList"></div><h3 style="margin-top:14px">Owner activity log</h3><div id="clyAuditList"></div><button type="button" class="cly-toolbtn" id="clyClearAudit">Clear local activity log</button>';
+   ownerArea.appendChild(panel);
+   function drawOwnerExtras(){
+     const reports=read("chatly_reports_local",[]),logs=read("chatly_owner_audit",[]);
+     $("clyReportList").innerHTML=reports.length?reports.slice(0,20).map((r,i)=>'<div class="cly-report-row"><b>@'+String(r.user).replace(/</g,"&lt;")+'</b> · '+String(r.status||"Open")+'<br>'+String(r.reason).replace(/</g,"&lt;")+'<br><small>'+new Date(r.ts).toLocaleString()+'</small><button type="button" class="cly-toolbtn" data-report="'+i+'">Mark reviewed</button></div>').join(""):'<small style="color:var(--sub)">No local reports.</small>';
+     $("clyAuditList").innerHTML=logs.length?logs.slice(0,12).map(x=>'<div class="cly-audit-row"><b>'+String(x.action).replace(/</g,"&lt;")+'</b><br>'+new Date(x.ts).toLocaleString()+'</div>').join(""):'<small style="color:var(--sub)">No owner activity recorded on this device.</small>';
+   }
+   panel.addEventListener("click",e=>{
+     if(e.target.id==="clyClearAudit"){if(confirm("Clear local owner activity log?")){store("chatly_owner_audit",[]);drawOwnerExtras()}}
+     const b=e.target.closest("[data-report]");if(b){const a=read("chatly_reports_local",[]),i=Number(b.dataset.report);if(a[i])a[i].status="Reviewed";store("chatly_reports_local",a);drawOwnerExtras()}
+   });
+   const oldOpenOwner=openOwner;
+   openOwner=async function(){await oldOpenOwner.apply(this,arguments);drawOwnerExtras()};
+   const oldOwDraw=owDraw;
+   owDraw=function(){oldOwDraw.apply(this,arguments);drawOwnerExtras()};
+ }
+ // Record owner moderation actions from the existing controls without changing their behavior.
+ document.addEventListener("click",e=>{
+   const b=e.target.closest(".owsuspend,.owunsuspend,.owdel");if(!b)return;
+   const u=b.dataset.u||"unknown";addAudit((b.classList.contains("owsuspend")?"Suspension requested for @":b.classList.contains("owunsuspend")?"Unsuspension requested for @":"Account deletion requested for @")+u);
+ },true);
+ // Keep notification and privacy settings synchronized after login.
+ hydrateProfileFields();
+ refreshLockedUI();applyEffect();
+})();
+</script>
+
 </body></html>
