@@ -714,6 +714,7 @@ header:has(#back:not([hidden])) #cst svg{width:23px;height:23px}
 <meta name="theme-color" content="#128c7e">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<script>(function(){var o=Node.prototype.insertBefore;Node.prototype.insertBefore=function(n,r){if(r&&r.parentNode!==this)r=null;return o.call(this,n,r)}})();window.beep=window.beep||function(){};</script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 
 <style>
@@ -892,7 +893,7 @@ async function acct(create){
   const h=await pwh(u,p);
   if(create){if(!(await isOwner())&&(await devAll()).length>=DEV_MAX)return alert("Only "+DEV_MAX+" accounts can be created on one device. Please log in to one of your existing accounts.");if(!/^[A-Za-z0-9_@-]{3,20}$/.test(n))return alert("Username: 3 to 20 characters. Only English letters, numbers and - _ @ allowed. No spaces, emoji or other symbols.");if(s.exists&&s.data()&&s.data().pw)return alert("That username is taken. Try another.");try{const c=await db.doc("claims/"+u).acquire({holder:h,ttlMs:315360000000});if(c&&c.acquired===false)return alert("That username is taken. Try another.")}catch(e){}
     const ph="";
-    try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph)}
+    try{await db.doc("users/"+u).set({name:n,phone:ph,pw:h,createdAt:Date.now()})}catch(e){return alert("Couldn’t create the account: "+((e&&e.message)||JSON.stringify(e)))}try{if(!(await isOwner()))await devSave([...new Set([...await devAll(),u])])}catch(e){}fin(n,ph)}
   else{const d=s.exists&&s.data();if(!d||!d.pw)return alert("Account not found. Create one first.");const su=Number(d.suspendedUntil)||0;if((d.suspended===true&&(!su||su>Date.now()))||su>Date.now())return alert("This account is suspended by the owner."+(su>Date.now()?"\nTry again after "+new Date(su).toLocaleString():""));if(d.pw!==h)return alert("Wrong password.");fin(d.name||n,d.phone)}
 }
 let signup=false;
@@ -912,7 +913,7 @@ function openGroupInfo(roomId){const r=allRooms().find(x=>x.id===roomId);if(!r||
   $("svlist").onclick=e=>{const b=e.target.closest(".rmbtn");if(!b)return;if(confirm("Remove @"+b.dataset.rm+" from this group?")){removeFromGroup(roomId,b.dataset.rm);openGroupInfo(roomId)}};
   $("starview").hidden=false}
 function reg(){}
-const body=m=>{let h="";if(m.re)h+=`<div class="q"><b>${esc(m.re.name)}</b><br>${esc(m.re.text)}</div>`;
+const body=m=>{let h="";if(m.re)h+=`<div class="q"${m.re.id?` data-rid="${esc(m.re.id)}"`:""}><b>${esc(m.re.name)}</b><span class="qt">${esc(m.re.text)}</span></div>`;
   const preview=!(window.getChatSettings&&window.getChatSettings().mediaPreview===false);
   if(typeof m.img==="string"&&m.img.startsWith("data:image/"))h+=preview?`<img src="${esc(m.img)}" alt="photo">`:`<div class="fl"><div class="fic">▧</div><div class="fn"><b>Photo attachment</b><small><a href="${esc(m.img)}" target="_blank" rel="noopener">Tap to open photo</a> · preview hidden</small></div></div>`;
   if(typeof m.aud==="string"&&m.aud.startsWith("data:audio/"))h+=vmHTML("m"+(m.id||m.ts),m.aud);
@@ -942,7 +943,7 @@ $("fwx").onclick=()=>{$("fwpick").hidden=true};
 $("fwlist").onclick=e=>{const b=e.target.closest(".fwr");if(!b||!fwMsg)return;const targetRoom=b.dataset.r;
   postRaw({room:targetRoom,name:me.name,text:fwMsg.text||"",img:fwMsg.img||"",aud:fwMsg.aud||"",file:fwMsg.file||null,orig:fwMsg.orig||null,fwd:true,ts:Date.now()});
   $("fwpick").hidden=true;alert("Forwarded.")};
-$("s-re").onclick=()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":m.file?"Attachment: "+m.file.name:"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}$("sheet").hidden=true};
+$("s-re").onclick=()=>{const m=cur.find(x=>(x.id||String(x.ts))===sel);if(m&&!m.del){replyTo={id:m.id||String(m.ts),name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":m.file?"Attachment: "+m.file.name:"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}$("sheet").hidden=true};
 $("s-del").onclick=async()=>{$("sheet").hidden=true;const id=sel;
   if(db){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m){m.del=true;m.text="";m.img="";m.aud="";render(rawCur)}
     try{await db.doc("messages/"+id).update({del:true,text:"",img:"",aud:""})}catch(e){alert("Couldn’t delete: "+((e&&e.message)||e))}}
@@ -1206,9 +1207,16 @@ $("cs-me").onclick=async()=>{const id=csel;$("csheet").hidden=true;if(!id)return
 (function(){let last=0;
   const arm=()=>{try{history.pushState({chatly:1},"")}catch(e){}};
   try{history.replaceState({chatly:0},"");arm()}catch(e){}
-  function closeTop(){const open=id=>{const e=$(id);return e&&!e.hidden};
-    if(open("call"))return true;
-    for(const id of ["esheet","csheet","sheet","fwpick","starview","fview","nc"]){if(open(id)){if(id==="nc"&&$("nx"))$("nx").click();else $(id).hidden=true;return true}}
+  const vis=e=>!!e&&!e.hidden&&getComputedStyle(e).display!=="none";
+  const OV=["clyOwnerDetails","clySuspendModal","clyLockedFolder","clyLockModal","cfm","chatlyNotifications","chatlySettings","cz","npop","crp","owp","fview","fwpick","starview","esheet","csheet","sheet","nc"];
+  const CL={clyOwnerDetails:".close",chatlyNotifications:"#clyNClose",cz:"#czx",crp:"#crpx",owp:"#owx",nc:"#nx"};
+  function dismiss(e){let b=CL[e.id]&&e.querySelector(CL[e.id]);
+    if(!b)b=[...e.querySelectorAll("button")].find(x=>/^(cancel|close|done|no|back|×|✕|x)$/i.test((x.textContent||x.getAttribute("aria-label")||"").trim()));
+    if(b)b.click();if(vis(e))e.hidden=true}
+  function closeTop(){
+    if(vis($("call")))return true;
+    const open=OV.map($).filter(vis).sort((x,y)=>(+getComputedStyle(y).zIndex||0)-(+getComputedStyle(x).zIndex||0));
+    if(open.length){dismiss(open[0]);return true}
     if(room){$("back").click();return true}
     if(!$("prof").hidden||window._tab==="inbox"){setTab("chats");return true}
     return false}
@@ -1216,7 +1224,7 @@ $("cs-me").onclick=async()=>{const id=csel;$("csheet").hidden=true;if(!id)return
     if(closeTop()){arm();return}
     const n=Date.now();
     if(n-last<2000){history.back();return}
-    last=n;arm();alert("Press back again to exit")})})();
+    last=n;arm();if(typeof note==="function")note("Press back again to exit");else alert("Press back again to exit")})})();
 (function(){const call=$("call"),cs=$("cs"),ctm=$("ctm");let t0=0;const f=n=>String(n).padStart(2,"0");
   const fmt=ms=>{const s=Math.floor(ms/1000);return f(Math.floor(s/3600))+":"+f(Math.floor(s%3600/60))+":"+f(s%60)};
   setInterval(()=>{const vis=!call.hidden;
@@ -1304,7 +1312,7 @@ function refreshPresence(){if(!room)return;const o=dmOther(room);if(!o)return;co
 (function(){const box=document.getElementById("msgs");let st=null,raf=0;const TH=64,MAX=96;
 const ICON='<svg viewBox="0 0 24 24"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/></svg>';
 const ease=d=>MAX*(1-Math.exp(-d/MAX));
-function doReply(id){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m&&!m.del){replyTo={name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":m.file?"Attachment: "+m.file.name:"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}}
+function doReply(id){const m=cur.find(x=>(x.id||String(x.ts))===id);if(m&&!m.del){replyTo={id:m.id||String(m.ts),name:m.name||"Someone",text:(m.text||(m.img?"Photo":m.aud?"Voice message":m.file?"Attachment: "+m.file.name:"")).slice(0,80)};$("rtxt").textContent=replyTo.name+": "+replyTo.text;$("rbar").hidden=false;$("in").focus()}}
 function apply(){raf=0;if(!st||!st.ic)return;const x=st.x;st.el.style.transform="translate3d("+x+"px,0,0)";st.ic.style.opacity=Math.min(1,x/(TH*.7));st.ic.style.transform="translateY(-50%) scale("+(.6+Math.min(.5,x/TH*.5))+")"}
 function down(e){window._lpt=e.pointerType;if(e.pointerType==="mouse"&&e.button!==0)return;const t=e.target.closest(".m");if(!t||e.target.closest("a,audio,video,button,.rch,.vw"))return;const s0={el:t,id:t.dataset.id,x0:e.clientX,y0:e.clientY,x:0,lock:false,fired:false,pid:e.pointerId,ic:null,t0:Date.now(),target:e.target,lpDone:false};st=s0;}
 function move(e){if(!st||e.pointerId!==st.pid)return;const dx=e.clientX-st.x0,dy=e.clientY-st.y0;
@@ -1621,7 +1629,7 @@ function czDraw(){const c=czGet(),w=c.wp||"";
       c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);try{czSet("wp",c.toDataURL("image/jpeg",.76))}catch(err){alert("This image could not be saved. Choose a smaller photo.")}};im.onerror=()=>URL.revokeObjectURL(u);im.src=u};
   const b=document.createElement("button");b.id="cst";b.type="button";b.setAttribute("aria-label","Customize chat");
   b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.7-.5-1.2 0-1.1.9-2 2-2h2.4a3.6 3.6 0 0 0 3.6-3.6C21 6.5 17 3 12 3zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>';
-  const h=document.querySelector("header"),cl=$("calls");if(h)h.insertBefore(b,cl||null);
+  const h=document.querySelector("header"),cl=$("calls");if(h)h.insertBefore(b,cl&&cl.parentNode===h?cl:null);
   b.onclick=()=>{if(!room)return;czDraw();m.hidden=false};
   setInterval(()=>{if(room!==_czr){_czr=room;czApply();if(!room)m.hidden=true}},250)})();
 </script>
@@ -1714,10 +1722,11 @@ function czDraw(){const c=czGet(),w=c.wp||"";
  let clyAudioUnlocked=false;
  function unlockClyAudio(){if(clyAudioUnlocked)return;clyAudioUnlocked=true;try{const c=acx();if(c&&c.state==='suspended')c.resume().catch(()=>{})}catch(e){}}
  document.addEventListener('pointerdown',unlockClyAudio,{passive:true});document.addEventListener('touchstart',unlockClyAudio,{passive:true});document.addEventListener('keydown',unlockClyAudio);
- function beep(){if(!getChatSettings().notificationSound)return;try{const c=acx();if(!c)return;const play=()=>{if(c.state!=='running')return;const t=c.currentTime+.025;tone(880,t,.12,.075,'sine');tone(1174,t+.13,.16,.065,'sine')};if(c.state==='suspended')c.resume().then(play).catch(()=>{});else play()}catch(e){}}
+ function beep(){if(!getChatSettings().notificationSound)return;if(window.clyPlaySound&&window.clyPlaySound("msg"))return;try{const c=acx();if(!c)return;const play=()=>{if(c.state!=='running')return;const t=c.currentTime+.025;tone(880,t,.12,.075,'sine');tone(1174,t+.13,.16,.065,'sine')};if(c.state==='suspended')c.resume().then(play).catch(()=>{});else play()}catch(e){}}
+window.beep=beep;window.showIncomingToast=function(){return showIncomingToast.apply(this,arguments)};
  // Premium in-app heads-up card for foreground notifications.
  let clyToastTimer=0;function showIncomingToast(m,title,body){if(document.visibilityState!=='visible'||room===m.room)return;let el=$('clyIncomingToast');if(!el){el=document.createElement('div');el.id='clyIncomingToast';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.innerHTML='<span class="ct-icon">✦</span><span class="ct-copy"><b></b><span></span></span>';document.body.appendChild(el)}el.querySelector('b').textContent=title;el.querySelector('.ct-copy span').textContent=body;el.classList.add('show');el.onclick=()=>{el.classList.remove('show');if(m.room){const u=getUnread();delete u[m.room];putUnread(u);open(m.room)}};clearTimeout(clyToastTimer);clyToastTimer=setTimeout(()=>el.classList.remove('show'),4200)}
- const baseNotify=notifyShow;notifyShow=async function(m){try{const title=(m.name||'Someone')+' • Chatly',body=(m.fwd?'Forwarded: ':'')+(m.text?m.text.slice(0,90):(m.img?'Photo':m.aud?'Voice message':m.file?'File: '+m.file.name:'New message'));const a=getNotifs();a.unshift({title,body,room:m.room,ts:m.ts||Date.now(),kind:m.img?'photo':m.file?'file':'text'});putNotifs(a);const u=getUnread();u[m.room]=(u[m.room]||0)+1;putUnread(u);beep();showIncomingToast(m,title,body);if(getChatSettings().vibration&&navigator.vibrate)try{navigator.vibrate([35,35,55])}catch(e){}}catch(e){}return baseNotify.apply(this,arguments)};
+ const baseNotify=notifyShow;notifyShow=async function(m){try{const title=(m.name||'Someone')+' • Chatly',body=(m.fwd?'Forwarded: ':'')+(m.text?m.text.slice(0,90):(m.img?'Photo':m.aud?'Voice message':m.file?'File: '+m.file.name:'New message'));const a=getNotifs();a.unshift({title,body,room:m.room,ts:m.ts||Date.now(),kind:m.img?'photo':m.file?'file':'text'});putNotifs(a);const u=getUnread();u[m.room]=(u[m.room]||0)+1;putUnread(u);(window.beep||beep)();(window.showIncomingToast||showIncomingToast)(m,title,body);if(getChatSettings().vibration&&navigator.vibrate)try{navigator.vibrate([35,35,55])}catch(e){}}catch(e){}return baseNotify.apply(this,arguments)};
  // Clear unread counter whenever a conversation is opened.
  const appOpenFn=open;open=function(r){const z=appOpenFn.apply(this,arguments);try{const u=getUnread();delete u[r];putUnread(u);applyBubble()}catch(e){}return z};
  // Owner dashboard statistics, based on accounts currently loaded by the app.
@@ -1939,7 +1948,7 @@ function czDraw(){const c=czGet(),w=c.wp||"";
    first.value="";second.value="";
    second.hidden=mode!=="setup"&&mode!=="change";
    $("clyLockTitle").textContent=mode==="setup"?"Create private PIN":mode==="change"?"Change private PIN":mode==="folder"?"Unlock locked chats":"Chat locked";
-   $("clyLockDesc").textContent=mode==="setup"?"Create a 4-digit PIN. You will need it to open locked chats.":mode==="change"?"Enter a new 4-digit PIN and confirm it.":mode==="folder"?"Enter your PIN to view your hidden conversations.":"Enter your 4-digit PIN to open this conversation.";
+   $("clyLockDesc").textContent=mode==="setup"?"Create a PIN of 4 to 8 digits. You will need it to open locked chats.":mode==="change"?"Enter a new PIN (4 to 8 digits) and confirm it.":mode==="folder"?"Enter your PIN to view your hidden conversations.":"Enter your 4-digit PIN to open this conversation.";
    $("clyLockSubmit").textContent=mode==="setup"||mode==="change"?"Save PIN":"Unlock";
    lockOverlay.hidden=false;setTimeout(()=>first.focus(),80);
  }
@@ -1947,21 +1956,21 @@ function czDraw(){const c=czGet(),w=c.wp||"";
  async function pinSubmit(e){
    e.preventDefault();
    const a=$("clyPinOne").value.trim(),b=$("clyPinTwo").value.trim();
-   if(!/^\d{4}$/.test(a)){$("clyLockError").textContent="Please enter exactly 4 digits.";return}
+   if(!/^\d{4,8}$/.test(a)){$("clyLockError").textContent="Use a PIN of 4 to 8 digits.";return}
    if(lockMode==="setup"||lockMode==="change"){
      if(lockMode==="change"){
        const old=prompt("Enter your current PIN first");if(!old)return;
-       if(await hashPin(old)!==localStorage.getItem(pinKey())){$("clyLockError").textContent="Current PIN is incorrect.";return}
+       if(!(await window.clyPinVerify(old,pinKey(),hashPin))){$("clyLockError").textContent=window.clyPinMsg||"Current PIN is incorrect.";return}
      }
      if(a!==b){$("clyLockError").textContent="The PINs do not match.";return}
-     try{localStorage.setItem(pinKey(),await hashPin(a))}catch(err){$("clyLockError").textContent="Could not save your PIN on this device.";return}
+     try{localStorage.setItem(pinKey(),await window.clyPinMake(a))}catch(err){$("clyLockError").textContent="Could not save your PIN on this device.";return}
      hidePin();
-     if(lockMode==="setup"&&pendingRoom){const set=lockSet();set.add(pendingRoom);store(lockKey(),[...set]);refreshLockedUI();if(room===pendingRoom&&$("back"))$("back").click();toast("Chat locked 🔒")}
+     if(lockMode==="setup"&&pendingRoom){const set=lockSet();set.add(pendingRoom);store(lockKey(),[...set]);refreshLockedUI();if(room===pendingRoom&&$("back"))$("back").click();toast("Chat locked")}
      else if(lockMode==="change")toast("Private PIN updated");
      else if(lockMode==="setup")toast("Private PIN created");
      return;
    }
-   if(await hashPin(a)!==localStorage.getItem(pinKey())){$("clyLockError").textContent="Incorrect PIN. Try again.";return}
+   if(!(await window.clyPinVerify(a,pinKey(),hashPin))){$("clyLockError").textContent=window.clyPinMsg||"Incorrect PIN. Try again.";return}
    hidePin();
    if(lockMode==="folder"){renderFolder();folder.hidden=false;folderOpen=true;return}
    if(lockMode==="unlock"&&pendingRoom){unlocked.add(pendingRoom);const r=pendingRoom;pendingRoom=null;originalOpen(r)}
@@ -2000,7 +2009,7 @@ function czDraw(){const c=czGet(),w=c.wp||"";
    const r=room,set=lockSet();
    if(set.has(r)){if(confirm("Unlock this chat and show it in your main list?")){set.delete(r);store(lockKey(),[...set]);unlocked.delete(r);refreshLockedUI();toast("Chat unlocked")};return}
    if(!localStorage.getItem(pinKey())){showPin("setup",r);return}
-   set.add(r);store(lockKey(),[...set]);unlocked.delete(r);refreshLockedUI();if($("back"))$("back").click();toast("Chat locked 🔒");
+   set.add(r);store(lockKey(),[...set]);unlocked.delete(r);refreshLockedUI();if($("back"))$("back").click();toast("Chat locked");
  }
  // Add controls to the existing customization sheet, without replacing its original wallpaper/bubble controls.
  const czb=$("czb");
@@ -2013,7 +2022,7 @@ function czDraw(){const c=czGet(),w=c.wp||"";
      const target=typeof dmOther==="function"?dmOther(room):null;if(!target){toast("Report is available for private chats.");return}
      const reason=prompt("Why are you reporting @"+target+"?");if(!reason||!reason.trim())return;
      const reports=read("chatly_reports_local",[]);reports.unshift({user:target,room,reason:reason.trim().slice(0,240),by:safeUser(),ts:Date.now(),status:"Open"});store("chatly_reports_local",reports.slice(0,100));
-     addAudit("Reported @"+target);toast("Report saved for owner review");
+     try{if(db)db.collection("reports").add({user:target,room,reason:reason.trim().slice(0,240),by:safeUser(),ts:Date.now(),status:"Open"}).catch(()=>{})}catch(e){}addAudit("Reported @"+target);toast("Report sent for owner review");
    };
    const oldCzDraw=czDraw;
    czDraw=function(){oldCzDraw.apply(this,arguments);const c=czGet();$("clyExpire").value=String(c.expire||0);$("clyEffect").value=c.effect||"none";$("clyMuteChat").checked=!!c.muted;const b=$("clyLockCurrent");if(b)b.textContent=lockSet().has(room)?"🔓 Unlock this chat":"🔒 Lock this chat"};
@@ -2090,31 +2099,45 @@ function czDraw(){const c=czGet(),w=c.wp||"";
    const toMin=x=>{const z=String(x||"").split(":").map(Number);return(z[0]||0)*60+(z[1]||0)};
    const a=toMin(p.start),b=toMin(p.end);return a===b?false:a<b?(v>=a&&v<b):(v>=a||v<b);
  }
- const oldBeep=beep;
- beep=function(){const p=read("chatly_notif_prefs_"+safeUser(),{});if(quietNow()||p.style==="off"||!getChatSettings().notificationSound)return;
-   if(p.style==="soft"){try{const c=acx();if(!c)return;const play=()=>{if(c.state!=="running")return;const t=c.currentTime+.02;tone(660,t,.18,.045,"sine");tone(880,t+.17,.2,.04,"sine")};if(c.state==="suspended")c.resume().then(play).catch(()=>{});else play()}catch(e){}}
+ const oldBeep=window.beep||function(){};
+ window.beep=function(){const p=read("chatly_notif_prefs_"+safeUser(),{});if(quietNow()||p.style==="off"||!getChatSettings().notificationSound)return;
+   if(p.style==="soft"&&!(window.clyCustomSoundOn&&window.clyCustomSoundOn())){try{const c=acx();if(!c)return;const play=()=>{if(c.state!=="running")return;const t=c.currentTime+.02;tone(660,t,.18,.045,"sine");tone(880,t+.17,.2,.04,"sine")};if(c.state==="suspended")c.resume().then(play).catch(()=>{});else play()}catch(e){}}
    else oldBeep();
  };
- const oldToast=showIncomingToast;
- showIncomingToast=function(m,t,b){if(quietNow()||czGetForRoom(m.room).muted)return;return oldToast(m,t,b)};
+ const oldToast=window.showIncomingToast||function(){};
+ window.showIncomingToast=function(m,t,b){if(quietNow()||czGetForRoom(m.room).muted)return;return oldToast(m,t,b)};
  function czGetForRoom(r){try{return JSON.parse(localStorage.getItem("chatly_cz_"+r)||"{}")}catch(e){return{}}}
  const oldNotify=notifyShow;
  notifyShow=async function(m){if(quietNow()||czGetForRoom(m.room).muted)return;return oldNotify.apply(this,arguments)};
  // Owner dashboard: local report inbox and audit trail. Server-side moderation still uses the existing owner SQL/RPC.
- function addAudit(action){const a=read("chatly_owner_audit",[]);a.unshift({action,by:safeUser(),ts:Date.now()});store("chatly_owner_audit",a.slice(0,100))}
+ function addAudit(action){const a=read("chatly_owner_audit",[]);a.unshift({action,by:safeUser(),ts:Date.now()});store("chatly_owner_audit",a.slice(0,100));try{if(typeof db!=="undefined"&&db)db.collection("audit").add({action,by:safeUser(),ts:Date.now()}).catch(()=>{})}catch(e){}}
  const ownerArea=$("owp");
  if(ownerArea){
    const panel=document.createElement("div");panel.id="clyOwnerExtras";panel.className="cly-owner-extra";
    panel.innerHTML='<h3>Moderation centre</h3><div id="clyReportList"></div><h3 style="margin-top:14px">Owner activity log</h3><div id="clyAuditList"></div><button type="button" class="cly-toolbtn" id="clyClearAudit">Clear local activity log</button>';
    ownerArea.appendChild(panel);
-   function drawOwnerExtras(){
-     const reports=read("chatly_reports_local",[]),logs=read("chatly_owner_audit",[]);
-     $("clyReportList").innerHTML=reports.length?reports.slice(0,20).map((r,i)=>'<div class="cly-report-row"><b>@'+String(r.user).replace(/</g,"&lt;")+'</b> · '+String(r.status||"Open")+'<br>'+String(r.reason).replace(/</g,"&lt;")+'<br><small>'+new Date(r.ts).toLocaleString()+'</small><button type="button" class="cly-toolbtn" data-report="'+i+'">Mark reviewed</button></div>').join(""):'<small style="color:var(--sub)">No local reports.</small>';
-     $("clyAuditList").innerHTML=logs.length?logs.slice(0,12).map(x=>'<div class="cly-audit-row"><b>'+String(x.action).replace(/</g,"&lt;")+'</b><br>'+new Date(x.ts).toLocaleString()+'</div>').join(""):'<small style="color:var(--sub)">No owner activity recorded on this device.</small>';
-   }
-   panel.addEventListener("click",e=>{
-     if(e.target.id==="clyClearAudit"){if(confirm("Clear local owner activity log?")){store("chatly_owner_audit",[]);drawOwnerExtras()}}
-     const b=e.target.closest("[data-report]");if(b){const a=read("chatly_reports_local",[]),i=Number(b.dataset.report);if(a[i])a[i].status="Reviewed";store("chatly_reports_local",a);drawOwnerExtras()}
+   const E=x=>String(x==null?"":x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+   const FT=t=>t?new Date(t).toLocaleString([],{dateStyle:"medium",timeStyle:"medium"}):"";
+   let sR=[],sA=[],loadingO=false,loadErr="",loadedO=false;
+   async function loadOwnerData(){if(loadingO||!window.SB||!SB.raw)return;loadingO=true;loadErr="";drawOwnerExtras(true);
+     try{const q=n=>SB.raw.from("docs").select("path,data").eq("collection",n).limit(300);const r=await Promise.all([q("reports"),q("audit")]);if(r[0].error||r[1].error)throw(r[0].error||r[1].error);
+       const m=a=>(a.data||[]).map(x=>({path:x.path,...x.data})).sort((x,y)=>(y.ts||0)-(x.ts||0));sR=m(r[0]);sA=m(r[1]);loadedO=true}
+     catch(e){loadErr=String((e&&e.message)||e)}finally{loadingO=false;drawOwnerExtras(true)}}
+   function drawOwnerExtras(skip){
+     const rl=$("clyReportList"),al=$("clyAuditList");if(!rl||!al)return;
+     if(loadingO&&!loadedO){rl.innerHTML=al.innerHTML='<small style="color:var(--sub)">Loading...</small>'}
+     else if(loadErr&&!loadedO){rl.innerHTML=al.innerHTML='<small style="color:var(--sub)">Could not load: '+E(loadErr)+'</small>'}
+     else{
+       rl.innerHTML=sR.length?sR.slice(0,60).map(r=>{const st=r.status||"Open",h=(r.h||[]).slice(-3).map(x=>E(x.s)+' by @'+E(x.by)+' ('+FT(x.ts)+')').join('<br>');
+         return '<div class="cly-report-row"><b>@'+E(r.user)+'</b> - '+E(st)+'<br>'+E(r.reason)+'<br><small>Reported by @'+E(r.by)+' on '+FT(r.ts)+'</small>'+(h?'<br><small>History:<br>'+h+'</small>':'')
+           +(st==="Resolved"?'':'<br>'+(st==="Open"?'<button type="button" class="cly-toolbtn" data-rs="In review" data-rp="'+E(r.path)+'">Review</button> ':'')+'<button type="button" class="cly-toolbtn" data-rs="Resolved" data-rp="'+E(r.path)+'">Resolve</button>')+'</div>'}).join(""):'<small style="color:var(--sub)">No reports yet.</small>';
+       al.innerHTML=sA.length?sA.slice(0,80).map(x=>'<div class="cly-audit-row"><b>'+E(x.action)+'</b><br><small>By @'+E(x.by)+' - '+FT(x.ts)+'</small></div>').join(""):'<small style="color:var(--sub)">No activity recorded yet.</small>'}
+     if(!skip)loadOwnerData()}
+   panel.addEventListener("click",async e=>{
+     if(e.target.id==="clyClearAudit"){if(confirm("Clear the local activity log on this device? Server records stay.")){store("chatly_owner_audit",[]);drawOwnerExtras()}return}
+     const b=e.target.closest("[data-rp]");if(!b)return;const r=sR.find(x=>x.path===b.dataset.rp);if(!r||!db)return;b.disabled=true;
+     try{await db.doc(r.path).update({status:b.dataset.rs,h:[...(r.h||[]),{s:b.dataset.rs,by:safeUser(),ts:Date.now()}]});addAudit('Report on @'+r.user+' set to '+b.dataset.rs);setTimeout(loadOwnerData,400)}
+     catch(err){alert("Could not update report: "+((err&&err.message)||err));b.disabled=false}
    });
    const oldOpenOwner=openOwner;
    openOwner=async function(){await oldOpenOwner.apply(this,arguments);drawOwnerExtras()};
@@ -2338,8 +2361,8 @@ function czDraw(){const c=czGet(),w=c.wp||"";
    if(clear)activityPage.append(clear);
    extras.remove();
  }
- root.insertBefore(intro,$('owq'));root.insertBefore(tabs,$('owq'));
- root.insertBefore(overview,$('owq'));root.insertBefore(userPage,$('owq'));root.insertBefore(modPage,$('owq'));root.insertBefore(activityPage,$('owq'));
+ root.appendChild(intro);root.appendChild(tabs);
+ root.appendChild(overview);root.appendChild(userPage);root.appendChild(modPage);root.appendChild(activityPage);
  function showTab(name){
    const pages={overview,users:userPage,moderation:modPage,activity:activityPage};
    Object.entries(pages).forEach(([k,v])=>v.hidden=k!==name);
@@ -2375,4 +2398,502 @@ function czDraw(){const c=czGet(),w=c.wp||"";
 })();
 </script>
 
+<style id="cly-bubble-v2">
+:is(#chat #msgs,.b2pv){--b2d:1}
+:is(#chat #msgs,.b2pv) .m{box-sizing:border-box!important;position:relative!important;isolation:isolate;flex:0 0 auto!important;width:fit-content!important;min-width:0!important;max-width:min(82%,560px)!important;margin:2px 0!important;padding:9px 13px 6px!important;overflow:visible!important;overflow-wrap:anywhere;word-break:break-word;will-change:auto!important;contain:none!important;background:transparent!important;border:0!important;align-self:flex-start!important;border-radius:var(--b2r,var(--mr,var(--t-r,20px 20px 20px 6px)))!important;box-shadow:var(--b2s,var(--t-s,0 2px 8px #0002)),var(--t-is,0 0 0 0 transparent)!important;color:var(--b2if,var(--t-if,inherit))!important;font-family:var(--b2ff,inherit)!important;font-size:var(--b2fs,16px)!important;line-height:1.38!important;-webkit-backdrop-filter:var(--t-bf,none);backdrop-filter:var(--t-bf,none)}
+:is(#chat #msgs,.b2pv) .m.me{align-self:flex-end!important;border-radius:var(--b2rm,var(--mrm,var(--t-rm,20px 20px 6px 20px)))!important;color:var(--b2of,var(--t-of,#fff))!important}
+:is(#chat #msgs,.b2pv) .m::before{content:""!important;position:absolute;inset:0;z-index:-1;box-sizing:border-box;border-radius:inherit;pointer-events:none;border:1px solid var(--t-b,transparent);background:var(--t-g,none),var(--b2i,var(--t-i,#e9e9eb));opacity:var(--b2a,1)}
+:is(#chat #msgs,.b2pv) .m.me::before{background:var(--t-g,none),var(--b2o,var(--mc,var(--t-o,#fe2c55)))}
+:is(#chat #msgs,.b2pv) .m::after{content:none!important;display:none!important}
+:is(#chat #msgs,.b2pv) .m .n{font-size:.78em;font-weight:600;margin:0 0 2px;opacity:.85}
+:is(#chat #msgs,.b2pv) .m .t{display:flex;justify-content:flex-end;align-items:center;gap:4px;margin-top:3px;font-size:.72em;line-height:1;opacity:.75;color:inherit!important}
+:is(#chat #msgs,.b2pv) .m a{color:inherit!important;text-decoration:underline}
+:is(#chat #msgs,.b2pv) .m img{display:block;max-width:100%;height:auto;border-radius:12px;margin:2px 0}
+:is(#chat #msgs,.b2pv) .m .q{display:block;box-sizing:border-box;max-width:100%;min-width:0;margin:0 0 6px;padding:5px 9px;border-left:3px solid var(--accent,#fe2c55);border-radius:10px;background:#7f7f7f29;color:inherit;font-size:.84em;line-height:1.3;overflow:hidden;cursor:pointer}
+:is(#chat #msgs,.b2pv) .m .q b{display:block;font-weight:600;opacity:.9}
+:is(#chat #msgs,.b2pv) .m .q .qt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;opacity:.85}
+#chat #msgs .m.emo{padding:2px 8px 4px!important;font-size:2.3em!important}
+#chat #msgs .m.emo::before{display:none}
+#chat #msgs .m.emo{box-shadow:none!important}
+#chat #msgs .m.emo .t{font-size:.3em}
+#chat #msgs .m.hl2{outline:2px solid var(--accent,#fe2c55);outline-offset:3px}
+@keyframes b2pop{from{opacity:0;transform:translateY(8px) scale(.94)}to{opacity:1;transform:none}}
+#chat #msgs .m.new{animation:b2pop .28s cubic-bezier(.2,.8,.2,1)!important}
+@media(prefers-reduced-motion:reduce){#chat #msgs .m.new{animation:none!important}}
+:is(#chat,.b2pv)[data-cly-b2=classic] .m::before{display:none}
+.b2pv{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:16px;background:var(--bg)}
+#b2p .czs+.czg.b2f{gap:8px;align-items:center}
+#b2p input[type=range]{flex:1;min-width:120px}
+#b2p select,#b2p input[type=color]{height:34px}
+:is(#chat,.b2pv)[data-cly-b2=3d]{--t-i:linear-gradient(160deg,#fbfcfe,#dde4ef);--t-if:#18202c;--t-o:linear-gradient(145deg,#ff7a9a,#fe2c55 58%,#c4144a);--t-of:#fff;--t-g:linear-gradient(180deg,#ffffff66,#ffffff14 46%,#0000 47%);--t-s:0 6px 14px #0003;--t-is:inset 0 1px 0 #fff8,inset 0 -6px 10px #0000002e;--t-b:#ffffff66}
+:root[data-theme=dark] :is(#chat,.b2pv)[data-cly-b2=3d]{--t-i:linear-gradient(160deg,#454d5e,#272c37);--t-if:#f2f5fa;--t-b:#ffffff22}
+:is(#chat,.b2pv)[data-cly-b2=neon]{--t-i:#120f26;--t-if:#f4f1ff;--t-o:linear-gradient(135deg,#ff2bd6,#5b5bff);--t-of:#fff;--t-s:0 0 14px #a855f777;--t-is:inset 0 0 10px #a855f733;--t-b:#a855f799}
+:is(#chat,.b2pv)[data-cly-b2=midnight]{--t-i:#1b2236;--t-if:#e6ebff;--t-o:linear-gradient(145deg,#33468a,#17224a);--t-of:#fff;--t-g:linear-gradient(180deg,#ffffff14,#0000 60%);--t-s:0 4px 12px #0006;--t-b:#ffffff1c}
+:is(#chat,.b2pv)[data-cly-b2=liquid]{--t-i:linear-gradient(135deg,#dff6ff,#f1e6ff,#ffe6f4);--t-if:#1d2433;--t-o:linear-gradient(120deg,#00d2ff,#7b5cff 50%,#ff5ec4);--t-of:#fff;--t-g:linear-gradient(180deg,#ffffff4d,#0000 55%);--t-s:0 8px 20px #7b5cff44;--t-is:inset 0 1px 0 #fff9}
+:root[data-theme=dark] :is(#chat,.b2pv)[data-cly-b2=liquid]{--t-i:linear-gradient(135deg,#27384a,#392b4f,#4a2a41);--t-if:#f1f4ff}
+:is(#chat,.b2pv)[data-cly-b2=cyber]{--t-i:#0b1f26;--t-if:#d9fbff;--t-o:linear-gradient(135deg,#00e5ff,#7c3aed);--t-of:#04121a;--t-r:6px;--t-rm:6px;--t-s:0 0 12px #00e5ff44;--t-is:inset 0 0 0 1px #00e5ff22;--t-b:#00e5ff88}
+:is(#chat,.b2pv)[data-cly-b2=luxury]{--t-i:linear-gradient(145deg,#2c261a,#15120c);--t-if:#f4e8c8;--t-o:linear-gradient(145deg,#f8e49a,#cba34a 55%,#8c6b1f);--t-of:#2b2006;--t-g:linear-gradient(180deg,#ffffff33,#0000 50%);--t-s:0 6px 16px #0006;--t-is:inset 0 1px 0 #ffffff55;--t-b:#d4af5acc}
+:is(#chat,.b2pv)[data-cly-b2=holo]{--t-i:#ffffff3d;--t-if:#1b1f2e;--t-o:linear-gradient(135deg,#a1c4fd,#c2ffd8 30%,#fbc2eb 62%,#ffe29f);--t-of:#1a1a2e;--t-bf:blur(12px) saturate(1.5);--t-g:linear-gradient(120deg,#ffffff66,#0000 40%,#ffffff33 70%,#0000);--t-s:0 8px 22px #7c6cff33;--t-b:#ffffffa6}
+:root[data-theme=dark] :is(#chat,.b2pv)[data-cly-b2=holo]{--t-if:#f4f6ff;--t-i:#ffffff1f}
+:is(#chat,.b2pv)[data-cly-b2=ios]{--t-i:#e9e9eb;--t-if:#0b0b0d;--t-o:#0a84ff;--t-of:#fff;--t-s:0 0 0 0 transparent}
+:root[data-theme=dark] :is(#chat,.b2pv)[data-cly-b2=ios]{--t-i:#2c2c2e;--t-if:#f5f5f7}
+:is(#chat,.b2pv)[data-cly-b2=prem]{--t-i:#1c1c1f;--t-if:#f2f2f4;--t-o:linear-gradient(145deg,#4b4b57,#25252c);--t-of:#fff;--t-g:linear-gradient(180deg,#ffffff1a,#0000 55%);--t-s:0 5px 14px #0007;--t-b:#ffffff1a}
+</style>
+<script id="cly-bubble-v2">
+(function(){
+"use strict";
+const THEMES=[["3d","3D Glass"],["neon","Neon"],["midnight","Midnight"],["liquid","Liquid Gradient"],["cyber","Cyber"],["luxury","Luxury"],["holo","Holographic"],["ios","Minimal iOS"],["prem","Premium Dark"],["classic","Classic (previous)"]];
+const SHAPES=[["","Theme"],["round","Round"],["tail","Chat tail"],["soft","Soft"],["pill","Pill"],["square","Square"],["sharp","Sharp"]];
+const SR={round:["20px","20px"],tail:["20px 20px 20px 6px","20px 20px 6px 20px"],soft:["26px 26px 26px 9px","26px 26px 9px 26px"],pill:["30px","30px"],square:["9px","9px"],sharp:["3px","3px"]};
+const SHADOWS=[["","Theme"],["none","None"],["soft","Soft"],["medium","Medium"],["deep","Deep"],["glow","Glow"]];
+const SHV={none:"0 0 0 0 transparent",soft:"0 2px 8px #0002",medium:"0 6px 16px #0003",deep:"0 12px 28px #0006",glow:"0 0 18px 2px #7c8cff88"};
+const FONTS=[["","Default"],["ui-rounded,'SF Pro Rounded',system-ui,sans-serif","Rounded"],["Georgia,'Times New Roman',serif","Serif"],["ui-monospace,Menlo,Consolas,monospace","Mono"],["'Segoe Print','Bradley Hand',cursive","Handwritten"]];
+const DEF={th:"3d",ic:"",ic2:"",oc:"",oc2:"",ig:0,og:0,op:100,sp:"",sd:"",f:"",fs:16};
+const $=id=>document.getElementById(id);
+let key="",S={...DEF};
+const userKey=()=>{try{const u=JSON.parse(localStorage.getItem("chatly_user")||"null");return "chatly_bub2_"+((u&&u.name)||"guest").toLowerCase().replace(/[\s\/]/g,"")}catch(e){return "chatly_bub2_guest"}};
+function load(){key=userKey();try{S={...DEF,...JSON.parse(localStorage.getItem(key)||"{}")}}catch(e){S={...DEF}}}
+function save(){try{localStorage.setItem(key,JSON.stringify(S))}catch(e){alert("Could not save bubble settings on this device.")}}
+const rgb=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const fgFor=h=>{const l=rgb(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*l[0]+.7152*l[1]+.0722*l[2]>.45?"#101418":"#fff"};
+const paint=(a,b,g)=>g&&b?"linear-gradient(135deg,"+a+","+b+")":a;
+function apply(){
+  const targets=[$("chat"),...document.querySelectorAll(".b2pv")].filter(Boolean);
+  targets.forEach(t=>{
+    t.setAttribute("data-cly-b2",S.th);
+    const set=(k,v)=>v?t.style.setProperty(k,v):t.style.removeProperty(k);
+    set("--b2i",S.ic?paint(S.ic,S.ic2,S.ig):"");set("--b2if",S.ic?fgFor(S.ic):"");
+    set("--b2o",S.oc?paint(S.oc,S.oc2,S.og):"");set("--b2of",S.oc?fgFor(S.oc):"");
+    const sr=SR[S.sp];set("--b2r",sr?sr[0]:"");set("--b2rm",sr?sr[1]:"");
+    set("--b2s",SHV[S.sd]||"");
+    set("--b2ff",FONTS[Number(S.f)||0][0]);
+    set("--b2fs",(Number(S.fs)||16)+"px");
+    t.style.setProperty("--b2a",String(Math.min(100,Math.max(35,Number(S.op)||100))/100));
+  });
+}
+const btns=(list,cur,attr)=>list.map((x,i)=>'<button type="button" class="sh'+(String(cur)===String(x[0])?" on":"")+'" data-'+attr+'="'+x[0]+'">'+x[1]+'</button>').join("");
+function colorRow(label,c,c2,g,p){return '<div class="czs">'+label+'</div><div class="czg b2f"><input type="color" data-k="'+p+'c" value="'+(c||"#888888")+'" aria-label="'+label+' colour"><input type="color" data-k="'+p+'c2" value="'+(c2||"#555555")+'" aria-label="'+label+' second colour"><label><input type="checkbox" data-k="'+p+'g"'+(g?" checked":"")+'> Gradient</label><button type="button" class="sh" data-clr="'+p+'">Use theme</button></div>'}
+function buildPanel(){
+  const b=$("czb");if(!b)return;let p=$("b2p");if(!p){p=document.createElement("div");p.id="b2p";const r=$("czr");r?b.insertBefore(p,r):b.appendChild(p)}
+  p.innerHTML='<div class="czs">Preview</div><div class="b2pv" data-cly-b2="'+S.th+'"><div class="m"><div class="n">Alex</div>Dinner at 8?<div class="t">9:41</div></div><div class="m me"><div class="q"><b>Alex</b><span class="qt">Dinner at 8?</span></div>Sounds perfect<div class="t">9:42</div></div></div>'
+   +'<div class="czs">Bubble theme (all chats)</div><div class="czg" data-g="th">'+btns(THEMES,S.th,"th")+'</div>'
+   +colorRow("Incoming bubble",S.ic,S.ic2,S.ig,"i")+colorRow("Outgoing bubble",S.oc,S.oc2,S.og,"o")
+   +'<div class="czs">Transparency</div><div class="czg b2f"><input type="range" min="35" max="100" step="5" data-k="op" value="'+S.op+'" aria-label="Bubble opacity"></div>'
+   +'<div class="czs">Bubble shape (overrides theme)</div><div class="czg">'+btns(SHAPES,S.sp,"sp")+'</div>'
+   +'<div class="czs">Bubble shadow</div><div class="czg">'+btns(SHADOWS,S.sd,"sd")+'</div>'
+   +'<div class="czs">Font</div><div class="czg b2f"><select data-k="f" aria-label="Message font">'+FONTS.map((f,i)=>'<option value="'+(i||"")+'"'+(String(S.f)===String(i||"")?" selected":"")+'>'+f[1]+'</option>').join("")+'</select></div>'
+   +'<div class="czs">Font size</div><div class="czg b2f"><input type="range" min="12" max="22" step="1" data-k="fs" value="'+S.fs+'" aria-label="Message font size"><span>'+S.fs+'px</span></div>'
+   +'<div class="czg"><button type="button" class="sh" data-b2reset="1">Reset bubble style</button></div>';
+  apply();
+}
+document.addEventListener("click",e=>{const p=e.target.closest&&e.target.closest("#b2p");if(!p)return;const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.th){S.th=b.dataset.th}else if(b.dataset.sp!==undefined){S.sp=b.dataset.sp}else if(b.dataset.sd!==undefined){S.sd=b.dataset.sd}
+  else if(b.dataset.clr){const q=b.dataset.clr;S[q+"c"]="";S[q+"c2"]="";S[q+"g"]=0}
+  else if(b.dataset.b2reset){S={...DEF}}else return;
+  save();buildPanel()});
+document.addEventListener("input",e=>{const t=e.target;if(!t.closest||!t.closest("#b2p")||!t.dataset.k)return;const k=t.dataset.k;
+  if(t.type==="checkbox")S[k]=t.checked?1:0;else if(t.type==="range"){S[k]=Number(t.value);if(k==="fs"&&t.nextSibling)t.nextSibling.textContent=t.value+"px"}else S[k]=t.value;
+  if(S.f==="0")S.f="";
+  save();apply()});
+/* reply: jump to the original message */
+function bindMsgs(){const m=$("msgs");if(!m||m._b2)return;m._b2=1;
+  m.addEventListener("click",e=>{const q=e.target.closest&&e.target.closest(".q[data-rid]");if(!q)return;e.stopPropagation();e.preventDefault();
+    const t=[...m.querySelectorAll(".m")].find(x=>x.dataset.id===q.dataset.rid);
+    if(!t){try{typeof toast==="function"&&toast("Original message is not available")}catch(x){}return}
+    t.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});
+    t.classList.add("hl2");setTimeout(()=>t.classList.remove("hl2"),1400)},true);
+  let tm=0;new MutationObserver(()=>{clearTimeout(tm);tm=setTimeout(tidy,30)}).observe(m,{childList:true,subtree:false})}
+const EMO=/^(?:\p{Extended_Pictographic}|\p{Emoji_Modifier}|\u200d|\ufe0f|\s){1,6}$/u;
+function tidy(){const m=$("msgs");if(!m)return;if(key!==userKey()){load();buildPanel()}
+  m.querySelectorAll(":scope>.m").forEach(el=>{if(el.classList.contains("emo")||el.dataset.b2)return;el.dataset.b2="1";
+    const c=el.cloneNode(true);c.querySelectorAll(".n,.t,.fwdtag,.rch").forEach(x=>x.remove());
+    if(!c.querySelector("img,.q,.vm,.fl")){const tx=c.textContent.trim();if(tx&&EMO.test(tx))el.classList.add("emo")}})}
+function init(){load();buildPanel();bindMsgs();apply()}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+new MutationObserver(()=>{const c=$("chat");if(c&&!c.hasAttribute("data-cly-b2"))apply()}).observe(document.body,{childList:true,subtree:false,attributes:false});
+})();
+</script>
+
+<style id="cly-rec-anim">
+#mic.rec{position:relative;animation:micp 1.1s ease-in-out infinite}
+#mic.rec::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #e53935;pointer-events:none;animation:micring 1.1s ease-out infinite}
+@keyframes micp{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes micring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+#recbar{display:none;flex:1;min-width:0;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:22px;background:var(--panel,#fff);color:var(--text,#111);box-shadow:0 0 0 1px #e5393555}
+form.recording #recbar{display:flex}
+form.recording #in{display:none!important}
+#recbar .rd{flex:none;width:10px;height:10px;border-radius:50%;background:#e53935;animation:rdb 1s ease-in-out infinite}
+#recbar .rt{flex:none;font-variant-numeric:tabular-nums;font-weight:600;font-size:15px;min-width:38px}
+#recbar .rw{flex:1;min-width:0;height:26px;display:flex;align-items:center;gap:3px;overflow:hidden}
+#recbar .rw i{flex:1;max-width:5px;min-width:2px;height:100%;border-radius:3px;background:#e53935;transform-origin:center;animation:rwv .9s ease-in-out infinite;animation-delay:calc(var(--i)*-.07s)}
+#recbar .rh{flex:none;font-size:12px;color:var(--sub,#888)}
+@keyframes rdb{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes rwv{0%,100%{transform:scaleY(.18)}50%{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){#mic.rec,#mic.rec::after,#recbar .rd,#recbar .rw i{animation:none}}
+</style>
+<script id="cly-rec-anim">
+(function(){
+const mic=document.getElementById("mic"),inp=document.getElementById("in");if(!mic||!inp)return;
+const form=inp.closest("form");if(!form)return;
+const bar=document.createElement("div");bar.id="recbar";bar.setAttribute("role","status");
+bar.innerHTML='<span class="rd"></span><span class="rt">0:00</span><span class="rw">'+Array.from({length:40},(_,i)=>'<i style="--i:'+i+'"></i>').join("")+'</span><span class="rh">Tap mic to send</span>';
+form.insertBefore(bar,inp);
+let t0=0,iv=0;const rt=bar.querySelector(".rt");
+const tick=()=>{const s=Math.floor((Date.now()-t0)/1000);rt.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+function sync(){const on=mic.classList.contains("rec");
+  if(on&&!iv){t0=Date.now();tick();iv=setInterval(tick,250);form.classList.add("recording")}
+  else if(!on&&iv){clearInterval(iv);iv=0;form.classList.remove("recording")}}
+new MutationObserver(sync).observe(mic,{attributes:true,attributeFilter:["class"]});
+})();
+</script>
+<style id="cly-p23">
+#clyRefresh{flex:none;display:flex;align-items:center;justify-content:center;width:40px;height:40px;margin-left:7px;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);cursor:pointer}
+#clyRefresh svg{width:20px;height:20px;fill:currentColor}
+#clyRefresh.spin svg{animation:clyspin .8s linear infinite}
+@keyframes clyspin{to{transform:rotate(360deg)}}
+header:has(#back:not([hidden])) #clyRefresh{background:#ffffff1c;border-color:#ffffff55;color:#fff}
+#clyNote{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);max-width:86vw;padding:10px 16px;border-radius:14px;background:#1f2937;color:#fff;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:300}
+#clyNote.on{opacity:1;transform:translate(-50%,0)}
+.clysnd select{max-width:46vw;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text)}
+.clysnd .cly-btn{margin:0 0 0 6px;padding:6px 10px;width:auto;min-width:0}
+.clysnd-note{display:block;padding:6px 16px 12px;font-size:12px;color:var(--sub)}
+@media(prefers-reduced-motion:reduce){#clyRefresh.spin svg{animation:none}}
+</style>
+<script id="cly-p23">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const uk=()=>{try{const u=JSON.parse(localStorage.getItem("chatly_user")||"null");return((u&&u.name)||"guest").toLowerCase().replace(/[\s\/]/g,"")}catch(e){return"guest"}};
+let nt=0;function note(m){let e=$("clyNote");if(!e){e=document.createElement("div");e.id="clyNote";e.setAttribute("role","status");document.body.appendChild(e)}e.textContent=m;e.classList.add("on");clearTimeout(nt);nt=setTimeout(()=>e.classList.remove("on"),2600)}
+
+/* ---------- notification sounds ---------- */
+const PRE={classic:["Classic (default)"],pop:["Pop",[[880,0,.12,.08,"sine"],[1174,.13,.16,.07,"sine"]]],droplet:["Droplet",[[1400,0,.07,.08,"sine"],[900,.07,.16,.07,"sine"]]],chime:["Chime",[[784,0,.2,.07,"sine"],[988,.14,.2,.07,"sine"],[1318,.28,.3,.06,"sine"]]],bell:["Bell",[[988,0,.7,.07,"sine"],[1976,0,.5,.03,"sine"]]],glass:["Glass",[[1568,0,.14,.06,"triangle"],[2093,.1,.26,.05,"triangle"]]],marimba:["Marimba",[[523,0,.16,.09,"triangle"],[659,.12,.16,.08,"triangle"],[784,.24,.24,.07,"triangle"]]],pulse:["Pulse",[[440,0,.1,.06,"square"],[440,.16,.1,.06,"square"]]],soft:["Soft",[[660,0,.18,.045,"sine"],[880,.17,.2,.04,"sine"]]]};
+const sk=()=>"chatly_snd_"+uk(),ck=s=>"chatly_snd_c_"+uk()+"_"+s;
+const sget=()=>{try{return{msg:"classic",oth:"chime",...JSON.parse(localStorage.getItem(sk())||"{}")}}catch(e){return{msg:"classic",oth:"chime"}}};
+const sset=o=>{try{localStorage.setItem(sk(),JSON.stringify({...sget(),...o}))}catch(e){note("Could not save sound settings")}};
+function synth(id){const n=PRE[id]&&PRE[id][1];if(!n)return false;const c=typeof acx==="function"?acx():null;if(!c)return false;
+  const go=()=>{const t=c.currentTime+.02;n.forEach(x=>{const o=c.createOscillator(),g=c.createGain();o.type=x[4];o.frequency.value=x[0];g.gain.setValueAtTime(0,t+x[1]);g.gain.linearRampToValueAtTime(x[3],t+x[1]+.015);g.gain.exponentialRampToValueAtTime(.0001,t+x[1]+x[2]);o.connect(g);g.connect(c.destination);o.start(t+x[1]);o.stop(t+x[1]+x[2]+.05)})};
+  if(c.state==="suspended")c.resume().then(go).catch(()=>{});else go();return true}
+function play(slot){const id=sget()[slot];if(id==="classic")return false;
+  if(id==="custom"){let u=null;try{u=localStorage.getItem(ck(slot))}catch(e){}if(!u)return false;const a=new Audio(u);a.play().catch(()=>{});return true}
+  return synth(id)}
+window.clyPlaySound=play;window.clyCustomSoundOn=()=>sget().msg!=="classic";
+function rowHTML(slot,label){const s=sget();const hasC=!!(()=>{try{return localStorage.getItem(ck(slot))}catch(e){return null}})();
+  const opts=Object.keys(PRE).filter(k=>slot==="msg"||k!=="classic").map(k=>'<option value="'+k+'"'+(s[slot]===k?" selected":"")+'>'+PRE[k][0]+'</option>').join("")+(hasC?'<option value="custom"'+(s[slot]==="custom"?" selected":"")+'>Your uploaded sound</option>':"");
+  return '<div class="cly-row clysnd"><span class="cly-info"><b>'+label+'</b></span><select data-slot="'+slot+'" aria-label="'+label+'">'+opts+'</select><button type="button" class="cly-btn secondary" data-prev="'+slot+'">Play</button><label class="cly-btn secondary" style="cursor:pointer">Upload<input type="file" accept="audio/*" data-up="'+slot+'" hidden></label></div>'}
+function buildSound(){const sw=$("clySound");if(!sw)return;const card=sw.closest(".cly-card");if(!card)return;let box=$("clySndBox");if(!box){box=document.createElement("div");box.id="clySndBox";card.insertBefore(box,card.querySelector("#clyVibrate")?card.querySelector("#clyVibrate").closest("label"):null)}
+  box.innerHTML=rowHTML("msg","Message sound")+rowHTML("oth","Other notifications sound")+'<span class="clysnd-note">Sounds play only while Chatly is open and your browser allows audio. Chatly cannot play custom sounds when the app is closed or in the background.</span>'}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-prev]");if(!b)return;if(!play(b.dataset.prev)){const c=typeof acx==="function"?acx():null;if(c){const t=c.currentTime+.02;[[880,0],[1174,.13]].forEach(x=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=x[0];g.gain.setValueAtTime(.07,t+x[1]);g.gain.exponentialRampToValueAtTime(.0001,t+x[1]+.15);o.connect(g);g.connect(c.destination);o.start(t+x[1]);o.stop(t+x[1]+.2)})}}});
+document.addEventListener("change",e=>{const t=e.target;if(!t.dataset)return;
+  if(t.dataset.slot){sset({[t.dataset.slot]:t.value});play(t.dataset.slot);return}
+  if(t.dataset.up){const slot=t.dataset.up,f=t.files&&t.files[0];t.value="";if(!f)return;
+    if(!/^audio\//.test(f.type)){note("Choose an audio file");return}if(f.size>600*1024){note("Audio must be under 600 KB");return}
+    const r=new FileReader();r.onerror=()=>note("Could not read that file");r.onload=()=>{const url=String(r.result),a=new Audio();
+      a.onerror=()=>note("This audio format is not supported");
+      a.onloadedmetadata=()=>{if(!(a.duration>0&&a.duration<=6)){note("Use a clip of up to 6 seconds");return}
+        try{localStorage.setItem(ck(slot),url)}catch(x){note("Not enough storage for this sound");return}sset({[slot]:"custom"});buildSound();a.play().catch(()=>{});note("Sound saved")};a.src=url};r.readAsDataURL(f)}});
+
+/* ---------- refresh and sync ---------- */
+let busy=null,lastAt=0;
+function resub(){if(typeof db==="undefined"||!db||typeof room==="undefined"||!room)return;const r=room;try{if(unsub)unsub()}catch(e){}
+  unsub=db.collection("messages").where("room","==",r).limit(300).onSnapshot(s=>{if(room!==r)return;render(s.docs.map(d=>({...d.data(),id:d.id})))},()=>{})}
+function refreshNow(manual){if(busy)return busy;
+  if(!manual&&Date.now()-lastAt<3000)return Promise.resolve();
+  const btn=$("clyRefresh");btn&&btn.classList.add("spin");
+  busy=(async()=>{try{if(typeof db==="undefined"||!db||!window.SB||!SB.raw)throw new Error("offline");
+      const ping=SB.raw.from("docs").select("path").limit(1);
+      const res=await Promise.race([ping,new Promise((_,rj)=>setTimeout(()=>rj(new Error("timeout")),8000))]);
+      if(res&&res.error)throw res.error;
+      resub();if(typeof drawRooms==="function")drawRooms();lastAt=Date.now();if(manual)note("Up to date")}
+    catch(e){if(manual||navigator.onLine===false)note("Could not refresh. Check your connection.")}
+    finally{await new Promise(r=>setTimeout(r,350));btn&&btn.classList.remove("spin");busy=null}})();return busy}
+window.clyRefresh=refreshNow;
+function addBtn(){if($("clyRefresh"))return;const h=document.querySelector("header");if(!h)return;const b=document.createElement("button");b.id="clyRefresh";b.type="button";b.setAttribute("aria-label","Refresh");
+  b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A8 8 0 1 0 19.74 14h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>';
+  const s=$("chatlySettingsBtn");s&&s.parentNode===h?h.insertBefore(b,s):h.appendChild(b);b.onclick=()=>refreshNow(true)}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refreshNow(false)});
+window.addEventListener("online",()=>refreshNow(false));window.addEventListener("pageshow",e=>{if(e.persisted)refreshNow(false)});
+window.addEventListener("offline",()=>note("You are offline. Messages will sync when you reconnect."));
+setInterval(()=>{if(document.visibilityState==="visible"&&navigator.onLine!==false)refreshNow(false)},60000);
+
+/* ---------- private chat PIN (salted PBKDF2) ---------- */
+const enc=new TextEncoder(),IT=150000;
+const b64=u=>btoa(String.fromCharCode(...u)),unb=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function der(p,salt,it){const k=await crypto.subtle.importKey("raw",enc.encode(String(p)),"PBKDF2",false,["deriveBits"]);return new Uint8Array(await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt,iterations:it},k,256))}
+window.clyPinMake=async p=>{const salt=crypto.getRandomValues(new Uint8Array(16));return"v2$"+IT+"$"+b64(salt)+"$"+b64(await der(p,salt,IT))};
+const TK="chatly_pin_try_"+uk;
+window.clyPinVerify=async(p,key,legacy)=>{window.clyPinMsg="";let st={n:0,until:0};try{st=JSON.parse(localStorage.getItem("chatly_pin_try")||"{}")}catch(e){}
+  if(st.until>Date.now()){window.clyPinMsg="Too many attempts. Try again in "+Math.ceil((st.until-Date.now())/1000)+"s.";return false}
+  let ok=false;const stored=localStorage.getItem(key)||"";
+  try{if(stored.startsWith("v2$")){const a=stored.split("$"),salt=unb(a[2]),h=await der(p,salt,Number(a[1])),want=unb(a[3]);ok=h.length===want.length&&h.every((v,i)=>v===want[i])}
+    else if(stored){ok=(await legacy(p))===stored;if(ok){try{localStorage.setItem(key,await window.clyPinMake(p))}catch(e){}}}}catch(e){ok=false}
+  if(ok){try{localStorage.removeItem("chatly_pin_try")}catch(e){}return true}
+  st.n=(st.n||0)+1;if(st.n>=5){st.until=Date.now()+30000*Math.min(8,st.n-4);window.clyPinMsg="Too many attempts. Try again in "+Math.ceil((st.until-Date.now())/1000)+"s."}
+  try{localStorage.setItem("chatly_pin_try",JSON.stringify(st))}catch(e){}return false};
+function pinInputs(){["clyPinOne","clyPinTwo"].forEach(i=>{const e=$(i);if(e){e.maxLength=8;e.setAttribute("inputmode","numeric");e.setAttribute("autocomplete","off")}})}
+
+function init(){addBtn();buildSound();pinInputs()}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+})();
+</script>
+<style id="cly-owner-plus">
+#clyOwnerPlus{margin:0 0 14px}
+#clyOwnerPage #owstats,#clyOwnerOverviewPage #owstats{display:none!important}
+.cop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cop-tile{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:13px;text-align:left;color:var(--text);min-width:0}
+button.cop-tile{cursor:pointer}
+.cop-tile b{display:block;font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.cop-tile span{display:block;margin-top:4px;font-size:12px;color:var(--sub)}
+.cop-sec{margin:16px 0 8px;font-size:13px;font-weight:700;color:var(--sub)}
+.cop-card{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:12px}
+.cop-row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:9px 4px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--text);text-align:left;cursor:pointer}
+.cop-row:last-child{border-bottom:0}.cop-row small{color:var(--sub);font-size:12px;white-space:nowrap}
+.cop-row b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cop-note{font-size:12px;color:var(--sub);line-height:1.5;margin-top:8px}
+#clyOwnerTools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+#clyOwnerTools button,#clyOwnerTools select,.cop-actions button{height:34px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);font-size:13px}
+#clyOwnerTools button.on{background:var(--accent,#14b8a6);border-color:transparent;color:#fff}
+.cop-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cop-actions button.danger{color:#ef4444;border-color:#ef444466}
+.cop-stats{margin-top:12px;font-size:13px;color:var(--sub);line-height:1.7}
+</style>
+<script id="cly-owner-plus">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const E=x=>String(x==null?"":x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const U=()=>(typeof usersCache!=="undefined"&&usersCache)||{};
+const D=86400000,srv={msgs:null,reports:null};
+const fmt=t=>t?new Date(t).toLocaleString([],{dateStyle:"medium",timeStyle:"short"}):"Not recorded";
+const ago=t=>{if(!t)return"never";const s=Math.max(0,(Date.now()-t)/1000);return s<60?"just now":s<3600?Math.floor(s/60)+" min ago":s<86400?Math.floor(s/3600)+" h ago":Math.floor(s/86400)+" d ago"};
+const susp=d=>{const su=Number(d.suspendedUntil)||0,n=Date.now();return(d.suspended===true&&(!su||su>n))||su>n};
+const FIL={all:["All",()=>true],online:["Online",d=>d.seen&&Date.now()-d.seen<60000],d7:["Active 7 days",d=>d.seen&&Date.now()-d.seen<7*D],susp:["Suspended",susp],never:["Never online",d=>!d.seen]};
+let flt="all",srt="name",busy=false;
+function agg(){const u=U(),ks=Object.keys(u).filter(k=>u[k]),n=Date.now();
+  return{u,ks,total:ks.length,online:ks.filter(k=>u[k].seen&&n-u[k].seen<60000).length,d1:ks.filter(k=>u[k].seen&&n-u[k].seen<D).length,d7:ks.filter(k=>u[k].seen&&n-u[k].seen<7*D).length,susp:ks.filter(k=>susp(u[k])).length,new7:ks.filter(k=>u[k].createdAt&&n-u[k].createdAt<7*D).length,nodate:ks.filter(k=>!u[k].createdAt).length,rooms:typeof roomDocs!=="undefined"?roomDocs.length:0}}
+async function loadSrv(){if(busy||!window.SB||!SB.raw)return;busy=true;try{
+  const m=await SB.raw.from("docs").select("path",{count:"exact",head:true}).eq("collection","messages");if(!m.error)srv.msgs=m.count;
+  const r=await SB.raw.from("docs").select("data").eq("collection","reports").limit(500);if(!r.error)srv.reports=(r.data||[]).map(x=>x.data||{})}catch(e){}busy=false;paint()}
+function chart(a){const days=[],n=new Date();n.setHours(0,0,0,0);for(let i=6;i>=0;i--){const s=n.getTime()-i*D;days.push({s,c:0})}
+  a.ks.forEach(k=>{const t=a.u[k].createdAt;if(!t)return;const d=days.find(x=>t>=x.s&&t<x.s+D);if(d)d.c++});
+  const mx=Math.max(1,...days.map(d=>d.c));
+  return'<svg viewBox="0 0 280 96" width="100%" role="img" aria-label="New accounts in the last 7 days">'+days.map((d,i)=>{const h=Math.round(d.c/mx*52),x=i*40+6;return'<rect x="'+x+'" y="'+(62-h)+'" width="28" height="'+h+'" rx="6" fill="var(--accent,#14b8a6)" opacity="'+(d.c?1:.25)+'"/><text x="'+(x+14)+'" y="'+(56-h)+'" text-anchor="middle" font-size="11" fill="var(--text)">'+(d.c||"")+'</text><text x="'+(x+14)+'" y="82" text-anchor="middle" font-size="10" fill="var(--sub)">'+new Date(d.s).toLocaleDateString([],{weekday:"short"})+'</text>'}).join("")+'</svg>'}
+function paint(){const pg=$("clyOwnerOverviewPage");if(!pg)return;let box=$("clyOwnerPlus");if(!box){box=document.createElement("div");box.id="clyOwnerPlus";pg.insertBefore(box,pg.firstChild);
+    box.addEventListener("click",e=>{const f=e.target.closest("[data-f]"),r=e.target.closest("[data-u]");if(!f&&!r)return;const t=document.querySelector('[data-tab="users"]');t&&t.click();
+      if(f){flt=f.dataset.f;const q=$("owq");q&&(q.value="");}if(r){flt="all";const q=$("owq");if(q){q.value=r.dataset.u}}
+      const q=$("owq");q&&q.dispatchEvent(new Event("input",{bubbles:true}));tools();tag()})}
+  const a=agg(),rep=srv.reports?srv.reports.filter(r=>(r.status||"Open")!=="Resolved").length:null;
+  const T=(n,l,f)=>(f?'<button type="button" class="cop-tile" data-f="'+f+'">':'<div class="cop-tile">')+'<b>'+n+'</b><span>'+l+'</span>'+(f?'</button>':'</div>');
+  const rec=a.ks.filter(k=>a.u[k].createdAt).sort((x,y)=>a.u[y].createdAt-a.u[x].createdAt).slice(0,5),act=a.ks.filter(k=>a.u[k].seen).sort((x,y)=>a.u[y].seen-a.u[x].seen).slice(0,5);
+  const row=(k,t)=>'<button type="button" class="cop-row" data-u="'+E(k)+'"><b>'+E(a.u[k].name||k)+' <small>@'+E(k)+'</small></b><small>'+t+'</small></button>';
+  box.innerHTML='<div class="cop-grid">'+T(a.total,"Registered accounts","all")+T(a.online,"Online now","online")+T(a.d1,"Active in 24 hours","d7")+T(a.d7,"Active in 7 days","d7")+T(a.susp,"Suspended","susp")+T(a.new7,"New in 7 days")+T(a.rooms,"Conversations")+T(srv.msgs==null?"-":srv.msgs,"Total messages")+T(rep==null?"-":rep,"Open reports")+'</div>'
+   +'<div class="cop-sec">New accounts, last 7 days</div><div class="cop-card">'+chart(a)+(a.nodate?'<div class="cop-note">'+a.nodate+' older account(s) have no creation date. Dates are recorded for accounts created from now on.</div>':"")+'</div>'
+   +'<div class="cop-sec">Recently registered</div><div class="cop-card">'+(rec.length?rec.map(k=>row(k,ago(a.u[k].createdAt))).join(""):'<div class="cop-note">No dated registrations yet.</div>')+'</div>'
+   +'<div class="cop-sec">Recently online</div><div class="cop-card">'+(act.length?act.map(k=>row(k,ago(a.u[k].seen))).join(""):'<div class="cop-note">No activity recorded yet.</div>')+'</div>'}
+/* users tab: filters, sorting, export */
+function tools(){const l=$("owl");if(!l)return;let t=$("clyOwnerTools");if(!t){t=document.createElement("div");t.id="clyOwnerTools";l.parentNode.insertBefore(t,l);
+    t.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.f){flt=b.dataset.f;tools();tag()}else if(b.dataset.x)exportCsv()});
+    t.addEventListener("change",e=>{if(e.target.dataset.s){srt=e.target.value;tag()}})}
+  t.innerHTML=Object.keys(FIL).map(k=>'<button type="button" data-f="'+k+'" class="'+(flt===k?"on":"")+'">'+FIL[k][0]+'</button>').join("")+'<select data-s="1" aria-label="Sort accounts"><option value="name"'+(srt==="name"?" selected":"")+'>Name</option><option value="seen"'+(srt==="seen"?" selected":"")+'>Last online</option><option value="new"'+(srt==="new"?" selected":"")+'>Newest</option></select><button type="button" data-x="1">Export CSV</button>'}
+let tagging=false;
+function tag(){const l=$("owl");if(!l||tagging)return;tagging=true;try{const u=U(),rows=[...l.querySelectorAll(":scope>.owr")];
+  rows.forEach(r=>{const s=r.querySelector(".owi small"),m=s&&s.textContent.match(/^@(\S+)/);r.dataset.k=m?m[1]:""});
+  const f=FIL[flt][1];let shown=0;rows.forEach(r=>{const d=u[r.dataset.k],ok=!!d&&!!f(d);r.style.display=ok?"":"none";if(ok)shown++});
+  const val=k=>{const d=u[k]||{};return srt==="seen"?-(d.seen||0):srt==="new"?-(d.createdAt||0):k};
+  const want=[...rows].sort((a,b)=>{const x=val(a.dataset.k),y=val(b.dataset.k);return x<y?-1:x>y?1:0});
+  if(want.some((r,i)=>r!==rows[i])){const ref=l.querySelector(":scope>.empty");want.forEach(r=>l.insertBefore(r,ref||null))}
+  const c=$("owc");if(c)c.textContent=shown+" of "+rows.length+" accounts"}finally{setTimeout(()=>{tagging=false},0)}}
+function exportCsv(){const u=U(),q=v=>{v=v==null?"":String(v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return'"'+v.replace(/"/g,'""')+'"'};
+  const rows=[["username","name","status","suspended_until","suspension_reason","created","last_online"]];
+  Object.keys(u).filter(k=>u[k]).sort().forEach(k=>{const d=u[k];rows.push([k,d.name||"",susp(d)?"Suspended":"Active",Number(d.suspendedUntil)>0?new Date(d.suspendedUntil).toISOString():(susp(d)?"permanent":""),d.suspensionReason||"",d.createdAt?new Date(d.createdAt).toISOString():"",d.seen?new Date(d.seen).toISOString():""])});
+  const blob=new Blob(["\ufeff"+rows.map(r=>r.map(q).join(",")).join("\r\n")],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="chatly-accounts-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+/* details panel: actions, counts, password reset */
+function detail(){const body=$("clyOwnerDetailBody");if(!body||body.querySelector(".cop-actions"))return;
+  const cell=[...body.querySelectorAll(".detailcell")].find(c=>/^username/i.test((c.querySelector("small")||{}).textContent||""));if(!cell)return;
+  const k=((cell.querySelector("b")||{}).textContent||"").replace(/^@/,"").trim();if(!k)return;const d=U()[k]||{},me=typeof uname==="function"?uname():"";
+  const w=document.createElement("div");w.dataset.u=k;w.innerHTML='<div class="cop-stats" id="copStats">Loading activity...</div><div class="cop-actions"><button type="button" data-a="copy">Copy user ID</button>'+(k===me?"":(susp(d)?'<button type="button" data-a="unsus">Unsuspend</button>':'<button type="button" data-a="sus">Suspend</button>')+'<button type="button" data-a="reset">Reset password</button><button type="button" data-a="del" class="danger">Delete account</button>')+'</div><div class="cop-note">User ID is the username. Passwords and password hashes are never shown.</div>';
+  body.appendChild(w);w.addEventListener("click",e=>act(e,k));stats(k)}
+async function stats(k){const el=$("copStats");if(!el)return;let m="unavailable";try{const r=await SB.raw.from("docs").select("path",{count:"exact",head:true}).eq("collection","messages").eq("data->>uid",k);if(!r.error)m=r.count}catch(e){}
+  const reps=srv.reports?srv.reports.filter(r=>r.user===k):null,by=srv.reports?srv.reports.filter(r=>r.by===k).length:null;
+  const el2=$("copStats");if(el2)el2.innerHTML="Messages sent: <b>"+E(m)+"</b><br>Reports against this user: <b>"+(reps?reps.length:"unavailable")+"</b><br>Reports filed by this user: <b>"+(by==null?"unavailable":by)+"</b>"}
+async function act(e,k){const b=e.target.closest("button[data-a]");if(!b)return;const a=b.dataset.a;
+  if(a==="copy"){try{await navigator.clipboard.writeText(k);b.textContent="Copied"}catch(x){b.textContent="Copy failed"}return}
+  if(typeof isOwner==="function"&&!(await isOwner()))return;
+  const close=()=>{const c=document.querySelector("#clyOwnerDetails .close");c&&c.click()};
+  if(a==="sus"||a==="unsus"||a==="del"){const sel=a==="sus"?".cly-suspend-open":a==="unsus"?".cly-unsuspend-new":".owdel",t=document.querySelector("#owl "+sel+'[data-u="'+k+'"]');if(!t){alert("Open the Users tab and clear any filter first.");return}close();t.click();return}
+  if(a==="reset"){const p=prompt("Set a temporary password for @"+k+" (at least 8 characters). Share it with the user privately.");if(p===null)return;
+    if(p.length<8){alert("Use at least 8 characters.");return}if(typeof pwh!=="function"||typeof db==="undefined"||!db){alert("Server connection is unavailable.");return}
+    try{await db.doc("users/"+k).update({pw:await pwh(k,p),session:""});try{await db.collection("audit").add({action:"Reset password for "+k,by:typeof uname==="function"?uname():"owner",ts:Date.now()})}catch(x){}alert("Password reset. @"+k+" must log in again with the temporary password.")}
+    catch(err){alert("Could not reset password: "+((err&&err.message)||err))}}}
+function init(){paint();tools();tag();detail()}
+let tm=0;const sched=()=>{clearTimeout(tm);tm=setTimeout(init,60)};
+new MutationObserver(sched).observe(document.body,{childList:true,subtree:true});
+setInterval(()=>{const p=$("clyOwnerOverviewPage");if(p&&p.offsetParent!==null&&document.visibilityState==="visible"){loadSrv()}},30000);
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("[data-tab]"))setTimeout(()=>{paint();loadSrv()},80)},true);
+init();
+})();
+</script>
+<script id="cly-owner-presence">
+(function(){
+const U=()=>{try{return usersCache||{}}catch(e){return{}}};
+const fmt=t=>t?new Date(t).toLocaleString([],{dateStyle:"medium",timeStyle:"short"}):"Never";
+const ago=t=>{const s=Math.max(0,(Date.now()-t)/1000);return s<60?"just now":s<3600?Math.floor(s/60)+" min ago":s<86400?Math.floor(s/3600)+" h ago":Math.floor(s/86400)+" d ago"};
+function decorate(){
+ const l=document.getElementById("owl");if(!l)return;
+ const me=typeof uname==="function"?uname():"";
+ l.querySelectorAll(".owr").forEach(r=>{
+  const i=r.querySelector(".owi"),sm=i&&i.querySelector("small");if(!sm)return;
+  const m=/^@(\S+)/.exec(sm.textContent);if(!m)return;const k=m[1],d=U()[k]||{};
+  let p=i.querySelector(".owpres");
+  if(!p){p=document.createElement("div");p.className="owpres";p.style.cssText="font-size:13px;font-weight:600;margin:3px 0";i.insertBefore(p,sm.nextSibling)}
+  const on=d.seen&&Date.now()-d.seen<60000;
+  p.style.color=on?"#25d366":"var(--sub,#8aa)";
+  p.textContent=on?"🟢 Online now":d.seen?"⚪ Offline · last online "+fmt(d.seen)+" ("+ago(d.seen)+")":"⚪ Never online";
+  const a=r.querySelector(".owactions");
+  if(a&&k!==me&&!a.querySelector(".owreset")){const b=document.createElement("button");b.type="button";b.className="owreset";b.dataset.u=k;b.textContent="Reset password";a.insertBefore(b,a.firstChild)}
+ });
+}
+document.addEventListener("click",async e=>{
+ const b=e.target.closest&&e.target.closest(".owreset");if(!b)return;const k=b.dataset.u;
+ try{if(typeof isOwner==="function"&&!(await isOwner()))return}catch(x){return}
+ const p=prompt("Set a temporary password for @"+k+" (at least 8 characters). Share it with the user privately.");if(p===null)return;
+ if(p.length<8){alert("Use at least 8 characters.");return}
+ if(typeof pwh!=="function"||typeof db==="undefined"||!db){alert("Server connection is unavailable.");return}
+ try{await db.doc("users/"+k).update({pw:await pwh(k,p),session:""});try{await db.collection("audit").add({action:"Reset password for "+k,by:typeof uname==="function"?uname():"owner",ts:Date.now()})}catch(x){}alert("Password reset. @"+k+" must log in again with the temporary password.")}
+ catch(err){alert("Could not reset password: "+((err&&err.message)||err))}
+});
+function start(){const l=document.getElementById("owl");if(!l)return;new MutationObserver(decorate).observe(l,{childList:true});decorate();setInterval(decorate,15000)}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+window.clyOwnerPresence=decorate;
+})();
+</script>
+<script id="cly-call-extras">
+(function(){
+const $=id=>document.getElementById(id);
+const FL='<svg viewBox="0 0 24 24"><path d="M20 4h-3.2L15 2H9L7.2 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm-5.5 11.6V14H9.3a3.5 3.5 0 0 0 .9 1.4l-1 1A5 5 0 0 1 7.5 13H6l2.5-2.5L11 13H9.7a2 2 0 0 0 .5.8H14.5V12l2.5 2.5L14.5 17zM15 10.6a3.5 3.5 0 0 0-.9-1.4l1-1A5 5 0 0 1 16.5 11H18l-2.5 2.5L13 11h1.3a2 2 0 0 0-.5-.8H9.5V12L7 9.5 9.5 7v1.6z" fill-rule="evenodd"/></svg>';
+const SC='<svg viewBox="0 0 24 24"><path d="M20 3H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h6v2H8v2h8v-2h-2v-2h6a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-8 11-4-4h2.5V6h3v4H16z"/></svg>';
+let facing="user",cam=null,screen=null,flipping=false;
+const vTrack=()=>{try{return stream&&stream.getVideoTracks()[0]}catch(e){return null}};
+const vSender=()=>{try{return pc&&pc.getSenders().find(s=>s.track&&s.track.kind==="video")}catch(e){return null}};
+function mirror(){const lv=$("lv");if(lv)lv.style.transform=(screen||facing!=="user")?"none":"scaleX(-1)"}
+async function flip(){
+ if(flipping||screen)return;const old=vTrack();if(!old)return;flipping=true;
+ try{
+  const next=facing==="user"?"environment":"user";
+  old.stop();
+  let ns;try{ns=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:next},width:{ideal:1280},height:{ideal:720}}})}
+  catch(e){ns=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing}}});}
+  const t=ns.getVideoTracks()[0];
+  const s=vSender();if(s)await s.replaceTrack(t);
+  stream.removeTrack(old);stream.addTrack(t);
+  facing=t.getSettings&&t.getSettings().facingMode||next;
+  if(facing!=="environment"&&facing!=="user")facing=next;
+  $("lv").srcObject=stream;mirror();
+ }catch(e){alert("Could not switch camera.")}
+ flipping=false;
+}
+async function stopShare(){
+ if(!screen)return;const sc=screen;screen=null;try{sc.getTracks().forEach(t=>t.stop())}catch(e){}
+ const b=$("cshare");b&&b.classList.remove("on");
+ try{const cur=vTrack(),s=vSender();if(s&&cur)await s.replaceTrack(cur);$("lv").srcObject=stream}catch(e){}
+ mirror();
+}
+async function share(){
+ if(screen){return stopShare()}
+ const s=vSender();if(!s)return;
+ try{
+  screen=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false});
+  const t=screen.getVideoTracks()[0];await s.replaceTrack(t);
+  t.onended=stopShare;$("cshare").classList.add("on");
+  $("lv").srcObject=new MediaStream([t]);mirror();
+ }catch(e){screen=null;if(e&&e.name!=="NotAllowedError")alert("Screen share is not available on this device/browser.")}
+}
+function build(){
+ const cb=$("cb"),end=$("end");if(!cb||!end||$("cflip"))return;
+ const f=document.createElement("button");f.id="cflip";f.type="button";f.setAttribute("aria-label","Switch camera");f.innerHTML=FL;f.hidden=true;f.onclick=flip;
+ cb.insertBefore(f,end);
+ if(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia){
+  const s=document.createElement("button");s.id="cshare";s.type="button";s.setAttribute("aria-label","Share screen");s.innerHTML=SC;s.hidden=true;s.onclick=share;cb.insertBefore(s,end);
+ }
+}
+function tick(){
+ const c=$("call");if(!c)return;
+ if(c.hidden){if(screen)stopShare();facing="user";return}
+ const has=!!vTrack()&&!!vSender();
+ const f=$("cflip"),s=$("cshare");
+ if(f)f.hidden=!has||!!screen;if(s)s.hidden=!has;
+}
+const css=document.createElement("style");css.textContent="#cflip,#cshare{background:#ffffff26!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}#cshare.on{background:#fff!important}#cshare.on svg{fill:#111}#call.inc #cflip,#call.inc #cshare{display:none}";document.head.appendChild(css);
+function start(){build();setInterval(tick,400)}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+})();
+</script>
+<script id="cly-owner-refresh">
+(function(){
+const $=id=>document.getElementById(id);let busy=false;
+async function reloadUsers(){
+ if(busy)return;busy=true;
+ try{
+  if(!window.SB||!SB.raw)throw new Error("offline");
+  const r=await SB.raw.from("docs").select("path,data").eq("collection","users").limit(2000);
+  if(r.error)throw r.error;
+  (r.data||[]).forEach(x=>{if(x&&x.path)usersCache[x.path.split("/").pop()]=x.data});
+  try{owDraw()}catch(e){}
+  try{window.clyOwnerPresence&&window.clyOwnerPresence()}catch(e){}
+  return true;
+ }catch(e){return false}finally{busy=false}
+}
+const st=document.createElement("style");st.textContent="@keyframes clyspin{to{transform:rotate(360deg)}}#owh{display:flex;align-items:center}";document.head.appendChild(st);
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("#clyRefresh"))reloadUsers()},true);
+function start(){setInterval(()=>{const p=$("owp");if(p&&!p.hidden&&document.visibilityState==="visible")reloadUsers()},20000)}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+window.clyReloadUsers=reloadUsers;
+})();
+</script>
+<script id="cly-gestures">
+(function(){
+const $=id=>document.getElementById(id);
+const st=document.createElement("style");
+st.textContent="html,body{overscroll-behavior-y:contain}#clyRefresh{display:none!important}#clyPtr{position:fixed;left:50%;top:0;z-index:100000;width:38px;height:38px;margin-left:-19px;border-radius:50%;background:var(--panel,#1f2937);color:#25d366;box-shadow:0 4px 14px #0006;display:grid;place-items:center;transform:translateY(-60px);opacity:0;pointer-events:none}#clyPtr svg{width:22px;height:22px;fill:currentColor}#clyPtr.spin svg{animation:clyptr .8s linear infinite}@keyframes clyptr{to{transform:rotate(360deg)}}";
+document.head.appendChild(st);
+const ind=document.createElement("div");ind.id="clyPtr";ind.innerHTML='<svg viewBox="0 0 24 24"><path d="M17.65 6.35A8 8 0 1 0 19.74 14h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>';
+document.body.appendChild(ind);
+const vis=e=>!!e&&!e.hidden&&getComputedStyle(e).display!=="none";
+function scroller(el){while(el&&el!==document.body){const cs=getComputedStyle(el);if(/(auto|scroll)/.test(cs.overflowY)&&el.scrollHeight>el.clientHeight+1)return el;el=el.parentElement}return null}
+const ZONES=["owp","chat","list"];
+let sy=0,sx=0,pull=0,active=false,busy=false,zone=null;
+function setInd(p){const y=Math.min(p,110)-50+(env()||0);ind.style.transform="translateY("+y+"px) rotate("+(p*3)+"deg)";ind.style.opacity=Math.min(1,p/60)}
+function env(){return 0}
+async function doRefresh(){
+ busy=true;ind.classList.add("spin");ind.style.transform="translateY(46px)";ind.style.opacity=1;
+ try{const ps=[];if(typeof window.clyRefresh==="function")ps.push(window.clyRefresh(true));if(typeof window.clyReloadUsers==="function")ps.push(window.clyReloadUsers());await Promise.all(ps)}catch(e){}
+ await new Promise(r=>setTimeout(r,400));
+ ind.classList.remove("spin");ind.style.opacity=0;ind.style.transform="translateY(-60px)";busy=false;
+}
+document.addEventListener("touchstart",e=>{
+ active=false;pull=0;if(busy||e.touches.length!==1)return;
+ const t=e.target;
+ if(vis($("call"))||$("login")&&vis($("login")))return;
+ // overlays other than owner panel block pull-to-refresh
+ for(const id of ["chatlySettings","chatlyNotifications","cz","npop","crp","fview","fwpick","starview","esheet","csheet","sheet","nc","prof","clyOwnerDetails"]){if(vis($(id)))return}
+ zone=null;for(const id of ZONES){const z=$(id);if(z&&vis(z)&&z.contains(t)){zone=z;break}}
+ if(!zone)return;
+ if(t.closest&&t.closest("input,textarea,select,canvas,form"))return;
+ const sc=scroller(t);if(sc&&sc.scrollTop>0)return;
+ sy=e.touches[0].clientY;sx=e.touches[0].clientX;active=true},{passive:true});
+document.addEventListener("touchmove",e=>{
+ if(!active)return;const t=e.touches[0],dy=t.clientY-sy,dx=Math.abs(t.clientX-sx);
+ if(dy<=0||dx>dy){if(dy<-8)active=false;return}
+ pull=dy*0.5;setInd(pull)},{passive:true});
+document.addEventListener("touchend",()=>{
+ if(!active)return;active=false;
+ if(pull>=55)doRefresh();else{ind.style.opacity=0;ind.style.transform="translateY(-60px)"}pull=0},{passive:true});
+document.addEventListener("touchcancel",()=>{active=false;ind.style.opacity=0},{passive:true});
+// swipe from left edge = back
+let ex=0,ey=0,edge=false;
+document.addEventListener("touchstart",e=>{const t=e.touches[0];edge=e.touches.length===1&&t.clientX<22;ex=t.clientX;ey=t.clientY},{passive:true});
+document.addEventListener("touchend",e=>{if(!edge)return;edge=false;const t=e.changedTouches[0];
+ if(t.clientX-ex>90&&Math.abs(t.clientY-ey)<60&&!vis($("call"))&&!($("login")&&vis($("login"))))history.back()},{passive:true});
+})();
+</script>
 </body></html>
